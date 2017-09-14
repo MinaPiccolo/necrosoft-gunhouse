@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace Gunhouse
 {
+    #if !UNITY_WEBGL
+
     public class Platform : MonoBehaviour
     {
         public static void LoadPlayerData()
@@ -29,7 +31,7 @@ namespace Gunhouse
         public static void SaveEndWave() { }
     }
 
-    #if UNITY_WEBGL
+    #else
 
     public class Platform : MonoBehaviour
     {
@@ -66,11 +68,8 @@ namespace Gunhouse
             once = true;
         }
 
-        public static void LoadPlayerData()
-        {
-            //DataStorage.LoadRemote();
-            //Objectives.LoadRemote();
-        }
+        public static void LoadPlayerData() { }
+        public static void SavePlayerData() { }
 
         public static void SaveOptions() { DataStorage.SaveOptions(); }
         public static void SaveStore() { DataStorage.SaveStore(); }

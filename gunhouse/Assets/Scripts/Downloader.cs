@@ -27,7 +27,7 @@ namespace Gunhouse
             #elif UNITY_WEBGL
             string bundleName = "WebGL/bundled";
             #endif
-            
+
             StartCoroutine(LoadAssetBundle(System.IO.Path.Combine(Application.streamingAssetsPath, bundleName)));
         }
 

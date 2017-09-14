@@ -640,22 +640,23 @@ PlayerSettings:
   splashScreenBackgroundSourceLandscape: {fileID: 0}
   splashScreenBackgroundSourcePortrait: {fileID: 0}
   spritePackerPolicy: 
-  webGLMemorySize: 256
+  webGLMemorySize: 384
   webGLExceptionSupport: 0
   webGLNameFilesAsHashes: 0
   webGLDataCaching: 1
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Default
+  webGLTemplate: PROJECT:Jump
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
-  webGLUseWasm: 0
-  webGLCompressionFormat: 2
+  webGLUseWasm: 1
+  webGLCompressionFormat: 1
   scriptingDefineSymbols:
     1: CONTROLLER_AND_TOUCH
     4: TOUCH
     7: LOADING_SCREEN;TOUCH
+    13: BUNDLED;CONTROLLER_AND_TOUCH
   platformArchitecture:
     iOS: 2
     tvOS: 1
