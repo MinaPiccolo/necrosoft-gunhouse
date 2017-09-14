@@ -1,0 +1,41 @@
+namespace icecream_flyer
+{
+    enum Sprites
+    {
+      icecream_flyer_arm1 = 0,
+      icecream_flyer_basket1,
+      icecream_flyer_die1,
+      icecream_flyer_die2,
+      icecream_flyer_die3,
+      icecream_flyer_die4,
+      icecream_flyer_die5,
+      icecream_flyer_die6,
+      icecream_flyer_die7,
+      icecream_flyer_die8,
+      icecream_flyer_die9,
+      icecream_flyer_die10,
+      icecream_flyer_die11,
+      icecream_flyer_die12,
+      icecream_flyer_grab1,
+      icecream_flyer_grab2,
+      icecream_flyer_grab3,
+      icecream_flyer_grab4,
+      icecream_flyer_grab5,
+      icecream_flyer_grab6,
+      icecream_flyer_grab7,
+      icecream_flyer_grab8,
+      icecream_flyer_hand1,
+      icecream_flyer_hand2,
+      icecream_flyer_idle1,
+      icecream_flyer_idle2,
+      icecream_flyer_idle3,
+      icecream_flyer_idle4,
+      icecream_flyer_shoot1,
+      icecream_flyer_shoot2,
+      icecream_flyer_shoot3,
+      icecream_flyer_shoot4,
+      icecream_flyer_shoot5,
+      icecream_flyer_shoot6,
+    };
+}
+
