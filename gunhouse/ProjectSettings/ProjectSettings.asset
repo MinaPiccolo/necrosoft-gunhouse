@@ -521,6 +521,9 @@ PlayerSettings:
   switchUdpSendBufferSize: 9
   switchUdpReceiveBufferSize: 42
   switchSocketBufferEfficiency: 4
+  switchSocketInitializeEnabled: 1
+  switchNetworkInterfaceManagerInitializeEnabled: 1
+  switchPlayerConnectionEnabled: 1
   ps4NPAgeRating: 12
   ps4NPTitleSecret: 
   ps4NPTrophyPackPath: 
@@ -650,7 +653,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 2
   scriptingDefineSymbols:
-    1: 
+    1: CONTROLLER_AND_TOUCH
     4: TOUCH
     7: LOADING_SCREEN;TOUCH
   platformArchitecture:

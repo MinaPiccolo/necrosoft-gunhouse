@@ -20,6 +20,10 @@ namespace Gunhouse
         public PlayerAction Start;
         public PlayerAction Escape;
 
+        public ControllerButton Submit_Button = ControllerButton.PS_X;
+        public ControllerButton Cancel_Button = ControllerButton.PS_CIRCLE;
+        public ControllerButton Alt_Button = ControllerButton.PS_TRIANGLE;
+
         public bool AnyWasPressd()
         {
             return Submit.WasPressed || Cancel.WasPressed || X.WasPressed || Y.WasPressed ||

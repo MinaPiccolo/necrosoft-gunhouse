@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Gunhouse
 {
-    public enum MenuOptions { Title, Continue, Hardcore, Shop, Options, Stats }; 
+    public enum MenuOptions { Title, Continue, Hardcore, Shop, Options, Stats };
 
     public struct MenuOption
     {
@@ -19,9 +19,12 @@ namespace Gunhouse
         public Vector2 text_size;
         public float font_scale;
         public Gun.Ammo ammo;
+        public ControllerButton button;
 
-        public MenuOption(string text_, Gun.Ammo ammo_, Selected s, float font_scale_ = 0.48f)
+        public MenuOption(string text_, Gun.Ammo ammo_, Selected s,
+                          ControllerButton button = ControllerButton.NONE, float font_scale_ = 0.48f)
         {
+            this.button = button;
             font_scale = font_scale_;
             text = Text.Wrap(text_, (int)(64 * 3 / (24 * font_scale)));
             text_size = Text.Size(AppMain.textures.font, text);
@@ -102,7 +105,7 @@ namespace Gunhouse
                 if (direction.y > 0) {
                     held_option = Mathf.Clamp(held_option + 1, 0, n_options - 1);
                     if ((AppMain.top_state is TitleState) &&
-                        options[held_option].selected == null) { 
+                        options[held_option].selected == null) {
                         held_option += 1;
                     }
                 }
@@ -126,6 +129,8 @@ namespace Gunhouse
                           (options[i].text_size * .5f) * options[i].font_scale +
                           new Vector2(-12, 22) * options[i].font_scale, options[i].text,
                           Vector2.one * options[i].font_scale, Vector4.one);
+
+                draw_button(i);
             }
         }
 
@@ -137,6 +142,27 @@ namespace Gunhouse
             options[n_options].size = new Vector2(Puzzle.piece_size * 3, Puzzle.piece_size * size);
             n_options_pos += Puzzle.piece_size * size;
             n_options++;
+        }
+
+        void draw_button(int index)
+        {
+            if (options[index].button == ControllerButton.NONE) { return; }
+
+            int button_sprite = -1;
+            switch (options[index].button)
+            {
+            case ControllerButton.PS_X: button_sprite = (int)store.Sprites.ps_x; break;
+            case ControllerButton.PS_CIRCLE: button_sprite = (int)store.Sprites.ps_circle; break;
+            case ControllerButton.PS_TRIANGLE: button_sprite = (int)store.Sprites.ps_triangle; break;
+            case ControllerButton.PS_SQUARE: button_sprite = (int)store.Sprites.ps_square; break;
+            }
+
+            Vector2 buttonPosition = options[index].position +
+                                     new Vector2(Puzzle.piece_size * 1.5f, options[index].size.y * .5f) -
+                                     (options[index].text_size * .5f) * options[index].font_scale +
+                                     new Vector2(-30, 20) * options[index].font_scale;
+
+            AppMain.textures.store.draw(button_sprite, buttonPosition, Vector2.one * 0.64f, Vector4.one);
         }
     }
 
@@ -241,7 +267,7 @@ namespace Gunhouse
                 Game.instance = null;
                 first_tick = false;
             }
-            
+
             base.tick();
             menu_house.tick();
             MoneyGuy.me.tick();
@@ -291,7 +317,7 @@ namespace Gunhouse
 
             AppMain.textures.title.draw(0, new Vector2 (title_position, 544 / 2 - 65 + (float)Math.Sin(AppMain.frame / 50.0f) * 5),
                                         new Vector2 (-1, 1), Vector4.one);
-                                        
+
             AppMain.textures.house.draw(0, new Vector2(Puzzle.grid_left + 95, Puzzle.grid_top + 144), Vector2.one, Vector4.one);
 
             menu_house.draw();
@@ -323,14 +349,14 @@ namespace Gunhouse
                 MoneyGuy.me.addMoney(100);
                 AppMain.top_state.Dispose();
                 AppMain.top_state = new CreditState();
-            }));
+            }, Input.Pad.Alt_Button));
             menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
             menu_house.addOption(new MenuOption(MenuText.ReturnToTile, Gun.Ammo.VEGETABLE,
             () => {
                 Platform.SaveOptions();
                 AppMain.top_state.Dispose();
                 AppMain.top_state = new TitleState(MenuOptions.Options);
-            }));
+            }, Input.Pad.Cancel_Button));
         }
 
         bool first_tick = true;
@@ -339,7 +365,7 @@ namespace Gunhouse
         {
             if (first_tick)
             {
-                Game.instance = null; 
+                Game.instance = null;
                 first_tick = false;
             }
 
@@ -464,7 +490,7 @@ namespace Gunhouse
                                                 Gun.Ammo.VEGETABLE, () => {
                 AppMain.top_state.Dispose();
                 AppMain.top_state = new TitleState(MenuOptions.Stats);
-            }));
+            }, Input.Pad.Cancel_Button));
         }
 
         public override void tick()
@@ -496,7 +522,7 @@ namespace Gunhouse
         void update_shop()
         {
             if (first_tick) {
-                Game.instance = null; 
+                Game.instance = null;
                 first_tick = false;
             }
 
@@ -526,7 +552,7 @@ namespace Gunhouse
                         if (Input.touches[t].position.x > buttons[i].x - size.x &&
                             Input.touches[t].position.x < buttons[i].x + size.x &&
                             Input.touches[t].position.y > buttons[i].y - size.y &&
-                            Input.touches[t].position.y < buttons[i].y + size.y) { 
+                            Input.touches[t].position.y < buttons[i].y + size.y) {
                             held_option = i;
                             return;
                         }
@@ -651,7 +677,7 @@ namespace Gunhouse
                     builder.Append("Blocks Loaded:");
                     Text.Draw(new Vector2(text_left_edge, 195), builder.ToString(), title_size, Vector4.one);
 
-                    int text_left_start = 1160; 
+                    int text_left_start = 1160;
                     int x_spacing = -200;
                     int y_position = 165;
                     int y_spacing = 40;
@@ -702,9 +728,9 @@ namespace Gunhouse
 
         public override void tick()
         {
-            if (first_tick) 
+            if (first_tick)
             {
-                Game.instance = null; 
+                Game.instance = null;
                 first_tick = false;
             }
 
@@ -778,12 +804,12 @@ namespace Gunhouse
                 MetaState.reset(selected_day);
                 AppMain.top_state = new Game();
 #endif
-            }));
+            }, Input.Pad.Submit_Button));
             menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
             menu_house.addOption(new MenuOption(MenuText.ReturnToTile, Gun.Ammo.VEGETABLE, () => {
                 AppMain.top_state.Dispose();
                 AppMain.top_state = new TitleState(MenuOptions.Continue);
-            }));
+            }, Input.Pad.Cancel_Button));
 
             max_day = DataStorage.StartOnWave;
             selected_day = max_day;
@@ -818,7 +844,7 @@ namespace Gunhouse
         void update_shop()
         {
             if (first_tick) {
-                Game.instance = null; 
+                Game.instance = null;
                 first_tick = false;
             }
 
@@ -906,7 +932,7 @@ namespace Gunhouse
                         if (Input.touches[t].position.x > buttons[i].x - size.x &&
                               Input.touches[t].position.x < buttons[i].x + size.x &&
                               Input.touches[t].position.y > buttons[i].y - size.y &&
-                              Input.touches[t].position.y < buttons[i].y + size.y) { 
+                              Input.touches[t].position.y < buttons[i].y + size.y) {
                             held_option = i;
                             play_pressed = false;
                             return;
@@ -918,7 +944,7 @@ namespace Gunhouse
                     if (Input.touches[t].position.x > play.x - play_size.x &&
                                             Input.touches[t].position.x < play.x + play_size.x &&
                                             Input.touches[t].position.y > play.y - play_size.y &&
-                                            Input.touches[t].position.y < play.y + play_size.y) { 
+                                            Input.touches[t].position.y < play.y + play_size.y) {
                         play_pressed = true;
                         held_option = -1;
                         return;
@@ -990,7 +1016,7 @@ namespace Gunhouse
                 Game.instance = null;
                 first_tick =  false;
             }
-            
+
             MoneyGuy.me.tick();
 
             if (!AppMain.back && shop_position > 620) {
@@ -1185,14 +1211,14 @@ namespace Gunhouse
             menu_house.ignore_pad = true;
 
             if (selected_gun == -1) {
-                if (upgradeCost (-1) > DataStorage.Money) {
+                if (upgradeCost(-1) > DataStorage.Money) {
                     if (DataStorage.Hearts >= 6) {
                         menu_house.addOption(new MenuOption(MenuText.AddArmor +
-                                                            UpgradeAmount(-1), Gun.Ammo.DRAGON, null));
+                                                            UpgradeAmount(-1), Gun.Ammo.DRAGON, null, Input.Pad.Submit_Button));
                     }
                     else {
                         menu_house.addOption(new MenuOption(MenuText.AddHeart +
-                                                            UpgradeAmount(-1), Gun.Ammo.DRAGON, null));
+                                                            UpgradeAmount(-1), Gun.Ammo.DRAGON, null, Input.Pad.Submit_Button));
                     }
                 }
                 else {
@@ -1204,7 +1230,7 @@ namespace Gunhouse
                             DataStorage.Armor++;
                             selectGun(selected_gun);
                             Tracker.ShopItemUpgrade("armor", DataStorage.Armor);
-                        }));
+                        }, Input.Pad.Submit_Button));
                     }
                     else {
                         menu_house.addOption(new MenuOption(MenuText.AddHeart + UpgradeAmount(-1),
@@ -1214,13 +1240,13 @@ namespace Gunhouse
                             DataStorage.Hearts++;
                             selectGun(selected_gun);
                             Tracker.ShopItemUpgrade("heart", DataStorage.Hearts);
-                        }));
+                        }, Input.Pad.Submit_Button));
                     }
                 }
 
                 if (upgradeCost(-2) > DataStorage.Money) {
                     menu_house.addOption(new MenuOption(MenuText.AddHealing +
-                                                        UpgradeAmount(-2), Gun.Ammo.IGLOO, null));
+                                                        UpgradeAmount(-2), Gun.Ammo.IGLOO, null, Input.Pad.Alt_Button));
                 }
                 else {
                     menu_house.addOption(new MenuOption(MenuText.AddHealing + UpgradeAmount(-2),
@@ -1230,7 +1256,7 @@ namespace Gunhouse
                         DataStorage.Healing++;
                         selectGun(selected_gun);
                         Tracker.ShopItemUpgrade("healing", DataStorage.Healing);
-                    }));
+                    }, Input.Pad.Alt_Button));
                 }
             }
             else if (selected_gun == -2) {
@@ -1255,7 +1281,7 @@ namespace Gunhouse
             else if (DataStorage.GunOwned[selected_gun] && !switch_gun) {
                 if (upgradeCost(selected_gun) > DataStorage.Money) {
                     menu_house.addOption(new MenuOption(MenuText.Upgrade + UpgradeAmount(selected_gun),
-                                                        Gun.Ammo.DRAGON, null));
+                                                        Gun.Ammo.DRAGON, null, Input.Pad.Submit_Button));
                 }
                 else {
                     menu_house.addOption(new MenuOption(MenuText.Upgrade + UpgradeAmount(selected_gun),
@@ -1265,7 +1291,7 @@ namespace Gunhouse
                         DataStorage.GunPower[selected_gun]++;
                         selectGun(selected_gun);
                         Tracker.ShopItemUpgrade(guns[selected_gun].name, DataStorage.GunPower[selected_gun]);
-                    }));
+                    }, Input.Pad.Submit_Button));
                 }
 
                 if (DataStorage.GunEquipped[selected_gun]) {
@@ -1278,14 +1304,14 @@ namespace Gunhouse
                             DataStorage.GunPower[selected_gun]--;
                             selectGun(selected_gun);
                             Tracker.ShopItemDowngrade(guns[selected_gun].name, DataStorage.GunPower[selected_gun]);
-                        }));
+                        }, Input.Pad.Alt_Button));
                     }
                     else {
                         menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
                     }
                 }
                 else {
-                    menu_house.addOption(new MenuOption(MenuText.Equip, Gun.Ammo.IGLOO, () => { equipGun(); }));
+                    menu_house.addOption(new MenuOption(MenuText.Equip, Gun.Ammo.IGLOO, () => { equipGun(); }, Input.Pad.Alt_Button));
                 }
             }
             else {
@@ -1293,7 +1319,7 @@ namespace Gunhouse
                     int purchase_cost = guns[selected_gun].cost;
 
                     if (purchase_cost > DataStorage.Money) {
-                        menu_house.addOption(new MenuOption(MenuText.Purchase + purchase_cost.ToString(), Gun.Ammo.DRAGON, null));
+                        menu_house.addOption(new MenuOption(MenuText.Purchase + purchase_cost.ToString(), Gun.Ammo.DRAGON, null, Input.Pad.Submit_Button));
                     }
                     else {
                         menu_house.addOption(new MenuOption(MenuText.Purchase + purchase_cost.ToString(),
@@ -1304,33 +1330,33 @@ namespace Gunhouse
                             DataStorage.GunOwned[selected_gun] = true;
                             equipGun();
                             resetMenu();
-                        }));
+                        }, Input.Pad.Submit_Button));
                     }
                     menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
                 }
                 else {
-                    menu_house.addOption(new MenuOption (MenuText.Swap, Gun.Ammo.DRAGON, () => {
+                    menu_house.addOption(new MenuOption(MenuText.Swap, Gun.Ammo.DRAGON, () => {
                         DataStorage.GunEquipped[selected_gun] = false;
                         DataStorage.GunEquipped[swap_slot] = true;
                         switch_gun = false;
                         selectGun(swap_slot);
                         resetMenu();
                         rebuildMoveGrid();
-                    }));
+                    }, Input.Pad.Submit_Button));
 
                     menu_house.addOption(new MenuOption(MenuText.Cancel, Gun.Ammo.IGLOO, () => {
                         switch_gun = false;
                         selectGun(swap_slot);
                         resetMenu();
                         rebuildMoveGrid();
-                    }));
+                    }, Input.Pad.Alt_Button));
                 }
             }
 
             menu_house.addOption(new MenuOption(MenuText.ReturnToTile, Gun.Ammo.VEGETABLE, () => {
                 AppMain.back = true;
                 Platform.SaveStore();
-            }));
+            }, Input.Pad.Cancel_Button));
         }
 
         public int upgradeCost(int n)
@@ -1346,7 +1372,7 @@ namespace Gunhouse
             }
             else if (DataStorage.GunOwned[n]) {
                 return (int)(Math.Pow(upgrade_price_multiplier, DataStorage.GunPower[n] - 1) * base_upgrade_price);
-            } 
+            }
             else {
                 return guns[selected_gun].cost;
             }
@@ -1550,7 +1576,7 @@ namespace Gunhouse
         {
             Tracker.ScreenVisit(SCREEN_NAME.CREDITS);
             MetaState.end_game = false;
- 
+
             #if LOADING_SCREEN
             loadscreen = Util.rng.Next(5);
             protip = Text.Wrap(Story.tips[Util.rng.Next(Story.tips.Length)], 50);
