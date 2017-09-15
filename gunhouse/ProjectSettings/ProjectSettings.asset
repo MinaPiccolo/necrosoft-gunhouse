@@ -73,7 +73,7 @@ PlayerSettings:
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
-  submitAnalytics: 1
+  submitAnalytics: 0
   usePlayerLog: 1
   bakeCollisionMeshes: 1
   forceSingleInstance: 0
@@ -631,11 +631,11 @@ PlayerSettings:
   psp2TVDisableEmu: 0
   psp2AllowTwitterDialog: 1
   psp2Upgradable: 0
-  psp2HealthWarning: 0
+  psp2HealthWarning: 1
   psp2UseLibLocation: 0
   psp2InfoBarOnStartup: 0
   psp2InfoBarColor: 0
-  psp2ScriptOptimizationLevel: 0
+  psp2ScriptOptimizationLevel: 2
   psmSplashimage: {fileID: 0}
   splashScreenBackgroundSourceLandscape: {fileID: 0}
   splashScreenBackgroundSourcePortrait: {fileID: 0}
@@ -656,6 +656,7 @@ PlayerSettings:
     1: LOADING_SCREEN;CONTROLLER_AND_TOUCH
     4: TOUCH
     7: LOADING_SCREEN;TOUCH
+    18: LOADING_SCREEN;CONTROLLER_AND_TOUCH
   platformArchitecture:
     iOS: 2
     tvOS: 1
