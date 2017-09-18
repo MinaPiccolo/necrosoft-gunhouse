@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿#if UNITY_SWITCH
+using UnityEngine;
 
 namespace Gunhouse
 {
     public partial class Objectives : MonoBehaviour
     {
-        #if UNITY_SWITCH
         public static string SaveFile()
         {
             ObjectivesSaveFile objectivesSaveFile = new ObjectivesSaveFile();
@@ -122,6 +122,6 @@ namespace Gunhouse
             public int daysToReach;
             public string currentFreeTask;
         }
-        #endif
     }
 }
+#endif

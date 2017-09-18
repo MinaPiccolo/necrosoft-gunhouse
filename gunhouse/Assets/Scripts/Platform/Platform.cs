@@ -8,14 +8,14 @@ namespace Gunhouse
     {
         public static void LoadPlayerData()
         {
-            DataStorage.Load();
-            Objectives.Load();
+            DataStorage.LoadFile();
+            Objectives.LoadFile();
         }
 
         public static void SavePlayerData()
         {
-            DataStorage.Save();
-            Objectives.Save();
+            DataStorage.SaveFile();
+            Objectives.SaveFile();
         }
 
         public static void Quit()

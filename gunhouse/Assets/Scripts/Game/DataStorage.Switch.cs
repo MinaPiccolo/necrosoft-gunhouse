@@ -1,10 +1,10 @@
-﻿using Necrosoft;
+﻿#if UNITY_SWTICH
+using Necrosoft;
 
 namespace Gunhouse
 {
     public static partial class DataStorage
     {
-        #if UNITY_SWTICH
         public static void SaveOptions() { }
         public static void SaveStore() { }
         public static void SaveEndWave() { }
@@ -115,6 +115,6 @@ namespace Gunhouse
             public float EffectVolume;
             public int[] ObjectivesActive;
         }
-        #endif
     }
 }
+#endif
