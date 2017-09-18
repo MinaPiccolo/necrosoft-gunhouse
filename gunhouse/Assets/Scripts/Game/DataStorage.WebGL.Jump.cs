@@ -1,10 +1,10 @@
-﻿using Necrosoft;
+﻿#if UNITY_WEBGL
+using Necrosoft;
 
 namespace Gunhouse
 {
     public static partial class DataStorage
     {
-        #if UNITY_WEBGL
         public static void SaveOptions()
         {
             Platform.SaveData(SaveKeys.MusicVolume, ((int)(Choom.MusicVolume * 100)).ToString());
@@ -116,6 +116,6 @@ namespace Gunhouse
             TimesDefeated = Platform.LoadData(SaveKeys.TimesDefeated, 0);
             DisconcertingObjectivesSeen = Platform.LoadData(SaveKeys.DisconcertingObjectivesSeen, 0);
         }
-        #endif
     }
 }
+#endif
