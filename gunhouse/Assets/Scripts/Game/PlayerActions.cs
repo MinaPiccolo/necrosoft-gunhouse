@@ -79,6 +79,11 @@ namespace Gunhouse
 
             actions.Start.AddDefaultBinding(InputControlType.Start);
             actions.Start.AddDefaultBinding(InputControlType.Command);
+            
+            #if UNITY_SWITCH
+            actions.Start.AddDefaultBinding(InputControlType.Plus);
+            actions.Start.AddDefaultBinding(InputControlType.Minus);
+            #endif
 
             #if UNITY_WEBGL
             actions.Escape.AddDefaultBinding(Key.Q);
