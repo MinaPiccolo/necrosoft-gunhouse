@@ -5,10 +5,45 @@ namespace Gunhouse
 {
     public static partial class DataStorage
     {
-        public static void SaveOptions() { }
-        public static void SaveStore() { }
-        public static void SaveEndWave() { }
-        public static void SaveHardcore() { }
+        public static void ResetValues()
+        {
+            GunOwned = new bool[NumberOfGuns];
+            GunPower = new int[NumberOfGuns];
+            GunEquipped = new bool[NumberOfGuns];
+
+            for (int i = 0; i < maxEquip; ++i) GunEquipped[i] = true;
+            for (int i = 0; i < NumberOfGuns; ++i) {
+                GunOwned[i] = i < maxEquip;
+                GunPower[i] = 1;
+            }
+
+            version = 1;
+            Money = 0;
+            Hearts = 2;
+            Armor = 0;
+            Healing = 1;
+            StartOnWave = 0;
+            Choom.MusicVolume = 0.75f;
+            Choom.EffectVolume = 0.75f;
+            IgnoreSignIn = false;
+            Objectives.activeTasks = new int[3];
+            AmountOfObjectivesComplete = 0;
+
+            int[] scores = new int[0];
+            BestHardcoreScores.Clear();
+            for (int i = 0; i < scores.Length / 2; i++) {
+                if (scores[i * 2] > 0) {
+                    BestHardcoreScores.Add(new Tuple<int, int>(scores[i * 2], scores[i * 2 + 1]));
+                }
+            }
+
+            BlocksLoaded = new int[10];
+            AmmoLoaded = new int[10];
+            MatchStreak = 0;
+            ShotsFired = 0;
+            TimesDefeated = 0;
+            DisconcertingObjectivesSeen = 0;
+        }
 
         public static void SaveFile(PlayStationVita.SaveData data)
         {
@@ -44,22 +79,22 @@ namespace Gunhouse
 
         public static void LoadFile(PlayStationVita.SaveData data)
         {
-            version = data.version != 0 ? data.version : 1;
+            version = data.version;
             Money = data.Money;
-            Hearts = data.Hearts != 0 ? data.Hearts : 2;
+            Hearts = data.Hearts;
             Armor = data.Armor;
-            Healing = data.Healing != 0 ? data.Healing : 1;
+            Healing = data.Healing;
             StartOnWave = data.StartOnWave;
-            GunOwned = data.GunOwned != null ? data.GunOwned : new bool[NumberOfGuns];
-            GunPower = data.GunPower != null ? data.GunPower : new int[NumberOfGuns];
-            GunEquipped = data.GunEquipped != null ? data.GunEquipped : new bool[NumberOfGuns];
-            Choom.MusicVolume = data.MusicVolume != 0 ? data.MusicVolume : 0.75f;
-            Choom.EffectVolume = data.EffectVolume != 0 ? data.EffectVolume : 0.75f;
+            GunOwned = data.GunOwned;
+            GunPower = data.GunPower;
+            GunEquipped = data.GunEquipped;
+            Choom.MusicVolume = data.MusicVolume;
+            Choom.EffectVolume = data.EffectVolume;
             IgnoreSignIn = data.IgnoreSignIn;
-            Objectives.activeTasks = data.ObjectivesActive != null ? data.ObjectivesActive : new int[3];
+            Objectives.activeTasks = data.ObjectivesActive;
             AmountOfObjectivesComplete = data.AmountOfObjectivesComplete;
 
-            int[] scores = data.BestHardcoreScores != null ? data.BestHardcoreScores : new int[0];
+            int[] scores = data.BestHardcoreScores;
             BestHardcoreScores.Clear();
             for (int i = 0; i < scores.Length / 2; i++) {
                 if (scores[i * 2] > 0) {
@@ -67,8 +102,8 @@ namespace Gunhouse
                 }
             }
 
-            BlocksLoaded = data.BlocksLoaded != null ? data.BlocksLoaded : new int[10];
-            AmmoLoaded = data.AmmoLoaded != null ? data.AmmoLoaded : new int[10];
+            BlocksLoaded = data.BlocksLoaded;
+            AmmoLoaded = data.AmmoLoaded;
             MatchStreak = data.MatchStreak;
             ShotsFired = data.ShotsFired;
             TimesDefeated = data.TimesDefeated;

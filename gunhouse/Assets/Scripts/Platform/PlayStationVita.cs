@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.PSVita;
+using UnityEngine.SceneManagement;
 
 namespace Gunhouse
 {
@@ -13,17 +14,21 @@ namespace Gunhouse
         const SaveLoad.ControlFlags controlFlags = SaveLoad.ControlFlags.NOSPACE_DIALOG_CONTINUABLE;
         const int slotNumber = 0;
 
-        void Awake()
+        void Start()
         {
+            DontDestroyOnLoad(gameObject);
+
+            //SceneManager.LoadSceneAsync((int)SceneIndex.Main);
+
             PSVitaVideoPlayer.TransferMemToMonoHeap();
 
+            Main.Initialise();
             Main.enableInternalLogging = true;
             Main.OnLog += OnLog;
             Main.OnLogWarning += OnLogWarning;
             Main.OnLogError += OnLogError;
 
             SaveLoad.Initialise();
-
             SaveLoad.OnGameSaved += OnSavedGameSaved;
             SaveLoad.OnGameLoaded += OnSavedGameLoaded;
             SaveLoad.OnSaveError += OnSaveError;
@@ -35,12 +40,15 @@ namespace Gunhouse
             slotParams.detail = "DETAILS ABOUT THE SAVE INFO [Detail]";
             slotParams.iconPath = Path.Combine(Application.streamingAssetsPath, "SaveIcon.png");
 
+            DataStorage.ResetValues();
+            Objectives.ResetValues();
+
+            //SaveLoad.Delete(0, false);
             LoadFile();
         }
 
         void OnEnable() { Application.logMessageReceived += HandleLog; }
         void OnDisable() { Application.logMessageReceived -= HandleLog; }
-
         void HandleLog(string logString, string stackTrace, LogType type)
         {
             OnScreenLog.Add("LOG: " + logString + " " + stackTrace);
@@ -87,7 +95,7 @@ namespace Gunhouse
         {
             OnScreenLog.Add("Game Loaded...");
             byte[] bytes = SaveLoad.GetLoadedGame();
-            if (bytes == null) { return; }
+            if (bytes == null) { SceneManager.LoadSceneAsync((int)SceneIndex.Main); return; }
 
             SaveData data;
             using (MemoryStream memoryStream = new MemoryStream()) {
@@ -105,6 +113,8 @@ namespace Gunhouse
             // and using the memory card for storage, e.g. not connected to host0:, otherwise it is always 0.
             int used = SaveLoad.GetUsedSize();
             OnScreenLog.Add("Storage used = " + used + "KB / " + quota + "KB");
+
+            SceneManager.LoadSceneAsync((int)SceneIndex.Main);
         }
 
         void OnSaveError(Messages.PluginMessage msg)
@@ -119,9 +129,14 @@ namespace Gunhouse
             ResultCode res = new ResultCode();
             SaveLoad.GetLastError(out res);
             OnScreenLog.Add("Failed to load: " + res.className + ": " + res.lastError + ", sce error 0x" + res.lastErrorSCE.ToString("X8"));
+            SceneManager.LoadSceneAsync((int)SceneIndex.Main);
         }
 
-        void OnLoadNoData(Messages.PluginMessage msg) { OnScreenLog.Add("Nothing to load"); }
+        void OnLoadNoData(Messages.PluginMessage msg)
+        {
+            OnScreenLog.Add("Nothing to load");
+            SceneManager.LoadScene((int)SceneIndex.Main);
+        }
 
         #endregion
 
@@ -183,6 +198,6 @@ namespace Gunhouse
 
             #endregion
         }
-    }
+}
 }
 #endif
