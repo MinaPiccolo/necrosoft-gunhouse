@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using Necrosoft.ThirdParty;
 
 namespace Gunhouse
 {

@@ -13,7 +13,9 @@ namespace Gunhouse
 
         void Awake()
         {
+            #if !UNITY_PSP2 || UNITY_EDITOR
             Platform.LoadPlayerData();
+            #endif
 
             Cursor.visible = cursorVisible;
             instance = this;

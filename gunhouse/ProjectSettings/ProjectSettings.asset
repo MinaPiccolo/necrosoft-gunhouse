@@ -245,70 +245,86 @@ PlayerSettings:
       m_Icon: {fileID: 2800000, guid: 26103b3254c4b44c18f2d6afdcd7951f, type: 3}
       m_Width: 128
       m_Height: 128
+      m_Kind: 0
   - m_BuildTarget: iPhone
     m_Icons:
     - serializedVersion: 2
       m_Icon: {fileID: 2800000, guid: 26103b3254c4b44c18f2d6afdcd7951f, type: 3}
       m_Width: 180
       m_Height: 180
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 167
       m_Height: 167
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 152
       m_Height: 152
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 144
       m_Height: 144
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 120
       m_Height: 120
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 114
       m_Height: 114
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 76
       m_Height: 76
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 72
       m_Height: 72
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 57
       m_Height: 57
+      m_Kind: 0
   - m_BuildTarget: Android
     m_Icons:
     - serializedVersion: 2
       m_Icon: {fileID: 2800000, guid: 7b916daaf88fa4510bd972cc89e22850, type: 3}
       m_Width: 192
       m_Height: 192
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 144
       m_Height: 144
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 96
       m_Height: 96
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 72
       m_Height: 72
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 48
       m_Height: 48
+      m_Kind: 0
     - serializedVersion: 2
       m_Icon: {fileID: 0}
       m_Width: 36
       m_Height: 36
+      m_Kind: 0
   m_BuildTargetBatching:
   - m_BuildTarget: Android
     m_StaticBatching: 1
@@ -589,16 +605,16 @@ PlayerSettings:
   ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
   monoEnv: 
-  psp2Splashimage: {fileID: 2800000, guid: 015a7f6613d6b4c48a5199a104c31433, type: 3}
+  psp2Splashimage: {fileID: 2800000, guid: f70380f9ed5e96d4e82cfcec5dd7d5bb, type: 3}
   psp2NPTrophyPackPath: 
   psp2NPSupportGBMorGJP: 0
   psp2NPAgeRating: 12
   psp2NPTitleDatPath: 
   psp2NPCommsID: 
-  psp2NPCommunicationsID: 
+  psp2NPCommunicationsID: NPWR14054_00
   psp2NPCommsPassphrase: 
   psp2NPCommsSig: 
-  psp2ParamSfxPath: 
+  psp2ParamSfxPath: Assets/Content/Platform/PlayStation/param.sfx
   psp2ManualPath: 
   psp2LiveAreaGatePath: 
   psp2LiveAreaBackroundPath: 
@@ -622,7 +638,7 @@ PlayerSettings:
   psp2SaveDataQuota: 10240
   psp2ParentalLevel: 1
   psp2ShortTitle: Gunhouse
-  psp2ContentID: IV0000-ABCD12345_00-0123456789ABCDEF
+  psp2ContentID: ED1633-PCSE01157_00-GUNHOUSECOOLTOWN
   psp2Category: 0
   psp2MasterVersion: 01.00
   psp2AppVersion: 01.00
@@ -752,7 +768,7 @@ PlayerSettings:
   cloudServicesEnabled:
     Analytics: 0
     Build: 0
-    Collab: 1
+    Collab: 0
     ErrorHub: 0
     Game_Performance: 0
     Hub: 0

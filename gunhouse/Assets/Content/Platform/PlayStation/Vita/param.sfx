@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<paramsfo>
+    <param key="CATEGORY">gd</param>
+    <param key="TITLE">Gunhouse</param>
+    <param key="STITLE">Gunhouse</param>
+    <param key="CONTENT_ID">ED1633-PCSE01157_00-GUNHOUSECOOLTOWN</param>
+    <param key="TITLE_ID">PCSE01157</param>
+    <param key="NP_COMMUNICATION_ID">NPWR14054_00</param>
+    <param key="SAVEDATA_MAX_SIZE">10240</param>
+    <param key="PARENTAL_LEVEL">1</param>
+    <param key="VERSION">01.00</param>
+    <param key="APP_VER">01.00</param>
+    <param key="ATTRIBUTE">0</param>
+    <param key="ATTRIBUTE_MINOR">0</param>
+    <param key="ATTRIBUTE2">0</param>
+</paramsfo>

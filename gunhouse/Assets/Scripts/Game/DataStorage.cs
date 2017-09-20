@@ -32,7 +32,7 @@ namespace Gunhouse
         }
 
         const int maxEquip = 3;
-        static int version = 1;
+        public static int version = 1;
 
         public const int NumberOfGuns = 10;
 
