@@ -71,6 +71,13 @@ namespace Gunhouse
 
         public static void Save()
         {
+            int[] scores = new int[SCORES_TO_KEEP * 2];
+            for (int i = 0; i < SCORES_TO_KEEP; i++) {
+                if (i >= BestHardcoreScores.Count) break;
+                scores[i * 2] = BestHardcoreScores[i].Item1;
+                scores[i * 2 + 1] = BestHardcoreScores[i].Item2;
+            }
+            
             PlayerPrefs.SetInt(SaveKeys.Version, version);
             PlayerPrefs.SetInt(SaveKeys.Money, Money);
             PlayerPrefs.SetInt(SaveKeys.Hearts, Hearts);
@@ -88,13 +95,6 @@ namespace Gunhouse
             PlayerPrefsX.SetBool(SaveKeys.IgnoreSignIn, IgnoreSignIn);
             PlayerPrefsX.SetIntArray(SaveKeys.ObjectivesActive, Objectives.activeTasks);
             PlayerPrefs.SetInt(SaveKeys.ObjectivesComplete, AmountOfObjectivesComplete);
-
-            int[] scores = new int[SCORES_TO_KEEP * 2];
-            for (int i = 0; i < SCORES_TO_KEEP; i++) {
-                if (i >= BestHardcoreScores.Count) break;
-                scores[i * 2] = BestHardcoreScores[i].Item1;
-                scores[i * 2 + 1] = BestHardcoreScores[i].Item2;
-            }
 
             PlayerPrefsX.SetIntArray(SaveKeys.BestHardcoreScores, scores);
             PlayerPrefsX.SetIntArray(SaveKeys.BlocksLoaded, BlocksLoaded);
@@ -131,7 +131,6 @@ namespace Gunhouse
             AmountOfObjectivesComplete = PlayerPrefs.GetInt(SaveKeys.ObjectivesComplete, 0);
 
             int[] scores = PlayerPrefsX.GetIntArray(SaveKeys.BestHardcoreScores);
-
             BestHardcoreScores.Clear();
             for (int i = 0; i < scores.Length / 2; i++) {
                 if (scores[i * 2] > 0) {
