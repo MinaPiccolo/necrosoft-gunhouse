@@ -18,8 +18,6 @@ namespace Gunhouse
         {
             DontDestroyOnLoad(gameObject);
 
-            //SceneManager.LoadSceneAsync((int)SceneIndex.Main);
-
             PSVitaVideoPlayer.TransferMemToMonoHeap();
 
             Main.Initialise();
@@ -35,13 +33,47 @@ namespace Gunhouse
             SaveLoad.OnLoadError += OnLoadError;
             SaveLoad.OnLoadNoData += OnLoadNoData;
 
-            slotParams.title = "Gunhouse [Title]";
-            slotParams.subTitle = "Save Data [SubTitle]";
-            slotParams.detail = "DETAILS ABOUT THE SAVE INFO [Detail]";
+            slotParams.title = "Gunhouse";
+            slotParams.subTitle = "Load your guns! Rain death from above!";
+            slotParams.detail = "Save Data";
             slotParams.iconPath = Path.Combine(Application.streamingAssetsPath, "SaveIcon.png");
 
             DataStorage.ResetValues();
             Objectives.ResetValues();
+
+            /* 
+             So, assuming that this is what is happening the solution is
+             to either avoid calling AutoLoad (or any save game methods)
+             until after the PSN sign in process has completed, i.e.
+             the Sony.NP.User.OnSignedIn delegate has fired, or, avoid
+             initialising the NpToolkit and signing in until after the
+             AutoLoad process has completed.
+             
+            ==================================================
+
+            according to the TRC, when the game finds a corrupted save data,
+            the player should be presented with the option of trying to reload
+            or continue with a new game. Is there a way to let the SavedGames
+            plugin handle this interaction with the player? Or is it up to the
+            calling code to deal with this by presenting a suitable dialog box? Thank you
+
+            You will need to add your own code to deal with the failure.
+            When a load error occurs you will be notified by the
+            Vita.SavedGame.SaveLoad.OnLoadError event, you should create
+            a handler for this event and perform the appropriate actions,
+            i.e. display an error message, etc.
+
+            The save games plugin does handle broken slot checking and displaying the
+            required dialog you can test it by enabling the ""Fake Save Data Slot Broken"
+            option in the Vita's debug settings.
+
+            Assets->Import Package->Vita Plugins->Common Dialog
+
+            Sony.Vita.Dialog.Common.ShowUserMessage(Sony.Vita.Dialog.Common.EnumUserMessageType.MSG_DIALOG_BUTTON_TYPE_OK, true, "No Save Data.\nCreate New Save Data.");
+
+            ==================================================
+
+             */
 
             //SaveLoad.Delete(0, false);
             LoadFile();
@@ -54,7 +86,7 @@ namespace Gunhouse
             OnScreenLog.Add("LOG: " + logString + " " + stackTrace);
         }
 
-        void Update() { Main.Update(); }
+        void Update() { Main.Update(); /*SonyDialog.Main.Update();*/ }
         void OnLog(Messages.PluginMessage msg) { OnScreenLog.Add(msg.Text); }
         void OnLogWarning(Messages.PluginMessage msg) { OnScreenLog.Add("WARNING: " + msg.Text); }
         void OnLogError(Messages.PluginMessage msg) { OnScreenLog.Add("ERROR: " + msg.Text); }
