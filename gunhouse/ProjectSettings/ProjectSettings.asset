@@ -149,7 +149,7 @@ PlayerSettings:
     iOS: com.necrosoftgames.funhouse
     tvOS: com.necrosoftgames.funhouse
   buildNumber:
-    iOS: 72
+    iOS: 75
   AndroidBundleVersionCode: 46
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
