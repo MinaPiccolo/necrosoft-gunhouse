@@ -10,8 +10,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: gunhouse
+  companyName: Necrosoft Games
+  productName: Gunhouse
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -71,9 +71,9 @@ PlayerSettings:
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
-  submitAnalytics: 1
+  submitAnalytics: 0
   usePlayerLog: 1
-  bakeCollisionMeshes: 0
+  bakeCollisionMeshes: 1
   forceSingleInstance: 0
   resizableWindow: 0
   useMacAppStoreValidation: 0
@@ -105,7 +105,7 @@ PlayerSettings:
   xboxOneDisableEsram: 0
   videoMemoryForVertexBuffers: 0
   psp2PowerMode: 0
-  psp2AcquireBGM: 1
+  psp2AcquireBGM: 0
   wiiUTVResolution: 0
   wiiUGamePadMSAA: 1
   wiiUSupportsNunchuk: 0
@@ -154,11 +154,11 @@ PlayerSettings:
   ForceSDCardPermission: 0
   CreateWallpaper: 0
   APKExpansionFiles: 0
-  keepLoadedShadersAlive: 0
-  StripUnusedMeshComponents: 0
+  keepLoadedShadersAlive: 1
+  StripUnusedMeshComponents: 1
   VertexChannelCompressionMask:
     serializedVersion: 2
-    m_Bits: 238
+    m_Bits: 4294967295
   iPhoneSdkVersion: 988
   iOSTargetOSVersionString: 
   tvOSSdkVersion: 0
@@ -227,7 +227,14 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 26103b3254c4b44c18f2d6afdcd7951f, type: 3}
+      m_Width: 128
+      m_Height: 128
+      m_Kind: 0
   m_BuildTargetBatching: []
   m_BuildTargetGraphicsAPIs: []
   m_BuildTargetVRSettings: []
@@ -436,25 +443,93 @@ PlayerSettings:
   ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
   monoEnv: 
-  psp2Splashimage: {fileID: 0}
-  psp2NPTrophyPackPath: 
+  psp2Splashimage: {fileID: 2800000, guid: f70380f9ed5e96d4e82cfcec5dd7d5bb, type: 3}
+  psp2NPTrophyPackPath: C:/-/necrosoft/gunhouse/psn/releases/vita/gunhouse_signed.trp
   psp2NPSupportGBMorGJP: 0
   psp2NPAgeRating: 12
-  psp2NPTitleDatPath: 
+  psp2NPTitleDatPath: C:/-/necrosoft/gunhouse/psn/releases/vita/PCSE01157_00/nptitle.dat
   psp2NPCommsID: 
-  psp2NPCommunicationsID: 
-  psp2NPCommsPassphrase: 
-  psp2NPCommsSig: 
-  psp2ParamSfxPath: 
-  psp2ManualPath: 
-  psp2LiveAreaGatePath: 
-  psp2LiveAreaBackroundPath: 
+  psp2NPCommunicationsID: NPWR14054_00
+  psp2NPCommsPassphrase: '0x69,0xfd,0x44,0x6d,0xdf,0x20,0xd2,0x23,
+
+    0x06,0x61,0xbf,0x49,0x04,0x74,0x95,0x3e,
+
+    0x31,0x97,0x31,0x2f,0x43,0x1e,0xb1,0x91,
+
+    0x56,0x49,0x41,0x56,0xb5,0x2f,0xf3,0x8f,
+
+    0x52,0x0b,0xdc,0x41,0x88,0xd4,0x72,0x33,
+
+    0x90,0xff,0xec,0x66,0x02,0x96,0x02,0x40,
+
+    0x70,0xb0,0x88,0xc9,0x78,0xbb,0x3e,0x08,
+
+    0x7d,0xb7,0xf1,0x5f,0x7d,0x34,0xdf,0x02,
+
+    0x4a,0x23,0x13,0xe0,0xdd,0x3b,0x64,0x10,
+
+    0xb5,0x8d,0xb1,0x55,0x7d,0xcf,0x82,0x46,
+
+    0x66,0x75,0x87,0x15,0x6c,0x4e,0x28,0x90,
+
+    0x80,0x23,0x4a,0x35,0xe7,0x50,0xd9,0xb2,
+
+    0xe8,0x7e,0xca,0xeb,0x24,0xcc,0x63,0x02,
+
+    0x6c,0xea,0x4c,0xd7,0x88,0x21,0x0b,0x03,
+
+    0x43,0x49,0x2e,0x0b,0xd4,0x5a,0xca,0xc6,
+
+    0x61,0xff,0xcf,0x5f,0x1e,0x49,0x58,0x01'
+  psp2NPCommsSig: '0xb9,0xdd,0xe1,0x3b,0x01,0x00,0x00,0x00,
+
+    0x00,0x00,0x00,0x00,0x71,0x61,0x71,0x75,
+
+    0x8e,0x36,0x07,0xe9,0x60,0x13,0x08,0x00,
+
+    0x78,0x3b,0xcd,0xc5,0xd5,0x91,0xd1,0xc5,
+
+    0x43,0x45,0x2c,0x5a,0xb0,0x53,0xd3,0xe5,
+
+    0x69,0xf0,0xa5,0x10,0x5f,0x21,0x0d,0xee,
+
+    0xe1,0x5b,0xbc,0xad,0x01,0xf1,0xde,0x7d,
+
+    0x90,0x5c,0xbb,0x28,0xb0,0x59,0xc7,0xb2,
+
+    0x48,0x6f,0x8f,0xdd,0x31,0x3b,0xc6,0x00,
+
+    0x98,0x2b,0x00,0x60,0x33,0x90,0xbd,0xa5,
+
+    0x17,0x9c,0x53,0x04,0x07,0x20,0x00,0xb4,
+
+    0x4d,0x24,0x42,0xff,0x5b,0x23,0x84,0x27,
+
+    0x48,0x08,0x58,0x17,0x7b,0x0e,0xf5,0xa7,
+
+    0x10,0xa4,0xa5,0x79,0xbc,0x6d,0xc4,0x4e,
+
+    0x45,0x00,0xac,0x87,0xeb,0xa4,0x98,0xc0,
+
+    0xbb,0x04,0x99,0x20,0x39,0x36,0x6c,0x9d,
+
+    0x87,0x20,0xc8,0x5e,0x48,0x31,0x50,0x15,
+
+    0x3c,0xea,0x18,0x0e,0xdf,0xe4,0xc6,0xad,
+
+    0x83,0x92,0x52,0xd4,0x71,0x5f,0xa5,0x77,
+
+    0x44,0x0c,0x5b,0xff,0xf4,0xd2,0x05,0xc2'
+  psp2ParamSfxPath: C:/-/necrosoft/gunhouse/psn/releases/vita/param.sfx
+  psp2ManualPath: C:/-/necrosoft/gunhouse/psn/releases/vita/manual
+  psp2LiveAreaGatePath: C:/-/necrosoft/gunhouse/psn/releases/vita/livearea_full/default_gate.png
+  psp2LiveAreaBackroundPath: C:/-/necrosoft/gunhouse/psn/releases/vita/livearea_full/bg0.png
   psp2LiveAreaPath: 
   psp2LiveAreaTrialPath: 
   psp2PatchChangeInfoPath: 
   psp2PatchOriginalPackage: 
   psp2PackagePassword: F69AzBlax3CF3EDNhm3soLBPh71Yexui
-  psp2KeystoneFile: 
+  psp2KeystoneFile: C:/-/necrosoft/gunhouse/psn/releases/vita/keystone
   psp2MemoryExpansionMode: 0
   psp2DRMType: 0
   psp2StorageType: 0
@@ -468,8 +543,8 @@ PlayerSettings:
   psp2PackagedResourcesPath: 
   psp2SaveDataQuota: 10240
   psp2ParentalLevel: 1
-  psp2ShortTitle: Not Set
-  psp2ContentID: IV0000-ABCD12345_00-0123456789ABCDEF
+  psp2ShortTitle: Gunhouse
+  psp2ContentID: ED1633-PCSE01157_00-GUNHOUSECOOLTOWN
   psp2Category: 0
   psp2MasterVersion: 01.00
   psp2AppVersion: 01.00
@@ -478,11 +553,11 @@ PlayerSettings:
   psp2TVDisableEmu: 0
   psp2AllowTwitterDialog: 1
   psp2Upgradable: 0
-  psp2HealthWarning: 0
+  psp2HealthWarning: 1
   psp2UseLibLocation: 0
   psp2InfoBarOnStartup: 0
   psp2InfoBarColor: 0
-  psp2ScriptOptimizationLevel: 0
+  psp2ScriptOptimizationLevel: 2
   psmSplashimage: {fileID: 0}
   splashScreenBackgroundSourceLandscape: {fileID: 0}
   splashScreenBackgroundSourcePortrait: {fileID: 0}
@@ -500,12 +575,13 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    18: LOADING_SCREEN;CONTROLLER_AND_TOUCH
+    18: 
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    PSP2: 1
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 0
+  scriptingRuntimeVersion: 1
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
@@ -589,7 +665,7 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 
   projectName: 
   organizationId: 

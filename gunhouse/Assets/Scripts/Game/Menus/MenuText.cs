@@ -32,7 +32,7 @@
 
 #if CONTROLLER_AND_TOUCH || CONTROLLER
 
-        public const string ReturnToTile = "  Return\n to Tile";
+        public const string ReturnToTitle = "  Return\n to Title";
         public const string Start = "  Start";
 
         /* shop */
@@ -49,7 +49,7 @@
         /* options */
         public static string WatchCredits = "  Watch the\nCredits +$100";
 #else
-        public const string ReturnToTile = "B: Return\n to Tile";
+        public const string ReturnToTitle = "B: Return\n to Title";
         public const string Start = "A: Start";
 
         /* options */

@@ -16,13 +16,11 @@ namespace Gunhouse
 
         void StartSaveLoad()
         {
-            PSVitaVideoPlayer.TransferMemToMonoHeap();
-
             Main.Initialise();
             Main.enableInternalLogging = true;
-            Main.OnLog += OnLog;
-            Main.OnLogWarning += OnLogWarning;
-            Main.OnLogError += OnLogError;
+            Main.OnLog += OnLogSaveLoad;
+            Main.OnLogWarning += OnLogWarningSaveLoad;
+            Main.OnLogError += OnLogErrorSaveLoad;
 
             SaveLoad.Initialise();
             SaveLoad.OnGameSaved += OnSavedGameSaved;
@@ -73,9 +71,9 @@ namespace Gunhouse
 
         #region EventHandlers
 
-        void OnLog(Messages.PluginMessage msg) { OnScreenLog.Add(msg.Text); }
-        void OnLogWarning(Messages.PluginMessage msg) { OnScreenLog.Add("WARNING: " + msg.Text); }
-        void OnLogError(Messages.PluginMessage msg) { OnScreenLog.Add("ERROR: " + msg.Text); }
+        void OnLogSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add(msg.Text); }
+        void OnLogWarningSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add("WARNING: " + msg.Text); }
+        void OnLogErrorSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add("ERROR: " + msg.Text); }
 
         void OnSavedGameSaved(Messages.PluginMessage msg) { OnScreenLog.Add("Game Saved!"); }
 
@@ -115,6 +113,17 @@ namespace Gunhouse
 
         void OnLoadError(Messages.PluginMessage msg)
         {
+            /* @complete: according to the TRC, when the game finds a corrupted save data,
+                the player should be presented with the option of trying to reload or continue with a new game.
+
+                The save games plugin does handle broken slot checking and displaying the
+                required dialog you can test it by enabling the ""Fake Save Data Slot Broken"
+                option in the Vita's debug settings.
+
+                Sony.Vita.Dialog.Common.ShowUserMessage(Sony.Vita.Dialog.Common.EnumUserMessageType.MSG_DIALOG_BUTTON_TYPE_OK,
+                                                        true, "No Save Data.\nCreate New Save Data.");
+             */
+
             ResultCode res = new ResultCode();
             SaveLoad.GetLastError(out res);
             OnScreenLog.Add("Failed to load: " + res.className + ": " + res.lastError + ", sce error 0x" + res.lastErrorSCE.ToString("X8"));

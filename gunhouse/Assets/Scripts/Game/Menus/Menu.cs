@@ -351,7 +351,7 @@ namespace Gunhouse
                 AppMain.top_state = new CreditState();
             }, Input.Pad.Alt_Button));
             menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
-            menu_house.addOption(new MenuOption(MenuText.ReturnToTile, Gun.Ammo.VEGETABLE,
+            menu_house.addOption(new MenuOption(MenuText.ReturnToTitle, Gun.Ammo.VEGETABLE,
             () => {
                 Platform.SaveOptions();
                 AppMain.top_state.Dispose();
@@ -486,7 +486,7 @@ namespace Gunhouse
 
             menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
             menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
-            menu_house.addOption(new MenuOption(MenuText.ReturnToTile,
+            menu_house.addOption(new MenuOption(MenuText.ReturnToTitle,
                                                 Gun.Ammo.VEGETABLE, () => {
                 AppMain.top_state.Dispose();
                 AppMain.top_state = new TitleState(MenuOptions.Stats);
@@ -806,7 +806,7 @@ namespace Gunhouse
 #endif
             }, Input.Pad.Submit_Button));
             menu_house.addOption(new MenuOption("", Gun.Ammo.SKULL, null));
-            menu_house.addOption(new MenuOption(MenuText.ReturnToTile, Gun.Ammo.VEGETABLE, () => {
+            menu_house.addOption(new MenuOption(MenuText.ReturnToTitle, Gun.Ammo.VEGETABLE, () => {
                 AppMain.top_state.Dispose();
                 AppMain.top_state = new TitleState(MenuOptions.Continue);
             }, Input.Pad.Cancel_Button));
@@ -1353,7 +1353,7 @@ namespace Gunhouse
                 }
             }
 
-            menu_house.addOption(new MenuOption(MenuText.ReturnToTile, Gun.Ammo.VEGETABLE, () => {
+            menu_house.addOption(new MenuOption(MenuText.ReturnToTitle, Gun.Ammo.VEGETABLE, () => {
                 AppMain.back = true;
                 Platform.SaveStore();
             }, Input.Pad.Cancel_Button));
