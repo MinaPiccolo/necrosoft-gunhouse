@@ -73,7 +73,7 @@ PlayerSettings:
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
-  submitAnalytics: 1
+  submitAnalytics: 0
   usePlayerLog: 1
   bakeCollisionMeshes: 1
   forceSingleInstance: 0
@@ -145,11 +145,11 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.necrosoftgames.gunhouse
     Standalone: unity.Necrosoft Games.Gunhouse
-    Tizen: com.necrosoftgames.funhouse
+    Tizen: com.necrosoftgames.gunhouse
     iOS: com.necrosoftgames.funhouse
     tvOS: com.necrosoftgames.funhouse
   buildNumber:
-    iOS: 70
+    iOS: 72
   AndroidBundleVersionCode: 46
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
@@ -521,9 +521,6 @@ PlayerSettings:
   switchUdpSendBufferSize: 9
   switchUdpReceiveBufferSize: 42
   switchSocketBufferEfficiency: 4
-  switchSocketInitializeEnabled: 1
-  switchNetworkInterfaceManagerInitializeEnabled: 1
-  switchPlayerConnectionEnabled: 1
   ps4NPAgeRating: 12
   ps4NPTitleSecret: 
   ps4NPTrophyPackPath: 
@@ -653,9 +650,10 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 2
   scriptingDefineSymbols:
-    1: CONTROLLER_AND_TOUCH
-    4: TOUCH
+    1: LOADING_SCREEN;TOUCH
+    4: BUNDLED;LOADING_SCREEN;TRACKING;TOUCH
     7: LOADING_SCREEN;TOUCH
+    17: LOADING_SCREEN;TOUCH
   platformArchitecture:
     iOS: 2
     tvOS: 1
@@ -691,18 +689,64 @@ PlayerSettings:
   metroTileBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   metroSplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   metroSplashScreenUseBackgroundColor: 0
-  platformCapabilities: {}
+  platformCapabilities:
+    WindowsStoreApps:
+      AccountRead: False
+      AccountWrite: False
+      AlarmGet: False
+      AlarmSet: False
+      AppManagerLaunch: False
+      Bluetooth: False
+      CalendarRead: False
+      CalendarWrite: False
+      Call: False
+      CallHistoryRead: False
+      CallHistoryWrite: False
+      Camera: False
+      ContactRead: False
+      ContactWrite: False
+      ContentWrite: False
+      DataSharing: False
+      Display: False
+      Download: False
+      Email: False
+      ExternalStorage: False
+      ExternalStorageAppData: False
+      Haptic: False
+      Internet: False
+      KeyManager: False
+      LED: False
+      Location: False
+      MediaStorage: False
+      MessageRead: False
+      MessageWrite: False
+      NFC: False
+      NFCCardEmulation: False
+      NetworkGet: False
+      NetworkProfile: False
+      NetworkSet: False
+      Notification: False
+      PackageManagerInfo: True
+      Power: False
+      Push: False
+      Recorder: False
+      Shortcut: False
+      SystemSettings: False
+      Telephony: False
+      VolumeSet: False
+      WifiDirect: False
+      WindowPrioritySet: False
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 
   metroCompilationOverrides: 1
   tizenProductDescription: 
   tizenProductURL: 
-  tizenSigningProfileName: 
+  tizenSigningProfileName: necrosoftgames
   tizenGPSPermissions: 0
   tizenMicrophonePermissions: 0
   tizenDeploymentTarget: 
-  tizenDeploymentTargetType: -14737633
+  tizenDeploymentTargetType: 2
   tizenMinOSVersion: 1
   n3dsUseExtSaveData: 0
   n3dsCompressStaticMem: 1

@@ -48,6 +48,23 @@
 
         /* options */
         public static string WatchCredits = "  Watch the\nCredits +$100";
+#elif TOUCH
+        public const string ReturnToTitle = " Return\nto Title";
+        public const string Start = "Start";
+
+        /* options */
+        public static string WatchCredits = "  Watch the\nCredits +$100";
+
+        /* shop */
+        public static string Purchase = "Purchase\n -$"; // X
+        public static string Upgrade = "Upgrade\n-$"; // X
+        public static string AddHeart = "Add heart\n -$"; // X // &#x25AB;
+        public static string AddArmor = "Add armor\n -$"; // X // &#x25B5; // &#x25B3;
+        public static string Refund = "Refund Last\n  Upgrade\n  +$";
+        public static string AddHealing = "Add healing\n  -$";
+        public const string Equip = "Equip";
+        public const string Swap = "Swap";
+        public const string Cancel = "Cancel";
 #else
         public const string ReturnToTitle = "B: Return\n to Title";
         public const string Start = "A: Start";

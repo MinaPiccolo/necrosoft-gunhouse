@@ -19,9 +19,9 @@ namespace Gunhouse
         public void LoadBundle()
         {
             #if UNITY_TVOS
-            string bundleName = tvOS/bundled";
+            string bundleName = "tvOS/bundled";
             #elif UNITY_IOS
-            string bundleName = iOS/bundled";
+            string bundleName = "iOS/bundled";
             #elif UNITY_ANDROID
             string bundleName = "Android/bundled";
             #elif UNITY_WEBGL
