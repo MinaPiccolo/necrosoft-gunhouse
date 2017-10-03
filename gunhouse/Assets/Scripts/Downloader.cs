@@ -48,7 +48,12 @@ namespace Gunhouse
             #elif UNITY_WEBGL
 
             WWW request = WWW.LoadFromCacheOrDownload(bundleName, 1);
-            yield return request;
+
+            while (!request.isDone) {
+                if (progressBar != null) { progressBar.value = request.progress; }
+                yield return null;
+            }
+
             Bundle = request.assetBundle;
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
             request.Dispose();

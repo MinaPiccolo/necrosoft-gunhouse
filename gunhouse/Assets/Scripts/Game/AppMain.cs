@@ -68,12 +68,7 @@ namespace Gunhouse
         {
             renderer = new GHRenderer();
             textures = new Textures();
-
-//#if LOADING_SCREEN && !BUNDLED
-            //top_state = new LoadState(() => { return new TitleState(MenuOptions.Title); }, 5);
-//#else
             top_state = new TitleState(MenuOptions.Title);
-//#endif
         }
 
         public static void screenShake(int amount, int length)
@@ -117,7 +112,7 @@ namespace Gunhouse
                 }
             }
 
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             if (!(top_state is LoadState || top_state is EndGameState)) {
             #else
             if (!(top_state is EndGameState)) {
@@ -154,7 +149,7 @@ namespace Gunhouse
                 return;
             }
 
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             if (!(top_state is LoadState) && !(top_state is CreditState)) {
             #endif
 
@@ -167,7 +162,7 @@ namespace Gunhouse
                                        new Vector4(0, 0, 0,(1 - background_fade)));
                 }
 
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             }
             #endif
 

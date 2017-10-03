@@ -1566,7 +1566,7 @@ namespace Gunhouse
 
     public class CreditState : State
     {
-        #if LOADING_SCREEN
+        #if LOADING_SCREEN || LOADING_CREDITS
         int loadscreen;
         string protip;
         float textWidth;
@@ -1577,7 +1577,7 @@ namespace Gunhouse
             Tracker.ScreenVisit(SCREEN_NAME.CREDITS);
             MetaState.end_game = false;
 
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             loadscreen = Util.rng.Next(5);
             protip = Text.Wrap(Story.tips[Util.rng.Next(Story.tips.Length)], 50);
             textWidth = Text.Size(AppMain.textures.font, protip).x;
@@ -1588,14 +1588,14 @@ namespace Gunhouse
         public override void tick() { }
         public override void draw()
         {
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             AppMain.textures.loading.draw(loadscreen, new Vector2(AppMain.vscreen.x * 0.5f, 545 * 0.5f - 50), new Vector2(-1, 1), Vector4.one);
             Text.Draw(new Vector2(AppMain.vscreen.x * 0.5f, 390) + new Vector2(textWidth * 0.25f, 0), protip, Vector2.one * 0.5f, Vector4.one);
             #endif
         }
     }
 
-#if LOADING_SCREEN
+#if LOADING_SCREEN || LOADING_CREDITS
     public class LoadState : State
     {
         public delegate State ToLoad();

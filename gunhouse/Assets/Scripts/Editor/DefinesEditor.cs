@@ -6,7 +6,9 @@ namespace Necrosoft
     public class DefinesEditor : EditorWindow
     {
         /* N3DS, PS4, PSP2, Switch, Tizen, tvOS, WebGL, XboxOne already exist */
-        static string[] platforms = { "FIXED_16X9", "BUNDLED", "LOADING_SCREEN", "TRACKING",
+        static string[] platforms = { "FIXED_16X9", "BUNDLED",
+                                      "LOADING_SCREEN", "LOADING_CREDITS",
+                                      "TRACKING",
                                       "CONTROLLER_AND_TOUCH", "CONTROLLER", "TOUCH",
                                       "ANDROID_STANDALONE",
                                       "AMAZON_STORE", "AMAZON_UNDERGROUND",
