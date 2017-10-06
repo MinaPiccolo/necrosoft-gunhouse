@@ -16,6 +16,8 @@ namespace Gunhouse
         [SerializeField] TextMeshProUGUI tutorialText;
         [SerializeField] Animator skulls;
 
+        [Space(10)] [SerializeField] Canvas switchMenu;
+
         [System.NonSerialized] public int repeatAmount = 2;
         [System.NonSerialized] public int blocksCreated;
         [System.NonSerialized] public int loadedGunAmount;
@@ -82,11 +84,15 @@ namespace Gunhouse
         public void SetDisplay(bool display)
         {
             if (display) {
-                Tracker.TutorialStart();
-                lessonIndex = Lesson.START;
+                switchMenu.gameObject.SetActive(true);
+                hasFocus = true;
                 isPaused = false;
-                background.gameObject.SetActive(false);
-                cursor.gameObject.SetActive(false);
+
+                //Tracker.TutorialStart();
+                //lessonIndex = Lesson.START;
+                //isPaused = false;
+                //background.gameObject.SetActive(false);
+                //cursor.gameObject.SetActive(false);
             }
             else {
                 isReady = true;
@@ -168,6 +174,8 @@ namespace Gunhouse
 
         public void SetLesson(Lesson lesson)
         {
+            Debug.Log("SetLesson: " + lesson.ToString());
+
             if (lesson >= Lesson.DONE || lessonIndex >= lesson) return;
 
             lessonIndex = lesson;
@@ -253,6 +261,16 @@ namespace Gunhouse
                 if (pausing) { leanDelay.pause(); }
                 else { leanDelay.resume(); }
             }
+        }
+
+        public void HideSwitchControls()
+        {
+            switchMenu.gameObject.SetActive(false);
+            Tracker.TutorialStart();
+            lessonIndex = Lesson.START;
+            isPaused = false;
+            background.gameObject.SetActive(false);
+            cursor.gameObject.SetActive(false);
         }
 
         #endregion
