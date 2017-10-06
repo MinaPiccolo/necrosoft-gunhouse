@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 9
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 8
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_ShadowMaskMode: 2
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -209,7 +209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: -1723}
+  m_AnchoredPosition: {x: 0, y: -1722}
   m_SizeDelta: {x: 0, y: 1723}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &183175027
@@ -347,7 +347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 2}
   m_SizeDelta: {x: 0, y: 2048}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &290344743
@@ -977,8 +977,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0577c1e48ba594aa882527c04d3ff3b7, type: 2}
-  m_sharedMaterial: {fileID: 21093492446675642, guid: 0577c1e48ba594aa882527c04d3ff3b7,
+  m_fontAsset: {fileID: 11400000, guid: cf7ef620662104148a6b6dbd14b7c986, type: 2}
+  m_sharedMaterial: {fileID: 21455558808938862, guid: cf7ef620662104148a6b6dbd14b7c986,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

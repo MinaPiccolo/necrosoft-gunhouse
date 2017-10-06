@@ -653,6 +653,7 @@ PlayerSettings:
     1: 
     4: TOUCH
     7: 
+    27: LOADING_SCREEN;CONTROLLER_AND_TOUCH
   platformArchitecture:
     iOS: 2
     tvOS: 1
@@ -750,7 +751,7 @@ PlayerSettings:
   cloudServicesEnabled:
     Analytics: 0
     Build: 0
-    Collab: 0
+    Collab: 1
     ErrorHub: 0
     Game_Performance: 0
     Hub: 0

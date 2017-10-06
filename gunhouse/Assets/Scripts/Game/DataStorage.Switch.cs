@@ -1,17 +1,20 @@
-﻿#if UNITY_SWTICH
+﻿#if UNITY_SWITCH
 using Necrosoft;
+using UnityEngine;
 
 namespace Gunhouse
 {
     public static partial class DataStorage
     {
-        public static void SaveOptions() { }
-        public static void SaveStore() { }
-        public static void SaveEndWave() { }
+        public static void SaveOptions() { SaveFile(); }
+        public static void SaveStore() { SaveFile(); }
+        public static void SaveEndWave() { SaveFile(); }
         public static void SaveHardcore() { }
 
         public static string SaveFile()
         {
+            Debug.Log("Saving");
+
             int[] scores = new int[SCORES_TO_KEEP * 2];
             for (int i = 0; i < SCORES_TO_KEEP; i++)
             {
@@ -20,7 +23,7 @@ namespace Gunhouse
                 scores[i * 2 + 1] = BestHardcoreScores[i].Item2;
             }
 
-            SaveFile saveFile = new SaveFile();
+            SaveData saveFile = new SaveData();
             saveFile.version = version;
             saveFile.Money = Money;
             saveFile.Hearts = Hearts;
@@ -51,14 +54,16 @@ namespace Gunhouse
 
         public static void LoadFile()
         {
+            Reset();
+
             string serializedSaveData = "";
-            SaveFile savedData;
+            SaveData savedData;
             if (SaveDataHandler.Load(ref serializedSaveData, "GunhouseSave")) {
-                savedData = JsonUtility.FromJson<SaveFile>(serializedSaveData);
+                savedData = JsonUtility.FromJson<SaveData>(serializedSaveData);
             }
             else {
-                serializedSaveData = Save();
-                savedData = JsonUtility.FromJson<SaveFile>(serializedSaveData);
+                serializedSaveData = SaveFile();
+                savedData = JsonUtility.FromJson<SaveData>(serializedSaveData);
             }
 
             version = savedData.version != 0 ? savedData.version : 1;
@@ -92,8 +97,8 @@ namespace Gunhouse
             DisconcertingObjectivesSeen = savedData.DisconcertingObjectivesSeen;
         }
 
-        [Serializable]
-        public class SaveFile
+        [System.Serializable]
+        public class SaveData
         {
             public int version;
             public int Money;

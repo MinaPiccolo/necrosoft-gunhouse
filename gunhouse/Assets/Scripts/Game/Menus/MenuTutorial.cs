@@ -33,6 +33,8 @@ namespace Gunhouse
         int frameCounter;
         bool isPaused;
 
+        bool showingControllerMap;
+
         Lesson lessonIndex = Lesson.NONE;
         public bool MakeBlocks { get { return lessonIndex == Lesson.MAKE_BLOCKS; } }
         public bool LoadedGun { get { return lessonIndex == Lesson.LOAD_GUNS; } }
@@ -259,8 +261,23 @@ namespace Gunhouse
             new string[] { "Welcome to Gunhouse! We're gonna show you how to gather ammo to load guns and defend your house from jerks!",
                            "First, you've got to take all these tiny block pieces and turn them into BIG blocks. Big blocks are ammo!",
                            "To make big blocks, drag one, two, or three rows of block pieces left or right, combining the pieces that fall.",
-#if CONTROLLER_AND_TOUCH
-                           "Either touch and drag, or hit the D-Pad left and right, hitting X to confirm the pieces you'd like to move.",
+#if UNITY_SWITCH
+                           "Either touch and drag, or press the Left Stick or Directional Buttons left and right, hitting the Confirm Button to bank the pieces you'd like to move.",
+                           "Try it for yourself! Make three big blocks! You can move one, two, or three block pieces at a time." },
+            new string[] { "Good stuff. Now let's load that ammo into your guns!",
+                           "Slide big blocks LEFT to load guns. Either drag blocks to the left and release, or press left on the Left Stick or Directional Buttons, then hit Confirm.",
+                           "Try loading three big blocks to the LEFT as ammo for your guns." },
+            new string[] { "Hooray! Next we'll talk about special attacks, which complement your guns.",
+                           "Slide big blocks RIGHT to load specials. Either drag blocks right with touch, or press right on the Left Stick or Directional Buttons, and hit Confirm.",
+                           "Try loading three big blocks to the RIGHT as special ammo!" },
+            new string[] { "Well done! Keep in mind you have limited time to add ammo, which you see on top of the house.",
+                           "Keep adding guns and specials until the ammo door closes! Usually the timer is 18 seconds, but we've doubled it for now." },
+            new string[] { "Okay, it's time to defend your house, so let's shoot some guns! Each gun type has its own properties.",
+                           "Either tap any of the guns on the left side of the house, or select a gun with the Left Stick or Directional buttons, and hit Confirm to activate." },
+            new string[] { "Let's use those specials now! Specials usually affect a wide area.",
+                           "Either tap any of your specials on the right side of the house, or select a special with the Left Stick or Directional Buttons, then hit Confirm." },
+#elif CONTROLLER_AND_TOUCH
+                "Either touch and drag, or hit the D-Pad left and right, hitting X to confirm the pieces you'd like to move.",
                            "Try it for yourself! Make three big blocks! You can move one, two, or three block pieces at a time." },
             new string[] { "Good stuff. Now let's load that ammo into your guns!", 
                            "Slide big blocks LEFT to load guns. Either drag blocks to the left and release, or tap left on the D-Pad, then hit X to confirm!",
@@ -308,7 +325,8 @@ namespace Gunhouse
                            "Try to make three bonus guns or specials by matching the pulsing block type!" },
             new string[] { "And now for some bad news. When enemies attack your house or steal your orphans, your heart meter empties.",
                            "But!! When you defeat enemies, you regain some hearts, and get money to use in the store!",
-                           "Just keep at it and you'll do great! Go get 'em!" }
+                           "Just keep at it and you'll do great! Go get 'em!" },
+            new string[] { "    Move blocks\n    Confirm" }
         };
     }
 

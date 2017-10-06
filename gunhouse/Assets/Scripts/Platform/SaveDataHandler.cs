@@ -119,14 +119,13 @@ public class SaveDataHandler : MonoBehaviour
             BinaryReader reader = new BinaryReader(stream);
             outputData = reader.ReadString();
         }
+
         return true;
     }
 
     public static SaveDataHandler GetInstance()
     {
         if (instance != null) return instance;
-
-        Debug.Log("instance is null. generating SaveDataHandler");
 
         GameObject newGameObject = new GameObject();
         instance = newGameObject.AddComponent<SaveDataHandler>();

@@ -83,6 +83,14 @@ namespace InControl
 
             InputManager.OnDeviceAttached += inputDevice =>
             {
+                if (!Gunhouse.AppEntry.HasAppStarted())
+                {
+                    UnityEngine.Debug.Log("<color=red>we're not in it yet. don't pop the controller applet</color>");
+                    return;
+                } else
+                {
+                    UnityEngine.Debug.Log("<color=blue>it's ok to pop the applet.</color>");
+                }
                 UnityEngine.Debug.Log("Attached: " + inputDevice.Name);
                 ShowControllerSupportForSinglePlayer(false);
             };

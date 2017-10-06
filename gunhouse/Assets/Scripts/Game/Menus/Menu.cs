@@ -125,12 +125,30 @@ namespace Gunhouse
                                                      new Vector4(.5f, .5f, .5f, .5f),
                                                      1, is_selected);
 
+#if UNITY_SWITCH
+                if (options[i].button == ControllerButton.NONE)
+                {
+                    Text.Draw(options[i].position + new Vector2(Puzzle.piece_size * 1.5f, options[i].size.y * .5f) -
+                                  (options[i].text_size * .5f) * options[i].font_scale +
+                                  new Vector2(-12, 22) * options[i].font_scale, options[i].text,
+                                  Vector2.one * options[i].font_scale, Vector4.one);
+                }
+                else
+                {
+                    Text.Draw(options[i].position + new Vector2(Puzzle.piece_size * 1.15f, options[i].size.y * .5f) -
+                                  (options[i].text_size * .5f) * options[i].font_scale +
+                                  new Vector2(-12, 22) * options[i].font_scale, options[i].text,
+                                  Vector2.one * options[i].font_scale, Vector4.one);
+                    draw_button(i);
+                }
+#else
                 Text.Draw(options[i].position + new Vector2(Puzzle.piece_size * 1.5f, options[i].size.y * .5f) -
                           (options[i].text_size * .5f) * options[i].font_scale +
                           new Vector2(-12, 22) * options[i].font_scale, options[i].text,
                           Vector2.one * options[i].font_scale, Vector4.one);
 
                 draw_button(i);
+#endif
             }
         }
 
@@ -155,12 +173,21 @@ namespace Gunhouse
             case ControllerButton.PS_CIRCLE: button_sprite = (int)store.Sprites.ps_circle; break;
             case ControllerButton.PS_TRIANGLE: button_sprite = (int)store.Sprites.ps_triangle; break;
             case ControllerButton.PS_SQUARE: button_sprite = (int)store.Sprites.ps_square; break;
+            case ControllerButton.SWITCH_A: button_sprite = (int)store.Sprites.switch_button_right; break;
+            case ControllerButton.SWITCH_B: button_sprite = (int)store.Sprites.switch_button_down; break;
+            case ControllerButton.SWITCH_X: button_sprite = (int)store.Sprites.switch_button_up; break;
+            case ControllerButton.SWITCH_Y: button_sprite = (int)store.Sprites.switch_button_left; break;
             }
 
+#if UNITY_SWITCH
+            Vector2 buttonPosition = options[index].position +
+                                     new Vector2(Puzzle.piece_size * 2.35f, options[index].size.y * .5f);
+#else
             Vector2 buttonPosition = options[index].position +
                                      new Vector2(Puzzle.piece_size * 1.5f, options[index].size.y * .5f) -
                                      (options[index].text_size * .5f) * options[index].font_scale +
                                      new Vector2(-30, 20) * options[index].font_scale;
+#endif
 
             AppMain.textures.store.draw(button_sprite, buttonPosition, Vector2.one * 0.64f, Vector4.one);
         }
@@ -182,7 +209,7 @@ namespace Gunhouse
                             MenuText.ContinueOn + Game.dayName(DataStorage.StartOnWave);
 
             menu_house.addOption(new MenuOption(name, Gun.Ammo.DRAGON, () => {
-                #if TRACKING
+#if TRACKING
                 string[] equippedNames = new string[Shop.max_equipped];
                 int equip_index = 0;
                 for (int i = 0; i < DataStorage.NumberOfGuns; ++i) {
@@ -190,7 +217,7 @@ namespace Gunhouse
                     equippedNames[equip_index++] = Shop.guns[i].name;
                 }
                 Tracker.StartMode(Game.dayName(MetaState.wave_number), equippedNames, DataStorage.Money);
-                #endif
+#endif
 
                 AppMain.menuAchievements.HideButtons();
                 AppMain.top_state.Dispose();
@@ -279,7 +306,7 @@ namespace Gunhouse
                 AppMain.top_state = quit;
             }
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
 
             int key = Util.keyRepeat("level select", 0, 20, 5, Input.last_key);
 
@@ -306,7 +333,7 @@ namespace Gunhouse
                 MoneyGuy.me.addMoney(100000);
             }
 
-            #endif
+#endif
         }
 
         public override void draw()
@@ -783,7 +810,7 @@ namespace Gunhouse
             menu_house.ignore_pad = true;
 
             menu_house.addOption(new MenuOption(MenuText.Start, Gun.Ammo.DRAGON, () => {
-                #if TRACKING
+#if TRACKING
                 string[] equippedNames = new string[Shop.max_equipped];
                 int equip_index = 0;
                 for (int i = 0; i < DataStorage.NumberOfGuns; ++i) {
@@ -791,7 +818,7 @@ namespace Gunhouse
                     equippedNames[equip_index++] = Shop.guns[i].name;
                 }
                 Tracker.StartMode(Game.dayName(MetaState.wave_number), equippedNames, DataStorage.Money);
-                #endif
+#endif
 
                 AppMain.top_state.Dispose();
 #if LOADING_SCREEN
@@ -1566,32 +1593,32 @@ namespace Gunhouse
 
     public class CreditState : State
     {
-        #if LOADING_SCREEN
+#if LOADING_SCREEN
         int loadscreen;
         string protip;
         float textWidth;
-        #endif
+#endif
 
         public CreditState(bool autoMove = true)
         {
             Tracker.ScreenVisit(SCREEN_NAME.CREDITS);
             MetaState.end_game = false;
 
-            #if LOADING_SCREEN
+#if LOADING_SCREEN
             loadscreen = Util.rng.Next(5);
             protip = Text.Wrap(Story.tips[Util.rng.Next(Story.tips.Length)], 50);
             textWidth = Text.Size(AppMain.textures.font, protip).x;
-            #endif
+#endif
             AppEntry.LoadCreditsSceneAsync(autoMove);
         }
 
         public override void tick() { }
         public override void draw()
         {
-            #if LOADING_SCREEN
+#if LOADING_SCREEN
             AppMain.textures.loading.draw(loadscreen, new Vector2(AppMain.vscreen.x * 0.5f, 545 * 0.5f - 50), new Vector2(-1, 1), Vector4.one);
             Text.Draw(new Vector2(AppMain.vscreen.x * 0.5f, 390) + new Vector2(textWidth * 0.25f, 0), protip, Vector2.one * 0.5f, Vector4.one);
-            #endif
+#endif
         }
     }
 

@@ -50,7 +50,7 @@ namespace Gunhouse
                 savedObjectivesData = JsonUtility.FromJson<ObjectivesSaveFile>(serializedObjectivesSaveData);
             }
             else {
-                savedObjectivesData = JsonUtility.FromJson<ObjectivesSaveFile>(Save());
+                savedObjectivesData = JsonUtility.FromJson<ObjectivesSaveFile>(SaveFile());
             }
 
             defeatWithGun = (Gun.Ammo)(savedObjectivesData.defeatWithGun != 0 ? savedObjectivesData.defeatWithGun : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.SIN));

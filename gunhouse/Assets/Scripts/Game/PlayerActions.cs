@@ -20,9 +20,15 @@ namespace Gunhouse
         public PlayerAction Start;
         public PlayerAction Escape;
 
+#if UNITY_SWITCH
+        public ControllerButton Submit_Button = ControllerButton.SWITCH_B;
+        public ControllerButton Cancel_Button = ControllerButton.SWITCH_A;
+        public ControllerButton Alt_Button = ControllerButton.SWITCH_X;
+#else
         public ControllerButton Submit_Button = ControllerButton.PS_X;
         public ControllerButton Cancel_Button = ControllerButton.PS_CIRCLE;
         public ControllerButton Alt_Button = ControllerButton.PS_TRIANGLE;
+#endif
 
         public bool AnyWasPressd()
         {
@@ -80,16 +86,16 @@ namespace Gunhouse
             actions.Start.AddDefaultBinding(InputControlType.Start);
             actions.Start.AddDefaultBinding(InputControlType.Command);
             
-            #if UNITY_SWITCH
+#if UNITY_SWITCH
             actions.Start.AddDefaultBinding(InputControlType.Plus);
             actions.Start.AddDefaultBinding(InputControlType.Minus);
-            #endif
+#endif
 
-            #if UNITY_WEBGL
+#if UNITY_WEBGL
             actions.Escape.AddDefaultBinding(Key.Q);
-            #else
+#else
             actions.Escape.AddDefaultBinding(Key.Escape);
-            #endif
+#endif
 
             return actions;
         }

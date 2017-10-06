@@ -409,6 +409,9 @@ namespace Gunhouse
         int dayTextTimer = 60 * 2;
         int startWaveTimer = 60 * 3;
 
+        bool hidePauseButton = false;
+        public static bool HidePauseButton { set { instance.hidePauseButton = value; } }
+
         public Game()
         {
             Tracker.LevelStart(MetaState.wave_number);
@@ -504,6 +507,10 @@ namespace Gunhouse
 
             Choom.Play("Music" + music);
             day_name = dayName(MetaState.wave_number);
+
+#if UNITY_SWITCH
+            hidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
+#endif
         }
 
         public override void Dispose()
@@ -576,8 +583,10 @@ namespace Gunhouse
             base.draw();
 
             if (AppMain.top_state == this) {
-                AppMain.textures.hud.draw((int)hud.Sprites.pause, new Vector2(AppMain.vscreen.x - 47, 47),
-                                          new Vector2 (-1, 1) * 64 / 97, Vector4.one);
+                if (!hidePauseButton) {
+                    AppMain.textures.hud.draw((int)hud.Sprites.pause, new Vector2(AppMain.vscreen.x - 47, 47),
+                                              new Vector2(-1, 1) * 64 / 97, Vector4.one);
+                }
 
                 if (time > startWaveTimer) {
                     AppMain.tutorial.SetLesson(Lesson.MAKE_BLOCKS);
@@ -593,7 +602,7 @@ namespace Gunhouse
         {
             time++;
 
-            #region Pause/Back
+#region Pause/Back
 
             if (AppMain.top_state == this) {
                 for (int i = 0; i < Input.touches.Count; i++) {
@@ -615,9 +624,9 @@ namespace Gunhouse
                 AppMain.top_state = new PauseState(this);
             }
 
-            #endregion
+#endregion
 
-            #region Value Resets
+#region Value Resets
 
             if (house.door_position < 1.0f) {
                 if (!MetaState.end_game) {
@@ -648,7 +657,7 @@ namespace Gunhouse
                 orphan_group.tickrate = 0;
             }
 
-            #endregion
+#endregion
 
             if (AppMain.top_state == this) {
                 base.tick();
@@ -663,11 +672,11 @@ namespace Gunhouse
                 MetaState.wave.tick();
             }
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
 
             if (Input.keys[(int)KeyCode.Delete]) { house.health = 0; }
 
-            #endif
+#endif
 
             if (house.health <= 0 && AppMain.top_state == this) {
                 AppMain.top_state = new EndWaveState(false, this);

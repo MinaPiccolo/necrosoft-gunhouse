@@ -6,7 +6,7 @@
         public static string ContinueOn = "Continue on\n";
         public const string StartOnEarlierDay = " Start on\nearlier day";
         public const string HardcoreMode = " Hardcore Mode";
-        public const string Shop = " Shop";
+        public const string Shop = "Shop";
         public const string Options = "Options";
         public const string Stats = "Stats";
 
@@ -30,12 +30,30 @@
         public static string OwnedLevel = "\nOwned - Level: ";
         public static string MoveX = "\n\nMove the red X to the gun you want\nto unequip, then select \"swap.\"";
 
-#if CONTROLLER_AND_TOUCH || CONTROLLER
+#if UNITY_SWITCH
+        public const string ReturnToTile = " Return\nto Title";
+        public const string Start = "Start";
+
+        // shop 
+        public static string Purchase = "Purchase\n -$";      // X
+        public static string Upgrade = "Upgrade\n-$";         // X
+        public static string AddHeart = "Add heart\n -$";     // X // &#x25AB;
+        public static string AddArmor = "Add armor\n -$";     // X // &#x25B5; // &#x25B3;
+        public static string Refund = "Refund Last\n   Upgrade\n  +$";
+        public static string AddHealing = "Add healing\n  -$";
+        public const string Equip = "Equip";
+        public const string Swap = "Swap";
+        public const string Cancel = "Cancel";
+
+        // options 
+        public static string WatchCredits = " Watch the\n  Credits\n   +$100";
+
+#elif CONTROLLER_AND_TOUCH || CONTROLLER
 
         public const string ReturnToTile = "  Return\n to Tile";
         public const string Start = "  Start";
 
-        /* shop */
+        // shop
         public static string Purchase = "  Purchase\n -$";      // X
         public static string Upgrade = "  Upgrade\n-$";         // X
         public static string AddHeart = "  Add heart\n -$";     // X // &#x25AB;
@@ -46,16 +64,16 @@
         public const string Swap = "  Swap";
         public const string Cancel = "  Cancel";
 
-        /* options */
+        // options
         public static string WatchCredits = "  Watch the\nCredits +$100";
 #else
         public const string ReturnToTile = "B: Return\n to Tile";
         public const string Start = "A: Start";
 
-        /* options */
+        // options
         public static string WatchCredits = "Y: Watch the\nCredits +$100";
 
-        /* shop */
+        // shop
         public static string Purchase = "A: Purchase\n -$"; // X
         public static string Upgrade = "A: Upgrade\n-$"; // X
         public static string AddHeart = "A: Add heart\n -$"; // X // &#x25AB;

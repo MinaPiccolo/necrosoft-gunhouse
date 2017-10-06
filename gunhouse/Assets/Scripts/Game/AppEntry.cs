@@ -89,5 +89,10 @@ namespace Gunhouse
 
             GameObject.FindObjectOfType<CreditsScene>().Display(autoMove);
         }
+
+        public static bool HasAppStarted()
+        {
+            return instance != null;
+        }
     }
 }

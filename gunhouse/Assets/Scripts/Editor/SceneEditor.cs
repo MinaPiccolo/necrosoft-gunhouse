@@ -49,11 +49,11 @@ namespace Necrosoft
             BuildPipeline.BuildAssetBundles("Assets/StreamingAssets/WebGL", BuildAssetBundleOptions.None, BuildTarget.WebGL);
         }
 
-        [MenuItem("Game/Bundle/Clear Cache")]
+        /*[MenuItem("Game/Bundle/Clear Cache")]
         static void AssetBundleClearCache()
         {
             if (Caching.ClearCache()) { Debug.LogWarning("Successfully cleaned all caches."); }
             else { Debug.LogWarning("Cache was in use."); }
-        }
+        }*/
     }
 }
