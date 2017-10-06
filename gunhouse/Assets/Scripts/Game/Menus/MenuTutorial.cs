@@ -89,10 +89,9 @@ namespace Gunhouse
         public void SetDisplay(bool display)
         {
             if (display) {
-                switchMenu.gameObject.SetActive(true);
                 hasFocus = true;
                 isPaused = false;
-
+                showingControllerMap = false;
                 //Tracker.TutorialStart();
                 //lessonIndex = Lesson.START;
                 //isPaused = false;
@@ -179,6 +178,11 @@ namespace Gunhouse
 
         public void SetLesson(Lesson lesson)
         {
+            if (!showingControllerMap && hasFocus) {
+                switchMenu.gameObject.SetActive(true);
+                showingControllerMap = true;
+            }
+
             if (lesson >= Lesson.DONE || lessonIndex >= lesson) return;
 
             lessonIndex = lesson;
