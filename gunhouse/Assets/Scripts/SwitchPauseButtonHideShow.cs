@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwitchPauseButtonHideShow : MonoBehaviour {
+public class SwitchPauseButtonHideShow {
 #if UNITY_SWITCH
     static void OnNotificationMessage(UnityEngine.Switch.Notification.Message message)
     {

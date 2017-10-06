@@ -37,7 +37,7 @@ namespace Gunhouse.Credits
         void FixedUpdate()
         {
             if (startScrolling) {
-                if (Input.Pad.Start.WasPressed) ExitCredits();
+                // if (Input.Pad.Start.WasPressed) ExitCredits(); // don't let the player skip the credits because then they can farm infinite $100 rewards B-)
                 if (Input.Pad.Submit.WasPressed) Pressed(true);
                 if (Input.Pad.Submit.WasReleased) Pressed(false);
             }

@@ -55,6 +55,11 @@ namespace Gunhouse
 
         void Update()
         {
+            if (Input.Pad.Submit.WasPressed && switchMenu.gameObject.activeSelf)
+            {
+                HideSwitchControls();
+            }
+
             if (lessonIndex >= Lesson.DONE || isPaused) { return; }
 
             if (frameDelay) {
@@ -174,8 +179,6 @@ namespace Gunhouse
 
         public void SetLesson(Lesson lesson)
         {
-            Debug.Log("SetLesson: " + lesson.ToString());
-
             if (lesson >= Lesson.DONE || lessonIndex >= lesson) return;
 
             lessonIndex = lesson;
