@@ -37,7 +37,6 @@ namespace Gunhouse.Credits
         void FixedUpdate()
         {
             if (startScrolling) {
-                if (Input.Pad.Start.WasPressed) ExitCredits();
                 if (Input.Pad.Submit.WasPressed) Pressed(true);
                 if (Input.Pad.Submit.WasReleased) Pressed(false);
             }

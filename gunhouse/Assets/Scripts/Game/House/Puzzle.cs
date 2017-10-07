@@ -409,6 +409,9 @@ namespace Gunhouse
         int dayTextTimer = 60 * 2;
         int startWaveTimer = 60 * 3;
 
+        bool hidePauseButton = false;
+        public static bool HidePauseButton { set { instance.hidePauseButton = value; } }
+
         public Game()
         {
             Tracker.LevelStart(MetaState.wave_number);
@@ -504,6 +507,10 @@ namespace Gunhouse
 
             Choom.Play("Music" + music);
             day_name = dayName(MetaState.wave_number);
+
+            #if UNITY_SWITCH
+            hidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
+            #endif
         }
 
         public override void Dispose()
@@ -576,8 +583,10 @@ namespace Gunhouse
             base.draw();
 
             if (AppMain.top_state == this) {
-                AppMain.textures.hud.draw((int)hud.Sprites.pause, new Vector2(AppMain.vscreen.x - 47, 47),
-                                          new Vector2 (-1, 1) * 64 / 97, Vector4.one);
+                if (!hidePauseButton) {
+                    AppMain.textures.hud.draw((int)hud.Sprites.pause, new Vector2(AppMain.vscreen.x - 47, 47),
+                                              new Vector2(-1, 1) * 64 / 97, Vector4.one);
+                }
 
                 if (time > startWaveTimer) {
                     AppMain.tutorial.SetLesson(Lesson.MAKE_BLOCKS);

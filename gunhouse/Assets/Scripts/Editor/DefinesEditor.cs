@@ -6,18 +6,14 @@ namespace Necrosoft
     public class DefinesEditor : EditorWindow
     {
         /* N3DS, PS4, PSP2, Switch, Tizen, tvOS, WebGL, XboxOne already exist */
-        static string[] platforms = { "FIXED_16X9", "BUNDLED",
+        static string[] platforms = { "BUNDLED",
                                       "LOADING_SCREEN", "LOADING_CREDITS",
                                       "TRACKING",
                                       "CONTROLLER_AND_TOUCH", "CONTROLLER", "TOUCH",
-                                      "ANDROID_STANDALONE",
-                                      "AMAZON_STORE", "AMAZON_UNDERGROUND",
-                                      "HUMBLE", "HUMBLE_ANDROID",
                                       "JUMP_STORE",
                                       "MACOS_STORE", "MACOS_STANDALONE",
-                                      "STEAM_PC", "STEAM_MOBILE",
-                                      "PLAY_STORE",
-                                      "WINDOWS_PHONE", "WINDOWS_STORE" };
+                                      "STEAM_PC",
+                                      "PLAY_STORE" };
 
         static bool[] defineEnable = new bool[platforms.Length];
         Vector2 scroll;

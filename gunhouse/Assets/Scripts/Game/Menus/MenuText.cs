@@ -6,7 +6,7 @@
         public static string ContinueOn = "Continue on\n";
         public const string StartOnEarlierDay = " Start on\nearlier day";
         public const string HardcoreMode = " Hardcore Mode";
-        public const string Shop = " Shop";
+        public const string Shop = "Shop";
         public const string Options = "Options";
         public const string Stats = "Stats";
 
@@ -30,25 +30,27 @@
         public static string OwnedLevel = "\nOwned - Level: ";
         public static string MoveX = "\n\nMove the red X to the gun you want\nto unequip, then select \"swap.\"";
 
-#if CONTROLLER_AND_TOUCH || CONTROLLER
+        #if CONTROLLER_AND_TOUCH || CONTROLLER
 
-        public const string ReturnToTitle = "  Return\n to Title";
-        public const string Start = "  Start";
+        public const string ReturnToTitle = " Return\nto Title";
+        public const string Start = "Start";
 
-        /* shop */
-        public static string Purchase = "  Purchase\n -$";      // X
-        public static string Upgrade = "  Upgrade\n-$";         // X
-        public static string AddHeart = "  Add heart\n -$";     // X // &#x25AB;
-        public static string AddArmor = "  Add armor\n -$";     // X // &#x25B5; // &#x25B3;
-        public static string Refund = "  Refund Last\n   Upgrade\n  +$";
-        public static string AddHealing = "  Add healing\n  -$";
-        public const string Equip = "  Equip";
-        public const string Swap = "  Swap";
-        public const string Cancel = "  Cancel";
+        // shop 
+        public static string Purchase = "Purchase\n -$";
+        public static string Upgrade = " Upgrade\n-$";
+        public static string AddHeart = " Add\nheart\n-$";
+        public static string AddArmor = "Add armor\n -$";
+        public static string Refund = " Refund\n   Last\n Upgrade\n +$";
+        public static string AddHealing = "  Add\nhealing\n-$";
+        public const string Equip = "Equip";
+        public const string Swap = "Swap";
+        public const string Cancel = "Cancel";
 
-        /* options */
-        public static string WatchCredits = "  Watch the\nCredits +$100";
-#elif TOUCH
+        // options 
+        public static string WatchCredits = " Watch the\n  Credits\n   +$100";
+
+        #else  // TOUCH
+
         public const string ReturnToTitle = " Return\nto Title";
         public const string Start = "Start";
 
@@ -65,23 +67,6 @@
         public const string Equip = "Equip";
         public const string Swap = "Swap";
         public const string Cancel = "Cancel";
-#else
-        public const string ReturnToTitle = "B: Return\n to Title";
-        public const string Start = "A: Start";
-
-        /* options */
-        public static string WatchCredits = "Y: Watch the\nCredits +$100";
-
-        /* shop */
-        public static string Purchase = "A: Purchase\n -$"; // X
-        public static string Upgrade = "A: Upgrade\n-$"; // X
-        public static string AddHeart = "A: Add heart\n -$"; // X // &#x25AB;
-        public static string AddArmor = "A: Add armor\n -$"; // X // &#x25B5; // &#x25B3;
-        public static string Refund = "Y: Refund Last\n   Upgrade\n  +$";
-        public static string AddHealing = "Y: Add healing\n  -$";
-        public const string Equip = "Y: Equip";
-        public const string Swap = "A: Swap";
-        public const string Cancel = "Y: Cancel";
-#endif
+        #endif
     }
 }

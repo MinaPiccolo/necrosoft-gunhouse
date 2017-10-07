@@ -118,19 +118,26 @@ namespace Gunhouse
                 bool is_selected = held_option == i && options[i].selected != null;
 
                 AppMain.textures.block.draw_outline(Puzzle.ammoToBlockSprite(options[i].ammo),
-                                                     options[i].position +
-                                                     new Vector2(Puzzle.piece_size * 1.5f,
-                                                                 options[i].size.y * .5f),
-                                                     (options[i].size / 64) * .25f,
-                                                     new Vector4(.5f, .5f, .5f, .5f),
-                                                     1, is_selected);
-
-                Text.Draw(options[i].position + new Vector2(Puzzle.piece_size * 1.5f, options[i].size.y * .5f) -
-                          (options[i].text_size * .5f) * options[i].font_scale +
-                          new Vector2(-12, 22) * options[i].font_scale, options[i].text,
-                          Vector2.one * options[i].font_scale, Vector4.one);
-
-                draw_button(i);
+                                                    options[i].position +
+                                                    new Vector2(Puzzle.piece_size * 1.5f,
+                                                                options[i].size.y * .5f),
+                                                    (options[i].size / 64) * .25f,
+                                                    new Vector4(.5f, .5f, .5f, .5f),
+                                                    1, is_selected);
+                
+                if (options[i].button == ControllerButton.NONE) {
+                    Text.Draw(options[i].position + new Vector2(Puzzle.piece_size * 1.5f, options[i].size.y * .5f) -
+                              (options[i].text_size * .5f) * options[i].font_scale +
+                              new Vector2(-12, 22) * options[i].font_scale, options[i].text,
+                              Vector2.one * options[i].font_scale, Vector4.one);
+                }
+                else {
+                    Text.Draw(options[i].position + new Vector2(Puzzle.piece_size * 1.15f, options[i].size.y * .5f) -
+                                  (options[i].text_size * .5f) * options[i].font_scale +
+                                  new Vector2(-12, 22) * options[i].font_scale, options[i].text,
+                                  Vector2.one * options[i].font_scale, Vector4.one);
+                    draw_button(i);
+                }
             }
         }
 
@@ -155,12 +162,18 @@ namespace Gunhouse
             case ControllerButton.PS_CIRCLE: button_sprite = (int)store.Sprites.ps_circle; break;
             case ControllerButton.PS_TRIANGLE: button_sprite = (int)store.Sprites.ps_triangle; break;
             case ControllerButton.PS_SQUARE: button_sprite = (int)store.Sprites.ps_square; break;
+            case ControllerButton.XBOX_X: button_sprite = (int)store.Sprites.xbox_x; break;
+            case ControllerButton.XBOX_A: button_sprite = (int)store.Sprites.xbox_a; break;
+            case ControllerButton.XBOX_B: button_sprite = (int)store.Sprites.xbox_b; break;
+            case ControllerButton.XBOX_Y: button_sprite = (int)store.Sprites.xbox_y; break;
+            case ControllerButton.SWITCH_A: button_sprite = (int)store.Sprites.switch_button_right; break;
+            case ControllerButton.SWITCH_B: button_sprite = (int)store.Sprites.switch_button_down; break;
+            case ControllerButton.SWITCH_X: button_sprite = (int)store.Sprites.switch_button_up; break;
+            case ControllerButton.SWITCH_Y: button_sprite = (int)store.Sprites.switch_button_left; break;
             }
 
             Vector2 buttonPosition = options[index].position +
-                                     new Vector2(Puzzle.piece_size * 1.5f, options[index].size.y * .5f) -
-                                     (options[index].text_size * .5f) * options[index].font_scale +
-                                     new Vector2(-30, 20) * options[index].font_scale;
+                                     new Vector2(Puzzle.piece_size * 2.35f, options[index].size.y * .5f);
 
             AppMain.textures.store.draw(button_sprite, buttonPosition, Vector2.one * 0.64f, Vector4.one);
         }

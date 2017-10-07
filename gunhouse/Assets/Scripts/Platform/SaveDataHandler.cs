@@ -126,8 +126,6 @@ public class SaveDataHandler : MonoBehaviour
     {
         if (instance != null) return instance;
 
-        Debug.Log("instance is null. generating SaveDataHandler");
-
         GameObject newGameObject = new GameObject();
         instance = newGameObject.AddComponent<SaveDataHandler>();
         instance.initialize();
