@@ -38,8 +38,8 @@
         // shop 
         public static string Purchase = "Purchase\n -$";
         public static string Upgrade = " Upgrade\n-$";
-        public static string AddHeart = " Add\nheart\n-$";
-        public static string AddArmor = "Add armor\n -$";
+        public static string AddHeart = "  Add\n heart\n-$";
+        public static string AddArmor = "  Add\n armor\n-$";
         public static string Refund = " Refund\n   Last\n Upgrade\n +$";
         public static string AddHealing = "  Add\nhealing\n-$";
         public const string Equip = "Equip";
