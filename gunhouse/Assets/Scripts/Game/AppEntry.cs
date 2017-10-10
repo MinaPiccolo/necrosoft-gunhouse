@@ -13,9 +13,7 @@ namespace Gunhouse
 
         void Awake()
         {
-            #if !UNITY_PSP2 || UNITY_EDITOR
             Platform.LoadPlayerData();
-            #endif
 
             Cursor.visible = cursorVisible;
             instance = this;
@@ -90,6 +88,11 @@ namespace Gunhouse
                 To save time I've just but this code here. */
 
             GameObject.FindObjectOfType<CreditsScene>().Display(autoMove);
+        }
+
+        public static bool HasAppStarted()
+        {
+            return instance != null;
         }
     }
 }

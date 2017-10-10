@@ -19,9 +19,9 @@ namespace Gunhouse
         public void LoadBundle()
         {
             #if UNITY_TVOS
-            string bundleName = tvOS/bundled";
+            string bundleName = "tvOS/bundled";
             #elif UNITY_IOS
-            string bundleName = iOS/bundled";
+            string bundleName = "iOS/bundled";
             #elif UNITY_ANDROID
             string bundleName = "Android/bundled";
             #elif UNITY_WEBGL
@@ -48,7 +48,12 @@ namespace Gunhouse
             #elif UNITY_WEBGL
 
             WWW request = WWW.LoadFromCacheOrDownload(bundleName, 1);
-            yield return request;
+
+            while (!request.isDone) {
+                if (progressBar != null) { progressBar.value = request.progress; }
+                yield return null;
+            }
+
             Bundle = request.assetBundle;
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
             request.Dispose();

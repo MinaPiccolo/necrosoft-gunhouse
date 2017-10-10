@@ -3,7 +3,6 @@ using Sony.Vita.SavedGame;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.PSVita;
 using UnityEngine.SceneManagement;
 
 namespace Gunhouse
@@ -39,8 +38,6 @@ namespace Gunhouse
             LoadFile();
         }
         
-        void UpdateSaveLoad() { Main.Update(); }
-
         public static void SaveFile()
         {
             SaveData data = new SaveData();
@@ -73,7 +70,12 @@ namespace Gunhouse
 
         void OnLogSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add(msg.Text); }
         void OnLogWarningSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add("WARNING: " + msg.Text); }
-        void OnLogErrorSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add("ERROR: " + msg.Text); }
+
+        void OnLogErrorSaveLoad(Messages.PluginMessage msg)
+        {
+            OnScreenLog.Add("ERROR: " + msg.Text);
+            //SceneManager.LoadSceneAsync((int)SceneIndex.Main);
+        }
 
         void OnSavedGameSaved(Messages.PluginMessage msg) { OnScreenLog.Add("Game Saved!"); }
 
@@ -84,8 +86,7 @@ namespace Gunhouse
             if (bytes == null) { SceneManager.LoadSceneAsync((int)SceneIndex.Main); return; }
 
             SaveData data;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
+            using (MemoryStream memoryStream = new MemoryStream()) {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 memoryStream.Write(bytes, 0, bytes.Length);
                 memoryStream.Seek(0, SeekOrigin.Begin);

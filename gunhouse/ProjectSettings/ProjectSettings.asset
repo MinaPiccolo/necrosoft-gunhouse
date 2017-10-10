@@ -103,7 +103,7 @@ PlayerSettings:
   xboxOneMonoLoggingLevel: 0
   xboxOneLoggingLevel: 1
   xboxOneDisableEsram: 0
-  videoMemoryForVertexBuffers: 0
+  videoMemoryForVertexBuffers: 32
   psp2PowerMode: 0
   psp2AcquireBGM: 0
   wiiUTVResolution: 0
@@ -575,7 +575,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    18: 
+    18: LOADING_SCREEN;CONTROLLER_AND_TOUCH
   platformArchitecture: {}
   scriptingBackend:
     PSP2: 1

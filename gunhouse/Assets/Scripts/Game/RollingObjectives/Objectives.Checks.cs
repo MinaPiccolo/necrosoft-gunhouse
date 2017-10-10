@@ -195,78 +195,32 @@ namespace Gunhouse
 
         public static void CheckAchievements()
         {
-            #if PLAY_STORE
-
-            if (DataStorage.AmountOfObjectivesComplete > 74) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_like_moths_to_flame);
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 49) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_blue_skies);
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 19) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_rambunctious);
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 9) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_misdeeds);
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 2) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_toothsome);
-            }
+            #if UNITY_PSP2 || UNITY_PS4
+            if (DataStorage.AmountOfObjectivesComplete > 74) { PlayStationVita.AwardTrophy(Achievement.LikeMothsToFlame); }
+            if (DataStorage.AmountOfObjectivesComplete > 49) { PlayStationVita.AwardTrophy(Achievement.BlueSkies); }
+            if (DataStorage.AmountOfObjectivesComplete > 19) { PlayStationVita.AwardTrophy(Achievement.Rambunctious); }
+            if (DataStorage.AmountOfObjectivesComplete > 9) { PlayStationVita.AwardTrophy(Achievement.Misdeeds); }
+            if (DataStorage.AmountOfObjectivesComplete > 2) { PlayStationVita.AwardTrophy(Achievement.ToothSome); }
 
             int currentDay = (DataStorage.StartOnWave / 3 + 1);
-            if (currentDay > 100) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_too_many_guns);
-            }
-            if (currentDay > 30) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_molytrois);
-            }
-            if (currentDay > 20) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_another_peter);
-            }
-            if (currentDay > 10) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_savior);
-            }
-            if (currentDay > 5) {
-                AppMain.menuAchievements.Award(GPGSIds.achievement_halfstep);
-            }
-
-            #endif
-
-            #if APP_STORE
-
-            if (DataStorage.AmountOfObjectivesComplete > 74) {
-                AppMain.menuAchievements.Award("grp.achievement_like_moths_to_flame");
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 49) {
-                AppMain.menuAchievements.Award("grp.achievement_blue_skies");
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 19) {
-                AppMain.menuAchievements.Award("grp.achievement_rambunctious");
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 9) {
-                AppMain.menuAchievements.Award("grp.achievement_misdeeds");
-            }
-            if (DataStorage.AmountOfObjectivesComplete > 2) {
-                AppMain.menuAchievements.Award("grp.achievement_toothsome");
-            }
+            if (currentDay > 100) { PlayStationVita.AwardTrophy(Achievement.TooManyGuns); }
+            if (currentDay > 30) { PlayStationVita.AwardTrophy(Achievement.Molytrols); }
+            if (currentDay > 20) { PlayStationVita.AwardTrophy(Achievement.AnotherPeter); }
+            if (currentDay > 10) { PlayStationVita.AwardTrophy(Achievement.Savior); }
+            if (currentDay > 5) { PlayStationVita.AwardTrophy(Achievement.HalfStep); }
+            #else
+            if (DataStorage.AmountOfObjectivesComplete > 74) { AppMain.menuAchievements.Award(Achievement.LikeMothsToFlame); }
+            if (DataStorage.AmountOfObjectivesComplete > 49) { AppMain.menuAchievements.Award(Achievement.BlueSkies); }
+            if (DataStorage.AmountOfObjectivesComplete > 19) { AppMain.menuAchievements.Award(Achievement.Rambunctious); }
+            if (DataStorage.AmountOfObjectivesComplete > 9) { AppMain.menuAchievements.Award(Achievement.Misdeeds); }
+            if (DataStorage.AmountOfObjectivesComplete > 2) { AppMain.menuAchievements.Award(Achievement.ToothSome); }
 
             int currentDay = (DataStorage.StartOnWave / 3 + 1);
-            if (currentDay > 100) {
-                AppMain.menuAchievements.Award("grp.achievement_too_many_guns");
-            }
-            if (currentDay > 30) {
-                AppMain.menuAchievements.Award("grp.achievement_molytrois");
-            }
-            if (currentDay > 20) {
-                AppMain.menuAchievements.Award("grp.achievement_another_peter");
-            }
-            if (currentDay > 10) {
-                AppMain.menuAchievements.Award("grp.achievement_savior");
-            }
-            if (currentDay > 5) {
-                AppMain.menuAchievements.Award("grp.achievement_half_step");
-            }
-
+            if (currentDay > 100) { AppMain.menuAchievements.Award(Achievement.TooManyGuns); }
+            if (currentDay > 30) { AppMain.menuAchievements.Award(Achievement.Molytrols); }
+            if (currentDay > 20) { AppMain.menuAchievements.Award(Achievement.AnotherPeter); }
+            if (currentDay > 10) { AppMain.menuAchievements.Award(Achievement.Savior); }
+            if (currentDay > 5) { AppMain.menuAchievements.Award(Achievement.HalfStep); }
             #endif
         }
     }

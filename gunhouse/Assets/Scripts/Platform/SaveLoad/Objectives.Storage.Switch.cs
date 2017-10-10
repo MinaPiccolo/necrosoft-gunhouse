@@ -7,36 +7,36 @@ namespace Gunhouse
     {
         public static string SaveFile()
         {
-            SaveData data = new SaveData();
+            ObjectivesSaveFile objectivesSaveFile = new ObjectivesSaveFile();
 
-            data.defeatWithGun = (int)defeatWithGun;
-            data.previousDefeatWithGun = (int)previousDefeatWithGun;
-            data.amountToDefeat = amountToDefeat;
-            data.ammoToUpgrade = (int)ammoToUpgrade;
-            data.previousAmmoToUpgrade = (int)previousAmmoToUpgrade;
-            data.leveToUpgrade = leveToUpgrade;
-            data.levelToHealing = levelToHealing;
-            data.levelToHeart = levelToHeart;
-            data.isLevelingHeart = isLevelingHeart ? 1 : 0;
-            data.amountofBlocksToMake = amountofBlocksToMake;
-            data.makeXSize = makeXSize;
-            data.makeYSize = makeYSize;
-            data.amountOfSizedBlocksToLoadToGun = amountOfSizedBlocksToLoadToGun;
-            data.loadGunXSize = loadGunXSize;
-            data.loadGunYSize = loadGunYSize;
-            data.amountOfSizedBlocksToLoadToSpecial = amountOfSizedBlocksToLoadToSpecial;
-            data.loadSpecialXSize = loadSpecialXSize;
-            data.loadSpecialYSize = loadSpecialYSize;
-            data.amountToHaveInBank = amountToHaveInBank;
-            data.ammoGunToSend = (int)ammoGunToSend;
-            data.ammoSpecialToSend = (int)ammoSpecialToSend;
-            data.amountOfElementsMatching = amountOfElementsMatching;
-            data.amountOfBossesToDefeat = amountOfBossesToDefeat;
-            data.currentBossesDefeated = currentBossesDefeated;
-            data.daysToReach = daysToReach;
-            data.currentFreeTask = currentFreeTask;
+            objectivesSaveFile.defeatWithGun = (int)defeatWithGun;
+            objectivesSaveFile.previousDefeatWithGun = (int)previousDefeatWithGun;
+            objectivesSaveFile.amountToDefeat = amountToDefeat;
+            objectivesSaveFile.ammoToUpgrade = (int)ammoToUpgrade;
+            objectivesSaveFile.previousAmmoToUpgrade = (int)previousAmmoToUpgrade;
+            objectivesSaveFile.leveToUpgrade = leveToUpgrade;
+            objectivesSaveFile.levelToHealing = levelToHealing;
+            objectivesSaveFile.levelToHeart = levelToHeart;
+            objectivesSaveFile.isLevelingHeart = isLevelingHeart ? 1 : 0;
+            objectivesSaveFile.amountofBlocksToMake = amountofBlocksToMake;
+            objectivesSaveFile.makeXSize = makeXSize;
+            objectivesSaveFile.makeYSize = makeYSize;
+            objectivesSaveFile.amountOfSizedBlocksToLoadToGun = amountOfSizedBlocksToLoadToGun;
+            objectivesSaveFile.loadGunXSize = loadGunXSize;
+            objectivesSaveFile.loadGunYSize = loadGunYSize;
+            objectivesSaveFile.amountOfSizedBlocksToLoadToSpecial = amountOfSizedBlocksToLoadToSpecial;
+            objectivesSaveFile.loadSpecialXSize = loadSpecialXSize;
+            objectivesSaveFile.loadSpecialYSize = loadSpecialYSize;
+            objectivesSaveFile.amountToHaveInBank = amountToHaveInBank;
+            objectivesSaveFile.ammoGunToSend = (int)ammoGunToSend;
+            objectivesSaveFile.ammoSpecialToSend = (int)ammoSpecialToSend;
+            objectivesSaveFile.amountOfElementsMatching = amountOfElementsMatching;
+            objectivesSaveFile.amountOfBossesToDefeat = amountOfBossesToDefeat;
+            objectivesSaveFile.currentBossesDefeated = currentBossesDefeated;
+            objectivesSaveFile.daysToReach = daysToReach;
+            objectivesSaveFile.currentFreeTask = currentFreeTask;
 
-            string objectivesSaveFileSerialized = JsonUtility.ToJson(data);
+            string objectivesSaveFileSerialized = JsonUtility.ToJson(objectivesSaveFile);
 
             SaveDataHandler.Save(objectivesSaveFileSerialized, "GunhouseObjectivesSave");
             return objectivesSaveFileSerialized;
@@ -45,33 +45,33 @@ namespace Gunhouse
         public static void LoadFile()
         {
             string serializedObjectivesSaveData = "";
-            SaveData data;
+            ObjectivesSaveFile savedObjectivesData;
             if (SaveDataHandler.Load(ref serializedObjectivesSaveData, "GunhouseObjectivesSave")) {
-                data = JsonUtility.FromJson<SaveData>(serializedObjectivesSaveData);
+                savedObjectivesData = JsonUtility.FromJson<ObjectivesSaveFile>(serializedObjectivesSaveData);
             }
             else {
-                data = JsonUtility.FromJson<SaveData>(Save());
+                savedObjectivesData = JsonUtility.FromJson<ObjectivesSaveFile>(SaveFile());
             }
 
-            defeatWithGun = (Gun.Ammo)(data.defeatWithGun != 0 ? data.defeatWithGun : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.SIN));
-            previousDefeatWithGun = (Gun.Ammo)(data.previousDefeatWithGun != 0 ? data.previousDefeatWithGun : (int)defeatWithGun);
-            amountToDefeat = data.amountToDefeat != 0 ? data.amountToDefeat : Random.Range(5, 10);
-            ammoToUpgrade = (Gun.Ammo)(data.ammoToUpgrade != 0 ? data.ammoToUpgrade : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.SIN));
-            previousAmmoToUpgrade = (Gun.Ammo)(data.previousAmmoToUpgrade != 0 ? data.previousAmmoToUpgrade : (int)ammoToUpgrade);
-            leveToUpgrade = data.leveToUpgrade != 0 ? data.leveToUpgrade : (DataStorage.GunPower[(int)ammoToUpgrade] + 2);
-            levelToHealing = data.levelToHealing != 0 ? data.levelToHealing : (DataStorage.Healing + 2);
-            levelToHeart = data.levelToHeart != 0 ? data.levelToHeart : Mathf.Clamp(DataStorage.Hearts + 1, 0, 6);
-            isLevelingHeart = (data.isLevelingHeart != 0 ? data.isLevelingHeart : 1) == 1 ? true : false;
-            amountofBlocksToMake = data.amountofBlocksToMake != 0 ? data.amountofBlocksToMake : Random.Range(3, 10);
-            makeXSize = data.makeXSize != 0 ? data.makeXSize : Random.Range(2, 4);
-            makeYSize = data.makeYSize != 0 ? data.makeYSize : Random.Range(2, 4);
-            amountOfSizedBlocksToLoadToGun = data.amountOfSizedBlocksToLoadToGun != 0 ? data.amountOfSizedBlocksToLoadToGun : Random.Range(3, 10);
-            loadGunXSize = data.loadGunXSize != 0 ? data.loadGunXSize : Random.Range(2, 4);
-            loadGunYSize = data.loadGunYSize != 0 ? data.loadGunYSize : Random.Range(2, 4);
-            amountOfSizedBlocksToLoadToSpecial = data.amountOfSizedBlocksToLoadToSpecial != 0 ? data.amountOfSizedBlocksToLoadToSpecial : Random.Range(3, 10);
-            loadSpecialXSize = data.loadSpecialXSize != 0 ? data.loadSpecialXSize : Random.Range(2, 4);
-            loadSpecialYSize = data.loadSpecialYSize != 0 ? data.loadSpecialYSize : Random.Range(2, 4);
-            currentFreeTask = data.currentFreeTask;
+            defeatWithGun = (Gun.Ammo)(savedObjectivesData.defeatWithGun != 0 ? savedObjectivesData.defeatWithGun : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.SIN));
+            previousDefeatWithGun = (Gun.Ammo)(savedObjectivesData.previousDefeatWithGun != 0 ? savedObjectivesData.previousDefeatWithGun : (int)defeatWithGun);
+            amountToDefeat = savedObjectivesData.amountToDefeat != 0 ? savedObjectivesData.amountToDefeat : Random.Range(5, 10);
+            ammoToUpgrade = (Gun.Ammo)(savedObjectivesData.ammoToUpgrade != 0 ? savedObjectivesData.ammoToUpgrade : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.SIN));
+            previousAmmoToUpgrade = (Gun.Ammo)(savedObjectivesData.previousAmmoToUpgrade != 0 ? savedObjectivesData.previousAmmoToUpgrade : (int)ammoToUpgrade);
+            leveToUpgrade = savedObjectivesData.leveToUpgrade != 0 ? savedObjectivesData.leveToUpgrade : (DataStorage.GunPower[(int)ammoToUpgrade] + 2);
+            levelToHealing = savedObjectivesData.levelToHealing != 0 ? savedObjectivesData.levelToHealing : (DataStorage.Healing + 2);
+            levelToHeart = savedObjectivesData.levelToHeart != 0 ? savedObjectivesData.levelToHeart : Mathf.Clamp(DataStorage.Hearts + 1, 0, 6);
+            isLevelingHeart = (savedObjectivesData.isLevelingHeart != 0 ? savedObjectivesData.isLevelingHeart : 1) == 1 ? true : false;
+            amountofBlocksToMake = savedObjectivesData.amountofBlocksToMake != 0 ? savedObjectivesData.amountofBlocksToMake : Random.Range(3, 10);
+            makeXSize = savedObjectivesData.makeXSize != 0 ? savedObjectivesData.makeXSize : Random.Range(2, 4);
+            makeYSize = savedObjectivesData.makeYSize != 0 ? savedObjectivesData.makeYSize : Random.Range(2, 4);
+            amountOfSizedBlocksToLoadToGun = savedObjectivesData.amountOfSizedBlocksToLoadToGun != 0 ? savedObjectivesData.amountOfSizedBlocksToLoadToGun : Random.Range(3, 10);
+            loadGunXSize = savedObjectivesData.loadGunXSize != 0 ? savedObjectivesData.loadGunXSize : Random.Range(2, 4);
+            loadGunYSize = savedObjectivesData.loadGunYSize != 0 ? savedObjectivesData.loadGunYSize : Random.Range(2, 4);
+            amountOfSizedBlocksToLoadToSpecial = savedObjectivesData.amountOfSizedBlocksToLoadToSpecial != 0 ? savedObjectivesData.amountOfSizedBlocksToLoadToSpecial : Random.Range(3, 10);
+            loadSpecialXSize = savedObjectivesData.loadSpecialXSize != 0 ? savedObjectivesData.loadSpecialXSize : Random.Range(2, 4);
+            loadSpecialYSize = savedObjectivesData.loadSpecialYSize != 0 ? savedObjectivesData.loadSpecialYSize : Random.Range(2, 4);
+            currentFreeTask = savedObjectivesData.currentFreeTask;
 
             int difference = 0;
             if (DataStorage.Money > 10000) {
@@ -81,19 +81,19 @@ namespace Gunhouse
                 difference = whole - remainder;
             }
 
-            amountToHaveInBank = data.amountToHaveInBank != 0 ? data.amountToHaveInBank : (DataStorage.Money + 10000 + difference);
-            ammoGunToSend = (Gun.Ammo)(data.ammoGunToSend != 0 ? data.ammoGunToSend : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.GATLING));
-            ammoSpecialToSend = (Gun.Ammo)(data.ammoSpecialToSend != 0 ? data.ammoSpecialToSend : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.GATLING));
-            amountOfElementsMatching = data.amountOfElementsMatching != 0 ? data.amountOfElementsMatching : Random.Range(2, 5);
-            amountOfBossesToDefeat = data.amountOfBossesToDefeat != 0 ? data.amountOfBossesToDefeat : Random.Range(2, 5);
-            currentBossesDefeated = data.currentBossesDefeated;
+            amountToHaveInBank = savedObjectivesData.amountToHaveInBank != 0 ? savedObjectivesData.amountToHaveInBank : (DataStorage.Money + 10000 + difference);
+            ammoGunToSend = (Gun.Ammo)(savedObjectivesData.ammoGunToSend != 0 ? savedObjectivesData.ammoGunToSend : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.GATLING));
+            ammoSpecialToSend = (Gun.Ammo)(savedObjectivesData.ammoSpecialToSend != 0 ? savedObjectivesData.ammoSpecialToSend : Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.GATLING));
+            amountOfElementsMatching = savedObjectivesData.amountOfElementsMatching != 0 ? savedObjectivesData.amountOfElementsMatching : Random.Range(2, 5);
+            amountOfBossesToDefeat = savedObjectivesData.amountOfBossesToDefeat != 0 ? savedObjectivesData.amountOfBossesToDefeat : Random.Range(2, 5);
+            currentBossesDefeated = savedObjectivesData.currentBossesDefeated;
 
             int currentDay = (DataStorage.StartOnWave / 3 + 1);
-            daysToReach = data.daysToReach != 0 ? data.daysToReach : Mathf.Clamp(currentDay, currentDay + 1, currentDay + 4);
+            daysToReach = savedObjectivesData.daysToReach != 0 ? savedObjectivesData.daysToReach : Mathf.Clamp(currentDay, currentDay + 1, currentDay + 4);
         }
-
+        
         [System.Serializable]
-        public class SaveData
+        public class ObjectivesSaveFile
         {
             public int defeatWithGun;
             public int previousDefeatWithGun;

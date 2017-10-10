@@ -17,9 +17,15 @@ namespace Gunhouse
 
         void Start()
         {
+            #if !UNITY_EDITOR
             jumpPlugin.Initialized += (object sender, System.EventArgs e) => {
                 playFab.LoginToPlayFab(jumpPlugin.userId);
             };
+            #else
+            DataStorage.Load();
+            Objectives.Load();
+            GameObject.FindObjectOfType<Downloader>().LoadBundle();
+            #endif
         }
 
         public static void Quit()

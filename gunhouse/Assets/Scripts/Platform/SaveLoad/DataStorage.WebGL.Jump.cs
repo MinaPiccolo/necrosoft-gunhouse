@@ -7,49 +7,49 @@ namespace Gunhouse
     {
         public static void SaveOptions()
         {
-            Platform.SaveData(SaveKeys.MusicVolume, ((int)(Choom.MusicVolume * 100)).ToString());
-            Platform.SaveData(SaveKeys.EffectVolume, ((int)(Choom.EffectVolume * 100)).ToString());
+            WebGLJump.SaveData(SaveKeys.MusicVolume, ((int)(Choom.MusicVolume * 100)).ToString());
+            WebGLJump.SaveData(SaveKeys.EffectVolume, ((int)(Choom.EffectVolume * 100)).ToString());
         }
 
         public static void SaveStore()
         {
-            Platform.SaveData(SaveKeys.Money, Money.ToString());
-            Platform.SaveData(SaveKeys.Hearts, Hearts.ToString());
-            Platform.SaveData(SaveKeys.Armor, Armor.ToString());
-            Platform.SaveData(SaveKeys.Healing, Healing.ToString());
+            WebGLJump.SaveData(SaveKeys.Money, Money.ToString());
+            WebGLJump.SaveData(SaveKeys.Hearts, Hearts.ToString());
+            WebGLJump.SaveData(SaveKeys.Armor, Armor.ToString());
+            WebGLJump.SaveData(SaveKeys.Healing, Healing.ToString());
 
             for (int i = 0; i < GunOwned.Length; ++i) {
-                Platform.SaveData(SaveKeys.GunOwned + i.ToString(), GunOwned[i].ToString());
+                WebGLJump.SaveData(SaveKeys.GunOwned + i.ToString(), GunOwned[i].ToString());
             }
             for (int i = 0; i < GunPower.Length; ++i) {
-                Platform.SaveData(SaveKeys.GunPower + i.ToString(), GunPower[i].ToString());
+                WebGLJump.SaveData(SaveKeys.GunPower + i.ToString(), GunPower[i].ToString());
             }
             for (int i = 0; i < GunEquipped.Length; ++i) {
-                Platform.SaveData(SaveKeys.GunEquipped + i.ToString(), GunEquipped[i].ToString());
+                WebGLJump.SaveData(SaveKeys.GunEquipped + i.ToString(), GunEquipped[i].ToString());
             }
         }
 
         public static void SaveEndWave()
         {
-            Platform.SaveData(SaveKeys.Money, Money.ToString());
+            WebGLJump.SaveData(SaveKeys.Money, Money.ToString());
 
             for (int i = 0; i < Objectives.activeTasks.Length; ++i) {
-                Platform.SaveData(SaveKeys.ObjectivesActive + i.ToString(), Objectives.activeTasks[i].ToString());
+                WebGLJump.SaveData(SaveKeys.ObjectivesActive + i.ToString(), Objectives.activeTasks[i].ToString());
             }
-            Platform.SaveData(SaveKeys.ObjectivesComplete, AmountOfObjectivesComplete.ToString());
+            WebGLJump.SaveData(SaveKeys.ObjectivesComplete, AmountOfObjectivesComplete.ToString());
 
             for (int i = 0; i < BlocksLoaded.Length; ++i) {
-                Platform.SaveData(SaveKeys.BlocksLoaded + i.ToString(), BlocksLoaded[i].ToString());
+                WebGLJump.SaveData(SaveKeys.BlocksLoaded + i.ToString(), BlocksLoaded[i].ToString());
             }
             for (int i = 0; i < AmmoLoaded.Length; ++i) {
-                Platform.SaveData(SaveKeys.AmmoLoaded + i.ToString(), AmmoLoaded[i].ToString());
+                WebGLJump.SaveData(SaveKeys.AmmoLoaded + i.ToString(), AmmoLoaded[i].ToString());
             }
 
-            Platform.SaveData(SaveKeys.ShotsFired, ShotsFired.ToString());
-            Platform.SaveData(SaveKeys.TimesDefeated, TimesDefeated.ToString());
-            Platform.SaveData(SaveKeys.MatchStreak, MatchStreak.ToString());
+            WebGLJump.SaveData(SaveKeys.ShotsFired, ShotsFired.ToString());
+            WebGLJump.SaveData(SaveKeys.TimesDefeated, TimesDefeated.ToString());
+            WebGLJump.SaveData(SaveKeys.MatchStreak, MatchStreak.ToString());
 
-            Platform.SaveData(SaveKeys.DisconcertingObjectivesSeen, DisconcertingObjectivesSeen.ToString());
+            WebGLJump.SaveData(SaveKeys.DisconcertingObjectivesSeen, DisconcertingObjectivesSeen.ToString());
         }
 
         public static void SaveHardcore()
@@ -62,7 +62,7 @@ namespace Gunhouse
             }
 
             for (int i = 0; i < scores.Length; ++i) {
-                Platform.SaveData(SaveKeys.BestHardcoreScores + i.ToString(), scores[i].ToString());
+                WebGLJump.SaveData(SaveKeys.BestHardcoreScores + i.ToString(), scores[i].ToString());
             }
         }
 
@@ -70,33 +70,33 @@ namespace Gunhouse
         {
             Reset();
 
-            Money = Platform.LoadData(SaveKeys.Money, 0);
-            Hearts = Platform.LoadData(SaveKeys.Hearts, 2);
-            Armor = Platform.LoadData(SaveKeys.Armor, 0);
-            Healing = Platform.LoadData(SaveKeys.Healing, 1);
-            StartOnWave = Platform.LoadData(SaveKeys.StartOnWave, 0);
+            Money = WebGLJump.LoadData(SaveKeys.Money, 0);
+            Hearts = WebGLJump.LoadData(SaveKeys.Hearts, 2);
+            Armor = WebGLJump.LoadData(SaveKeys.Armor, 0);
+            Healing = WebGLJump.LoadData(SaveKeys.Healing, 1);
+            StartOnWave = WebGLJump.LoadData(SaveKeys.StartOnWave, 0);
 
             for (int i = 0; i < GunOwned.Length; ++i) {
-                GunOwned[i] = Platform.LoadData(SaveKeys.GunOwned + i.ToString(), i < maxEquip);
+                GunOwned[i] = WebGLJump.LoadData(SaveKeys.GunOwned + i.ToString(), i < maxEquip);
             }
             for (int i = 0; i < GunPower.Length; ++i) {
-                GunPower[i] = Platform.LoadData(SaveKeys.GunPower + i.ToString(), 1);
+                GunPower[i] = WebGLJump.LoadData(SaveKeys.GunPower + i.ToString(), 1);
             }
             for (int i = 0; i < GunEquipped.Length; ++i) {
-                GunEquipped[i] = Platform.LoadData(SaveKeys.GunEquipped + i.ToString(), i < maxEquip);
+                GunEquipped[i] = WebGLJump.LoadData(SaveKeys.GunEquipped + i.ToString(), i < maxEquip);
             }
 
-            Choom.MusicVolume = ((float)Platform.LoadData(SaveKeys.MusicVolume, 75) / (float)100);
-            Choom.EffectVolume = ((float)Platform.LoadData(SaveKeys.EffectVolume, 75) / (float)100);
+            Choom.MusicVolume = ((float)WebGLJump.LoadData(SaveKeys.MusicVolume, 75) / (float)100);
+            Choom.EffectVolume = ((float)WebGLJump.LoadData(SaveKeys.EffectVolume, 75) / (float)100);
 
             for (int i = 0; i < Objectives.activeTasks.Length; ++i) {
-                Objectives.activeTasks[i] = Platform.LoadData(SaveKeys.ObjectivesActive + i.ToString(), 0);
+                Objectives.activeTasks[i] = WebGLJump.LoadData(SaveKeys.ObjectivesActive + i.ToString(), 0);
             }
-            AmountOfObjectivesComplete = Platform.LoadData(SaveKeys.ObjectivesComplete, 0);
+            AmountOfObjectivesComplete = WebGLJump.LoadData(SaveKeys.ObjectivesComplete, 0);
 
             int[] scores = new int[5];
             for (int i = 0; i < scores.Length; ++i) {
-                scores[i] = Platform.LoadData(SaveKeys.BestHardcoreScores + i.ToString(), 0);
+                scores[i] = WebGLJump.LoadData(SaveKeys.BestHardcoreScores + i.ToString(), 0);
             }
             BestHardcoreScores.Clear();
             for (int i = 0; i < scores.Length / 2; i++) {
@@ -106,15 +106,15 @@ namespace Gunhouse
             }
 
             for (int i = 0; i < BlocksLoaded.Length; ++i) {
-                BlocksLoaded[i] = Platform.LoadData(SaveKeys.BlocksLoaded + i.ToString(), 0);
+                BlocksLoaded[i] = WebGLJump.LoadData(SaveKeys.BlocksLoaded + i.ToString(), 0);
             }
             for (int i = 0; i < AmmoLoaded.Length; ++i) {
-                AmmoLoaded[i] = Platform.LoadData(SaveKeys.AmmoLoaded + i.ToString(), 0);
+                AmmoLoaded[i] = WebGLJump.LoadData(SaveKeys.AmmoLoaded + i.ToString(), 0);
             }
-            MatchStreak = Platform.LoadData(SaveKeys.MatchStreak, 0);
-            ShotsFired = Platform.LoadData(SaveKeys.ShotsFired, 0);
-            TimesDefeated = Platform.LoadData(SaveKeys.TimesDefeated, 0);
-            DisconcertingObjectivesSeen = Platform.LoadData(SaveKeys.DisconcertingObjectivesSeen, 0);
+            MatchStreak = WebGLJump.LoadData(SaveKeys.MatchStreak, 0);
+            ShotsFired = WebGLJump.LoadData(SaveKeys.ShotsFired, 0);
+            TimesDefeated = WebGLJump.LoadData(SaveKeys.TimesDefeated, 0);
+            DisconcertingObjectivesSeen = WebGLJump.LoadData(SaveKeys.DisconcertingObjectivesSeen, 0);
         }
     }
 }

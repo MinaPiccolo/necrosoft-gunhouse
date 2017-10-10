@@ -34,8 +34,7 @@ namespace Gunhouse
             if (!Social.localUser.authenticated) {
                 isSignedIn = false;
                 DataStorage.IgnoreSignIn = true;
-                buttons[0].gameObject.SetActive(true);
-                buttons[1].gameObject.SetActive(false);
+                DisplayButtons(AppMain.background_fade);
             }
             #endif
         }

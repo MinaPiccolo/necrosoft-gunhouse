@@ -8,8 +8,8 @@ namespace Gunhouse
 {
     public partial class PlayStationVita : MonoBehaviour
     {
+        #pragma warning disable 0414
         static bool npReady = false;
-        //bool signedIn = User.IsSignedInPSN;
 
         string npCommunicationID = "NPWR14054_00";
         byte[] npCommunicationPassphrase = { 0x69,0xfd,0x44,0x6d,0xdf,0x20,0xd2,0x23,
@@ -49,16 +49,14 @@ namespace Gunhouse
                                             0x83,0x92,0x52,0xd4,0x71,0x5f,0xa5,0x77,
                                             0x44,0x0c,0x5b,0xff,0xf4,0xd2,0x05,0xc2 };
 
+        #pragma warning restore 0414
+
         void Start()
         {
             DontDestroyOnLoad(gameObject);
- 
+            Application.targetFrameRate = 60;
+
             PSVitaVideoPlayer.TransferMemToMonoHeap();
-            
-            ////string commID = BuildWindow.trophyCommId;
-            //string region = GetRegion();
-            //ErrorHandler(Main.RegisterCommsID(NpServiceType.Trophy, GetCommID() + "\0", GetTrophyCommPass(region), GetTrophyCommSig(region)));
-            //Trophies.RegisterTrophyPack();
 
             #if !UNITY_EDITOR
 
@@ -69,15 +67,11 @@ namespace Gunhouse
             Main.OnLogError += OnLogError;
             Main.Initialize(Main.kNpToolkitCreate_DoNotInitializeTrophies | Main.kNpToolkitCreate_NoRanking);
             Main.RegisterCommsID(NpServiceType.Trophy, npCommunicationID, npCommunicationPassphrase, npCommunicationSignature);
-            
-            Sony.NP.System.OnConnectionUp += OnSomeEvent;
-            Sony.NP.System.OnConnectionDown += OnConnectionDown;
-            Sony.NP.System.OnSysResume += OnSomeEvent;
-            Sony.NP.System.OnSysNpMessageArrived += OnSomeEvent;
-            Sony.NP.System.OnSysStorePurchase += OnSomeEvent;
-            Sony.NP.System.OnSysStoreRedemption += OnSomeEvent;
-            Sony.NP.System.OnSysEvent += OnSomeEvent;
- 
+
+            ////string commID = BuildWindow.trophyCommId;
+            //string region = GetRegion();
+            //ErrorHandler(Main.RegisterCommsID(NpServiceType.Trophy, GetCommID() + "\0", GetTrophyCommPass(region), GetTrophyCommSig(region)));
+
             StartSaveLoad();
             StartTrophy();
             #else
@@ -85,15 +79,11 @@ namespace Gunhouse
             #endif
         }
 
-        void OnEnable() { Application.logMessageReceived += HandleLog; }
-        void OnDisable() { Application.logMessageReceived -= HandleLog; }
-        void HandleLog(string logString, string stackTrace, LogType type) { OnScreenLog.Add("LOG: " + logString + " " + stackTrace); }
-        
         void Update()
         {
             #if !UNITY_EDITOR
-            Main.Update();
-            UpdateSaveLoad();
+            Sony.NP.Main.Update();
+            Sony.Vita.SavedGame.Main.Update();
             #else
             #endif
         }
@@ -103,29 +93,6 @@ namespace Gunhouse
         void OnLogError(Messages.PluginMessage msg) { OnScreenLog.Add("Error: " + msg.Text); }
 
         void OnInitializedNP(Messages.PluginMessage msg) { npReady = true; }
-
-        void OnConnectionDown(Messages.PluginMessage msg)
-        {
-            OnScreenLog.Add("Connection Down");
-
-            // Determining the reason for loss of connection...
-            //
-            // When connection is lost we can call Sony.NP.System.GetLastConnectionError() to obtain
-            // the NetCtl error status and reason for loss of connection.
-            //
-            // ResultCode.lastError will be either NP_ERR_NOT_CONNECTED
-            // or NP_ERR_NOT_CONNECTED_FLIGHT_MODE.
-            //
-            // For the case where ResultCode.lastError == NP_ERR_NOT_CONNECTED further information about
-            // the disconnection reason can be inferred from ResultCode.lastErrorSCE which contains
-            // the SCE NetCtl error code relating to the disconnection (please refer to SCE SDK docs when
-            // interpreting this code).
-
-            // Get the reason for loss of connection...
-            ResultCode result = new ResultCode();
-            Sony.NP.System.GetLastConnectionError(out result);
-            OnScreenLog.Add("Reason: " + result.lastError + ", sce error 0x" + result.lastErrorSCE.ToString("X8"));
-        }
 
         void OnSomeEvent(Messages.PluginMessage msg) { OnScreenLog.Add("Event: " + msg.type); }
 

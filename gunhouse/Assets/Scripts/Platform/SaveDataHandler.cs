@@ -28,22 +28,22 @@ public class SaveDataHandler : MonoBehaviour
     // For any single time you save data, check the file size against your journaling size.
     // Check against the total save data size only when you want to be sure all files don't exceed the limit.
     // The variable journalSaveDataSize is only a value that is checked against in this code. The actual journal size is set in the
-    // Unity editor in PlayerSettings > Publishing Settings > User account save data    
+    // Unity editor in PlayerSettings > Publishing Settings > User account save data
     private const int journalSaveDataSize = 16384;   // 16 KB. This value should be 32KB less than the journal size
                                                     // entered in PlayerSettings > Publishing Settings
     private const int loadBufferSize = 1024;  // 1 KB
 
     public void initialize()
     {
-        nn.account.Account.Initialize();        
-        nn.account.UserHandle userHandle = new nn.account.UserHandle();        
+        nn.account.Account.Initialize();
+        nn.account.UserHandle userHandle = new nn.account.UserHandle();
         nn.account.Account.OpenPreselectedUser(ref userHandle);
-        nn.account.Account.GetUserId(ref userId, userHandle);       
+        nn.account.Account.GetUserId(ref userId, userHandle);
 
-        // mount save data        
+        // mount save data
         nn.Result result = nn.fs.SaveData.Mount(mountName, userId);
-        
-        //print out error (debug only) and abort if the filesystem couldn't be mounted 
+
+        //print out error (debug only) and abort if the filesystem couldn't be mounted
         if (result.IsSuccess() == false)
         {
            Debug.Log("Critical Error: File System could not be mounted.");
@@ -75,7 +75,7 @@ public class SaveDataHandler : MonoBehaviour
         }
 
 #if UNITY_SWITCH && !UNITY_EDITOR
-        // This next line prevents the user from quitting the game while saving. 
+        // This next line prevents the user from quitting the game while saving.
         // This is required for Nintendo Switch Guideline 0080
         UnityEngine.Switch.Notification.EnterExitRequestHandlingSection();
 #endif
@@ -107,10 +107,10 @@ public class SaveDataHandler : MonoBehaviour
         nn.Result result = nn.fs.File.Open(ref fileHandle, saveDataPath + filename, nn.fs.OpenFileMode.Read);
         if (result.IsSuccess() == false)
         {
-            return false;   // Could not open file. This can be used to detect if this is the first time a user has launched your game. 
+            return false;   // Could not open file. This can be used to detect if this is the first time a user has launched your game.
                             // (However, be sure you are not getting this error due to your file being locked by another process, etc.)
         }
-        byte[] loadedData = new byte[loadBufferSize]; 
+        byte[] loadedData = new byte[loadBufferSize];
         nn.fs.File.Read(fileHandle, 0, loadedData, loadBufferSize);
         nn.fs.File.Close(fileHandle);
 
@@ -125,8 +125,6 @@ public class SaveDataHandler : MonoBehaviour
     public static SaveDataHandler GetInstance()
     {
         if (instance != null) return instance;
-
-        Debug.Log("instance is null. generating SaveDataHandler");
 
         GameObject newGameObject = new GameObject();
         instance = newGameObject.AddComponent<SaveDataHandler>();

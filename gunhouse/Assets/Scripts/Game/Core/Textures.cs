@@ -96,7 +96,7 @@ namespace Gunhouse
     {
         #region Field Properties
 
-        #if LOADING_SCREEN
+        #if LOADING_SCREEN || LOADING_CREDITS
         public Atlas loading;
         #endif
 
@@ -171,7 +171,7 @@ namespace Gunhouse
 
         public Textures()
         {
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             loading = new Atlas("loading.png", "loading.txa.txt", 0);
             #endif
 
@@ -343,7 +343,7 @@ namespace Gunhouse
 
             #endregion
 
-            house = new Atlas("house.png", new Vector2(275, 527), z_order++);
+            house = new Atlas("house.png", new Vector2(287, 527), z_order++);
             house.texture.hud = true;
 
             title = new Atlas("title.png", new Vector2(376, 300), z_order++);
@@ -557,7 +557,7 @@ namespace Gunhouse
             font = new Atlas("font.png", "font.fnt.txt", z_order++);
             font.texture.hud = true;
 
-            #if LOADING_SCREEN
+            #if LOADING_SCREEN || LOADING_CREDITS
             loading = new Atlas("loading.png", "loading.txa.txt", z_order++);
             #endif
 
