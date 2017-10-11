@@ -17,8 +17,8 @@ namespace Gunhouse
         {
             pad.Move = Vector2.zero;
 
-            if (pad.Direction.X < -0.5f) pad.Move.x = -1;
-            if (pad.Direction.X >  0.5f) pad.Move.x = 1;
+            if (pad.Direction.X < -0.7f) pad.Move.x = -1;
+            if (pad.Direction.X >  0.7f) pad.Move.x = 1;
             if (pad.Direction.Y < -0.5f) pad.Move.y = -1;
             if (pad.Direction.Y >  0.5f) pad.Move.y = 1;
 

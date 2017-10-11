@@ -10,6 +10,7 @@ namespace Gunhouse
     {
         #pragma warning disable 0414
         static bool npReady = false;
+        int npDelay;
 
         string npCommunicationID = "NPWR14054_00";
         byte[] npCommunicationPassphrase = { 0x69,0xfd,0x44,0x6d,0xdf,0x20,0xd2,0x23,
@@ -61,10 +62,6 @@ namespace Gunhouse
             #if !UNITY_EDITOR
 
             Main.OnNPInitialized += OnInitializedNP;
-            Main.enableInternalLogging = true;
-            Main.OnLog += OnLog;
-            Main.OnLogWarning += OnLogWarning;
-            Main.OnLogError += OnLogError;
             Main.Initialize(Main.kNpToolkitCreate_DoNotInitializeTrophies | Main.kNpToolkitCreate_NoRanking);
             Main.RegisterCommsID(NpServiceType.Trophy, npCommunicationID, npCommunicationPassphrase, npCommunicationSignature);
 
@@ -74,6 +71,7 @@ namespace Gunhouse
 
             StartSaveLoad();
             StartTrophy();
+            StartDialog();
             #else
             SceneManager.LoadScene((int)SceneIndex.Main);
             #endif
@@ -83,25 +81,22 @@ namespace Gunhouse
         {
             #if !UNITY_EDITOR
             Sony.NP.Main.Update();
-            Sony.Vita.SavedGame.Main.Update();
+            UpdateSaveLoad();
+            UpdateDialog();
             #else
             #endif
         }
 
-        void OnLog(Messages.PluginMessage msg) { OnScreenLog.Add(msg.Text); }
-        void OnLogWarning(Messages.PluginMessage msg) { OnScreenLog.Add("Warning: " + msg.Text); }
-        void OnLogError(Messages.PluginMessage msg) { OnScreenLog.Add("Error: " + msg.Text); }
-
-        void OnInitializedNP(Messages.PluginMessage msg) { npReady = true; }
-
-        void OnSomeEvent(Messages.PluginMessage msg) { OnScreenLog.Add("Event: " + msg.type); }
-
-        static public ErrorCode ErrorHandler(ErrorCode errorCode)
+        void OnInitializedNP(Messages.PluginMessage msg)
         {
-            if (errorCode == ErrorCode.NP_OK) { return errorCode; }
+            npReady = true;
 
-            OnScreenLog.Add("Error: " + errorCode);
-            return errorCode;
+            /* For some reason np ready is called twice. I can't find a reason why
+                in the documentation. If this function is called the first time it
+                causes an error and is ignored. */
+            npDelay++;
+            if (npDelay < 2) return; 
+            LoadFile();
         }
     }
 }

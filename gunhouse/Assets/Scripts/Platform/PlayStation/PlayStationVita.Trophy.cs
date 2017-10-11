@@ -6,7 +6,6 @@ namespace Gunhouse
 {
     public partial class PlayStationVita : MonoBehaviour
     {
-        static Trophies.GameInfo gameInfo;
         static bool trophiesAvailable = Trophies.TrophiesAreAvailable;
 
         void StartTrophy()
@@ -22,7 +21,6 @@ namespace Gunhouse
             #endif
 
             Trophies.RegisterTrophyPack();
-            gameInfo = Trophies.GetCachedGameInfo();
         }
 
         public static void AwardTrophy(int trophyIndex)

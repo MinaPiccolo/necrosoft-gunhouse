@@ -16,17 +16,10 @@ namespace Gunhouse
         void StartSaveLoad()
         {
             Main.Initialise();
-            Main.enableInternalLogging = true;
-            Main.OnLog += OnLogSaveLoad;
-            Main.OnLogWarning += OnLogWarningSaveLoad;
-            Main.OnLogError += OnLogErrorSaveLoad;
-
-            SaveLoad.Initialise();
-            SaveLoad.OnGameSaved += OnSavedGameSaved;
             SaveLoad.OnGameLoaded += OnSavedGameLoaded;
-            SaveLoad.OnSaveError += OnSaveError;
             SaveLoad.OnLoadError += OnLoadError;
             SaveLoad.OnLoadNoData += OnLoadNoData;
+            SaveLoad.Initialise();
 
             slotParams.title = "Gunhouse";
             slotParams.subTitle = "Load your guns! Rain death from above!";
@@ -35,8 +28,9 @@ namespace Gunhouse
 
             DataStorage.ResetValues();
             Objectives.ResetValues();
-            LoadFile();
         }
+
+        void UpdateSaveLoad() { Main.Update(); }
         
         public static void SaveFile()
         {
@@ -50,38 +44,25 @@ namespace Gunhouse
             byte[] bytes = memoryStream.ToArray();
             memoryStream.Dispose();
 
-            OnScreenLog.Add("SIZE!!!!: " + bytes.Length);
-
-            OnScreenLog.Add("Saving Game...");
-            OnScreenLog.Add(" icon: " + slotParams.iconPath);
-            OnScreenLog.Add(" size: " + bytes.Length / 1024 + "KB");
-
-            ErrorCode result = SaveLoad.AutoSaveGame(bytes, slotNumber, slotParams, controlFlags);
-            if (result != ErrorCode.SG_OK) { OnScreenLog.Add("Save failed: " + result); }
+            SaveLoad.AutoSaveGame(bytes, slotNumber, slotParams, controlFlags);
         }
 
         public static void LoadFile()
         {
-            ErrorCode result = SaveLoad.AutoLoadGame(slotNumber);
-            if (result != ErrorCode.SG_OK) { OnScreenLog.Add("Load failed: " + result); }
+            SaveLoad.AutoLoadGame(slotNumber);
+        }
+
+        public static void DeleteFile()
+        {
+            SaveLoad.Delete(0, false);
+            DataStorage.ResetValues();
+            Objectives.ResetValues();
         }
 
         #region EventHandlers
 
-        void OnLogSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add(msg.Text); }
-        void OnLogWarningSaveLoad(Messages.PluginMessage msg) { OnScreenLog.Add("WARNING: " + msg.Text); }
-
-        void OnLogErrorSaveLoad(Messages.PluginMessage msg)
-        {
-            OnScreenLog.Add("ERROR: " + msg.Text);
-            //SceneManager.LoadSceneAsync((int)SceneIndex.Main);
-        }
-
-        void OnSavedGameSaved(Messages.PluginMessage msg) { OnScreenLog.Add("Game Saved!"); }
-
         void OnSavedGameLoaded(Messages.PluginMessage msg)
         {
-            OnScreenLog.Add("Game Loaded...");
             byte[] bytes = SaveLoad.GetLoadedGame();
             if (bytes == null) { SceneManager.LoadSceneAsync((int)SceneIndex.Main); return; }
 
@@ -96,46 +77,12 @@ namespace Gunhouse
             DataStorage.LoadFile(data);
             Objectives.LoadFile(data);
 
-            int quota = SaveLoad.GetQuota();
-            // Get the current amount of used storage, note that this value is only valid when running from an installed package
-            // and using the memory card for storage, e.g. not connected to host0:, otherwise it is always 0.
-            int used = SaveLoad.GetUsedSize();
-            OnScreenLog.Add("Storage used = " + used + "KB / " + quota + "KB");
-
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
         }
 
-        void OnSaveError(Messages.PluginMessage msg)
-        {
-            ResultCode res = new ResultCode();
-            SaveLoad.GetLastError(out res);
-            OnScreenLog.Add("Failed to save: " + res.className + ": " + res.lastError + ", sce error 0x" + res.lastErrorSCE.ToString("X8"));
-        }
+        void OnLoadError(Messages.PluginMessage msg) { DialogSaveLoadError(); }
 
-        void OnLoadError(Messages.PluginMessage msg)
-        {
-            /* @complete: according to the TRC, when the game finds a corrupted save data,
-                the player should be presented with the option of trying to reload or continue with a new game.
-
-                The save games plugin does handle broken slot checking and displaying the
-                required dialog you can test it by enabling the ""Fake Save Data Slot Broken"
-                option in the Vita's debug settings.
-
-                Sony.Vita.Dialog.Common.ShowUserMessage(Sony.Vita.Dialog.Common.EnumUserMessageType.MSG_DIALOG_BUTTON_TYPE_OK,
-                                                        true, "No Save Data.\nCreate New Save Data.");
-             */
-
-            ResultCode res = new ResultCode();
-            SaveLoad.GetLastError(out res);
-            OnScreenLog.Add("Failed to load: " + res.className + ": " + res.lastError + ", sce error 0x" + res.lastErrorSCE.ToString("X8"));
-            SceneManager.LoadSceneAsync((int)SceneIndex.Main);
-        }
-
-        void OnLoadNoData(Messages.PluginMessage msg)
-        {
-            OnScreenLog.Add("Nothing to load");
-            SceneManager.LoadScene((int)SceneIndex.Main);
-        }
+        void OnLoadNoData(Messages.PluginMessage msg) { SceneManager.LoadScene((int)SceneIndex.Main); }
 
         #endregion
 
