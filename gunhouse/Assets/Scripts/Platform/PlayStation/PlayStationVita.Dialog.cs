@@ -29,7 +29,7 @@ namespace Gunhouse
 
         void OnGotDialogResult(Messages.PluginMessage msg)
         {
-            DeleteFile();  
+            DeleteFile();
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
         }
 
