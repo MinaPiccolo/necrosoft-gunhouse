@@ -1,44 +1,76 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 
 public static class ETransform
 {
     #region Position
 
+    static Vector3 vec3 = Vector3.zero;
+    static Vector3 vec3Abs = Vector3.zero;
+
+    public static void SetX(this Transform transform, int x)
+    {
+        vec3 = transform.position;
+        vec3.x = x;
+        transform.position = vec3;
+    }
+
     public static void SetX(this Transform transform, float x)
     {
-        Vector3 position = transform.position;
-        position.x = x;
-        transform.position = position;
+        vec3 = transform.position;
+        vec3.x = x;
+        transform.position = vec3;
+    }
+
+    public static void SetY(this Transform transform, int y)
+    {
+        vec3 = transform.position;
+        vec3.y = y;
+        transform.position = vec3;
     }
 
     public static void SetY(this Transform transform, float y)
     {
-        Vector3 position = transform.position;
-        position.y = y;
-        transform.position = position;
+        vec3 = transform.position;
+        vec3.y = y;
+        transform.position = vec3;
+    }
+
+    public static void SetZ(this Transform transform, int z)
+    {
+        vec3 = transform.position;
+        vec3.z = z;
+        transform.position = vec3;
     }
 
     public static void SetZ(this Transform transform, float z)
     {
-        Vector3 position = transform.position;
-        position.z = z;
-        transform.position = position;
+        vec3 = transform.position;
+        vec3.z = z;
+        transform.position = vec3;
+    }
+
+    public static void SetXY(this Transform transform, int x, int y)
+    {
+        vec3.x = x;
+        vec3.y = y;
+        vec3.z = transform.position.z;
+        transform.position = vec3;
     }
 
     public static void SetXY(this Transform transform, float x, float y)
     {
-        Vector3 position = transform.position;
-        position = new Vector2(x, y);
-        transform.position = position;
+        vec3.x = x;
+        vec3.y = y;
+        vec3.z = transform.position.z;
+        transform.position = vec3;
     }
 
     public static void SetXY(this Transform transform, Vector2 position)
     {
-        Vector3 currentPosition = transform.position;
-        currentPosition = position;
-        transform.position = currentPosition;
+        vec3.x = position.x;
+        vec3.y = position.y;
+        vec3.z = transform.position.z;
+        transform.position = vec3;
     }
 
     public static float GetX(this Transform transform)
@@ -65,34 +97,56 @@ public static class ETransform
 
     #region Scale
 
-    public static void ScaleX(this Transform transform, float scaleX)
+    public static void ScaleX(this Transform transform, int x)
     {
-        Vector3 scale = transform.localScale;
-        scale.x = scaleX;
-        transform.localScale = scale;
+        vec3 = transform.localScale;
+        vec3.x = x;
+        transform.localScale = vec3;
     }
 
-    public static void ScaleY(this Transform transform, float scaleY)
+    public static void ScaleX(this Transform transform, float x)
     {
-        Vector3 scale = transform.localScale;
-        scale.y = scaleY;
-        transform.localScale = scale;
+        vec3 = transform.localScale;
+        vec3.x = x;
+        transform.localScale = vec3;
+    }
+
+    public static void ScaleY(this Transform transform, int y)
+    {
+        vec3 = transform.localScale;
+        vec3.y = y;
+        transform.localScale = vec3;
+    }
+
+    public static void ScaleY(this Transform transform, float y)
+    {
+        vec3 = transform.localScale;
+        vec3.y = y;
+        transform.localScale = vec3;
+    }
+
+    public static void ScaleXY(this Transform transform, int x, int y)
+    {
+        vec3 = transform.localScale;
+        vec3.x = x;
+        vec3.y = y;
+        transform.localScale = vec3;
+    }
+
+    public static void ScaleXY(this Transform transform, float scaleX, float scaleY)
+    {
+        vec3 = transform.localScale;
+        vec3.x = scaleX;
+        vec3.y = scaleY;
+        transform.localScale = vec3;
     }
 
     public static void ScaleXY(this Transform transform, Vector2 scaleXY)
     {
-        Vector3 scale = transform.localScale;
-        scale.x = scaleXY.x;
-        scale.y = scaleXY.y;
-        transform.localScale = scale;
-    }
-
-    public static void ScaleXYBy(this Transform transform, int x, int y)
-    {
-        Vector3 scale = transform.localScale;
-        scale.x += x;
-        scale.y += y;
-        transform.localScale = scale;
+        vec3 = transform.localScale;
+        vec3.x = scaleXY.x;
+        vec3.y = scaleXY.y;
+        transform.localScale = vec3;
     }
 
     #endregion
@@ -101,23 +155,27 @@ public static class ETransform
 
     public static void TranslateX(this Transform transform, float x)
     {
-        transform.SetX((transform.GetX() + x));
+        transform.SetX(transform.GetX() + x);
     }
 
     public static void TranslateY(this Transform transform, float y)
     {
-        transform.SetY((transform.GetY() + y));
+        transform.SetY(transform.GetY() + y);
     }
 
-    public static void TranslateXY(this Transform transform, Vector2 position)
+    public static void TranslateXY(this Transform transform, Vector2 xyPosition)
     {
-        transform.SetXY(transform.GetXY() + position);
-    }
-
-    public static void TranslateXY(this Transform transform, float x, float y)
-    {
-        transform.SetXY(transform.GetX() + x, transform.GetY() + y);
+        transform.SetXY(transform.GetXY() + xyPosition);
     }
 
     #endregion
+
+    public static void FlipPostive(this Transform transform)
+    {
+        vec3 = transform.localScale;
+        vec3Abs.x = Mathf.Abs(vec3.x);
+        vec3Abs.y = Mathf.Abs(vec3.y);
+        vec3Abs.z = Mathf.Abs(vec3.z);
+        transform.localScale = vec3Abs;
+    }
 }

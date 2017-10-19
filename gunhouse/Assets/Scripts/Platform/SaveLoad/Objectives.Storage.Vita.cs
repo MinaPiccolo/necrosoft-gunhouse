@@ -12,7 +12,7 @@ namespace Gunhouse
             amountToDefeat = Random.Range(5, 10);
             ammoToUpgrade = (Gun.Ammo)Random.Range((int)Gun.Ammo.DRAGON, (int)Gun.Ammo.SIN);
             previousAmmoToUpgrade = ammoToUpgrade;
-            leveToUpgrade =DataStorage.GunPower[(int)ammoToUpgrade] + 2;
+            leveToUpgrade = DataStorage.GunPower[(int)ammoToUpgrade] + 2;
             levelToHealing = DataStorage.Healing + 2;
             levelToHeart = Mathf.Clamp(DataStorage.Hearts + 1, 0, 6);
             isLevelingHeart = false;

@@ -4,6 +4,7 @@ timeCreated: 1477517661
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
+  externalObjects: {}
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -57,6 +58,7 @@ TextureImporter:
   platformSettings:
   - buildTarget: DefaultTexturePlatform
     maxTextureSize: 4096
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: -1
@@ -65,7 +67,8 @@ TextureImporter:
     overridden: 0
   - buildTarget: iPhone
     maxTextureSize: 4096
-    textureFormat: 4
+    resizeAlgorithm: 0
+    textureFormat: 13
     textureCompression: 0
     compressionQuality: -1
     crunchedCompression: 0
@@ -73,6 +76,7 @@ TextureImporter:
     overridden: 1
   - buildTarget: Standalone
     maxTextureSize: 4096
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: -1
@@ -81,6 +85,7 @@ TextureImporter:
     overridden: 0
   - buildTarget: tvOS
     maxTextureSize: 4096
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: -1
@@ -89,12 +94,13 @@ TextureImporter:
     overridden: 0
   - buildTarget: Android
     maxTextureSize: 4096
-    textureFormat: -1
+    resizeAlgorithm: 0
+    textureFormat: 13
     textureCompression: 0
     compressionQuality: -1
     crunchedCompression: 0
     allowsAlphaSplitting: 0
-    overridden: 0
+    overridden: 1
   spriteSheet:
     serializedVersion: 2
     sprites: []

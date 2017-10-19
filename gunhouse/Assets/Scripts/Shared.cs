@@ -1,6 +1,6 @@
 ﻿namespace Gunhouse
 {
-#if BUNDLED
+#if BUNDLED || UNITY_PSP2
     public enum SceneIndex { Downloading, Main, Credits };
 #else
     public enum SceneIndex { Main, Credits };

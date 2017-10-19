@@ -287,9 +287,13 @@ namespace Gunhouse
 
             if (AppMain.back) {
                 AppMain.back = false;
+                #if UNITY_ANDROID
+                Platform.Quit();
+                #else
                 QuitMenu quit = new QuitMenu();
                 AppMain.top_state.Dispose();
                 AppMain.top_state = quit;
+                #endif
             }
 
             #if UNITY_EDITOR

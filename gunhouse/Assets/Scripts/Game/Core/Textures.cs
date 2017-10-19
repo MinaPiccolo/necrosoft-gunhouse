@@ -343,7 +343,7 @@ namespace Gunhouse
 
             #endregion
 
-            house = new Atlas("house.png", new Vector2(275, 527), z_order++);
+            house = new Atlas("house.png", new Vector2(287, 527), z_order++);
             house.texture.hud = true;
 
             title = new Atlas("title.png", new Vector2(376, 300), z_order++);

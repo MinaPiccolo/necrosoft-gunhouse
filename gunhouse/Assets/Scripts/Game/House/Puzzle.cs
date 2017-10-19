@@ -200,6 +200,7 @@ namespace Gunhouse
             }
 
             Platform.SaveEndWave();
+            Objectives.CheckAchievements();
         }
 
         override public void tick()
