@@ -8,22 +8,22 @@ public class Log
 
     public static void Info(string text)
     {
-        //if (messages == null) return;
-        //Message message = new Message() { text = text, type = MessageType.Info };
-        //messages(message);
+        if (messages == null) return;
+        Message message = new Message() { text = text, type = MessageType.Info };
+        messages(message);
     }
 
     public static void Warning(string text)
     {
-        //if (messages == null) return;
-        //Message message = new Message() { text = text, type = MessageType.Warning };
-        //messages(message);
+        if (messages == null) return;
+        Message message = new Message() { text = text, type = MessageType.Warning };
+        messages(message);
     }
 
     public static void Error(string text)
     {
-        //if (messages == null) return;
-        //Message message = new Message() { text = text, type = MessageType.Error };
-        //messages(message);
+        if (messages == null) return;
+        Message message = new Message() { text = text, type = MessageType.Error };
+        messages(message);
     }
 }

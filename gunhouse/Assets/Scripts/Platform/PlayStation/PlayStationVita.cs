@@ -60,14 +60,10 @@ namespace Gunhouse
             PSVitaVideoPlayer.TransferMemToMonoHeap();
 
             #if !UNITY_EDITOR
-
             Main.OnNPInitialized += OnInitializedNP;
+
             Main.Initialize(Main.kNpToolkitCreate_DoNotInitializeTrophies | Main.kNpToolkitCreate_NoRanking);
             Main.RegisterCommsID(NpServiceType.Trophy, npCommunicationID, npCommunicationPassphrase, npCommunicationSignature);
-
-            ////string commID = BuildWindow.trophyCommId;
-            //string region = GetRegion();
-            //ErrorHandler(Main.RegisterCommsID(NpServiceType.Trophy, GetCommID() + "\0", GetTrophyCommPass(region), GetTrophyCommSig(region)));
 
             StartSaveLoad();
             StartTrophy();

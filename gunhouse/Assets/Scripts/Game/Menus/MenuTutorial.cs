@@ -1,11 +1,11 @@
-﻿using Necrosoft.ThirdParty;
+using Necrosoft.ThirdParty;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Gunhouse
 {
-    public class MenuTutorial : MonoBehaviour 
+    public class MenuTutorial : MonoBehaviour
     {
         [SerializeField] Canvas canvas;
         [SerializeField] CanvasGroup group;
@@ -305,24 +305,24 @@ namespace Gunhouse
             new string[] { "Let's use those specials now! Specials usually affect a wide area.",
                            "Either tap any of your specials on the right side of the house, or select a special with the Left Stick or Directional Buttons, then hit Confirm." },
 #elif CONTROLLER_AND_TOUCH
-                           "Either touch and drag, or hit the D-Pad left and right, hitting X to confirm the pieces you'd like to move.",
+                           "Either touch and drag, or press the left or right buttons, hitting X to confirm the pieces you'd like to move.",
                            "Try it for yourself! Make three big blocks! You can move one, two, or three block pieces at a time." },
-            new string[] { "Good stuff. Now let's load that ammo into your guns!", 
-                           "Slide big blocks LEFT to load guns. Either drag blocks to the left and release, or tap left on the D-Pad, then hit X to confirm!",
+            new string[] { "Good stuff. Now let's load that ammo into your guns!",
+                           "Slide big blocks LEFT to load guns. Either drag blocks to the left and release, or press the left button, then hit X to confirm!",
                            "Try loading three big blocks to the LEFT as ammo for your guns." },
             new string[] { "Hooray! Next we'll talk about special attacks, which complement your guns.",
-                           "Slide big blocks RIGHT to load specials. Either drag blocks right with touch, or tap right on the D-Pad, and hit X.",
+                           "Slide big blocks RIGHT to load specials. Either drag blocks right with touch, or press the right button, and hit X.",
                            "Try loading three big blocks to the RIGHT as special ammo!" },
             new string[] { "Well done! Keep in mind you have limited time to add ammo, which you see on top of the house.",
                            "Keep adding guns and specials until the ammo door closes! Usually the timer is 18 seconds, but we've doubled it for now." },
             new string[] { "Okay, it's time to defend your house, so let's shoot some guns! Each gun type has its own properties.",
-                           "Either tap any of the guns on the left side of the house, or select a gun with the D-Pad, and hit X to activate." },
+                           "Either tap any of the guns on the left side of the house, or select a gun with the directional buttons, and hit X to activate." },
             new string[] { "Let's use those specials now! Specials usually affect a wide area.",
-                           "Either tap any of your specials on the right side of the house, or select a special with the D-Pad and hit X." },
+                           "Either tap any of your specials on the right side of the house, or select a special with the directional buttons and hit X." },
 #elif CONTROLLER
-                           "Tit the D-Pad left and right, hitting X to confirm the pieces you'd like to move.",
+                           "Hit the left button and right button, hitting X to confirm the pieces you'd like to move.",
                            "Try it for yourself! Make three big blocks! If existing big blocks get in your way, they move just like block pieces." },
-            new string[] { "Nice! Now let's load that ammo into your guns.", 
+            new string[] { "Nice! Now let's load that ammo into your guns.",
                            "Slide big blocks LEFT to load guns. Try loading three big blocks to the LEFT, as ammo for your guns." },
             new string[] { "Hooray! Next we'll talk about special attacks, which complement your guns.",
                            "Slide big blocks RIGHT to load specials. Try loading three big blocks to the RIGHT as special ammo!" },
@@ -333,20 +333,19 @@ namespace Gunhouse
             new string[] { "Let's use those specials now! Specials usually affect a wide area.",
                            "Tap the specials on the right side of the house to activate them!" },
 #else // TOUCH
-                           "Either touch and drag, or hit the D-Pad left and right, hitting X to confirm the pieces you'd like to move.",
                            "Try it for yourself! Make three big blocks! You can move one, two, or three block pieces at a time." },
-            new string[] { "Good stuff. Now let's load that ammo into your guns!", 
-                           "Slide big blocks LEFT to load guns. Either drag blocks to the left and release, or tap left on the D-Pad, then hit X to confirm!",
+            new string[] { "Good stuff. Now let's load that ammo into your guns!",
+                           "Slide big blocks LEFT to load guns. New guns replace old ones, or add more of the same ammo type to existing guns.",
                            "Try loading three big blocks to the LEFT as ammo for your guns." },
             new string[] { "Hooray! Next we'll talk about special attacks, which complement your guns.",
-                           "Slide big blocks RIGHT to load specials. Either drag blocks right with touch, or tap right on the D-Pad, and hit X.",
+                           "Slide big blocks RIGHT to load specials. Try loading three big blocks to the RIGHT as special ammo!",
                            "Try loading three big blocks to the RIGHT as special ammo!" },
             new string[] { "Well done! Keep in mind you have limited time to add ammo, which you see on top of the house.",
                            "Keep adding guns and specials until the ammo door closes! Usually the timer is 18 seconds, but we've doubled it for now." },
             new string[] { "Okay, it's time to defend your house, so let's shoot some guns! Each gun type has its own properties.",
-                           "Either tap any of the guns on the left side of the house, or select a gun with the D-Pad, and hit X to activate." },
+                           "Tap any of the guns on the left side of the house to fire them." },
             new string[] { "Let's use those specials now! Specials usually affect a wide area.",
-                           "Either tap any of your specials on the right side of the house, or select a special with the D-Pad and hit X." },
+                           "Tap any of your specials on the right side of the house, and off they'll go." },
 #endif
             new string[] { "The ammo door opens automatically after your attacks end.",
                            "For extra damage, load a block matching the block type that's pulsing above the house.",
@@ -354,10 +353,6 @@ namespace Gunhouse
             new string[] { "And now for some bad news. When enemies attack your house or steal your orphans, your heart meter empties.",
                            "But!! When you defeat enemies, you regain some hearts, and get money to use in the store!",
                            "Just keep at it and you'll do great! Go get 'em!" }
-#if UNITY_SWITCH
-            ,
-            new string[] { "    Move blocks\n    Confirm" }
-#endif
         };
     }
 

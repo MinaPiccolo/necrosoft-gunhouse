@@ -9,6 +9,8 @@ namespace Necrosoft
     {
         [SerializeField] Font font;
         [SerializeField] [Range(0.1f, 1)] float size = 0.3f;
+        [SerializeField] [Range(0.0f, 5.0f)] float timeScale = 1.0f;
+
         StringBuilder builder = new StringBuilder(100);
         GUIStyle style = new GUIStyle();
         Rect rect = new Rect();
@@ -44,6 +46,8 @@ namespace Necrosoft
             frameCount++;
             deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
             UpdateText();
+
+            if (Time.timeScale > timeScale || Time.timeScale < timeScale) { Time.timeScale = timeScale; }
         }
 
         void UpdateText()
