@@ -10,9 +10,12 @@ namespace Gunhouse
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
+        bool displayAnchor = false;
 
         public DrDogBackgroundDay()
         {
+            displayAnchor = !(AppMain.top_state is MenuState);
+
             for (int i = 0; i < n_clouds; i++)
                 clouds[i] = new Vector4(Util.rng.NextFloat(0, AppMain.vscreen.x),
                                         Util.rng.NextFloat(0, 400),
@@ -37,13 +40,15 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int sprite = (int)stage_drdog_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_drdog_dusk) { sprite = (int)stage_drdog_anchors.Sprites.dusk_anchor; }
-            if (atlas() == AppMain.textures.stage_drdog_night) { sprite = (int)stage_drdog_anchors.Sprites.night_anchor; }
-
-            AppMain.textures.stage_drdog_anchors.draw(sprite,
-                                                         new Vector2(340 * 0.5f, AppMain.vscreen.y - 70 * 0.5f),
-                                                         scaleAmount, Vector4.one);
+            if (displayAnchor) {
+                int sprite = (int)stage_drdog_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_drdog_dusk) { sprite = (int)stage_drdog_anchors.Sprites.dusk_anchor; }
+                if (atlas() == AppMain.textures.stage_drdog_night) { sprite = (int)stage_drdog_anchors.Sprites.night_anchor; }
+                
+                AppMain.textures.stage_drdog_anchors.draw(sprite,
+                                                             new Vector2(340 * 0.5f, AppMain.vscreen.y - 70 * 0.5f),
+                                                             scaleAmount, Vector4.one);
+            }
 
             atlas().draw((int)stage_drdog_noon.Sprites.background, AppMain.vscreen * 0.5f, scaleAmount, Vector4.one);
             atlas().draw((int)stage_drdog_noon.Sprites.sun, new Vector2(850, 100), scaleAmount, Vector4.one);
