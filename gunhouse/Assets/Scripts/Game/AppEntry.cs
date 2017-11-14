@@ -18,8 +18,9 @@ namespace Gunhouse
             Cursor.visible = cursorVisible;
             instance = this;
 
-            Input.controllerInput = GameObject.FindObjectOfType<PlayerInput>();
+            Input.Pad = GameObject.FindObjectOfType<PlayerInput>();
 
+            AppMain.MainMenu = GameObject.FindObjectOfType<Menu.MainMenu>();
             AppMain.menuOverlay = GameObject.FindObjectOfType<MenuOverlay>();
             AppMain.tutorial = GameObject.FindObjectOfType<MenuTutorial>();
             AppMain.menuAchievements = GameObject.FindObjectOfType<MenuAchievements>();

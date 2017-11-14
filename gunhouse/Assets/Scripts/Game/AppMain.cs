@@ -9,8 +9,7 @@ namespace Gunhouse
         public static List<Necrosofty.Input.TouchData> data;
         public static GameObject audio_object;
         public static Camera camera;
-        public static float background_fade = 0.0f;
-        public static float background_fade_delta = 1.0f / 60;
+
         public static Entity background;
         public static Vector2 vscreen;
 
@@ -52,6 +51,8 @@ namespace Gunhouse
         public static bool game_pad_active = true;
         #endif
 
+        public static Menu.MainMenu MainMenu;
+
         public static void Start()
         {
             GHInputUpdate();
@@ -62,13 +63,14 @@ namespace Gunhouse
             Util.rng = new Util.UtilRandom(seed);
             background = new DrDogBackgroundDay();
             MoneyGuy.me = new MoneyGuy();
+            AppMain.MainMenu.FadeInOut(true);
         }
 
         public static void initialize()
         {
             renderer = new GHRenderer();
             textures = new Textures();
-            top_state = new TitleState(MenuOptions.Title);
+            top_state = new MenuState();
         }
 
         public static void screenShake(int amount, int length)
@@ -111,24 +113,6 @@ namespace Gunhouse
                     camera.transform.position = camera_pos;
                 }
             }
-
-            #if LOADING_SCREEN || LOADING_CREDITS
-            if (!(top_state is LoadState || top_state is EndGameState)) {
-            #else
-            if (!(top_state is EndGameState)) {
-            #endif
-
-                background_fade += background_fade_delta;
-                if (background_fade < 0) {
-                    background_fade = 0;
-                    background_fade_delta = 0;
-                }
-
-                if (background_fade > 1) {
-                    background_fade = 1;
-                    background_fade_delta = 0;
-                }
-            }
         }
 
         static public long last_ram = 0;
@@ -149,22 +133,8 @@ namespace Gunhouse
                 return;
             }
 
-            #if LOADING_SCREEN || LOADING_CREDITS
-            if (!(top_state is LoadState) && !(top_state is CreditState)) {
-            #endif
-
-                if (textures.stage_drdog_noon == null) { textures.loadTheRest(); }
-
-                background.draw();
-
-                if (background_fade < 1.0f) {
-                    textures.fade.draw(0, new Vector2((960 * 0.5f),(544 * 0.5f)), new Vector2(1000, 1000),
-                                       new Vector4(0, 0, 0,(1 - background_fade)));
-                }
-
-            #if LOADING_SCREEN || LOADING_CREDITS
-            }
-            #endif
+            if (textures.stage_drdog_noon == null) { textures.loadTheRest(); }
+            background.draw();
 
             top_state.draw();
 

@@ -76,7 +76,7 @@ namespace Gunhouse.Credits
                 finalLocation[0].gameObject.SetActive(false);
                 LeanTween.color(overlay, new Color(0, 0, 0, 0), 1);
                 Choom.Play("Music/credits");
-                AppMain.background_fade = 1.0f;
+                //AppMain.background_fade = 1.0f;
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace Gunhouse.Credits
                     endingId = LeanTween.delayedCall(15, () => {
                         skipOnce++;
                         startScrolling = true;
-                        AppMain.background_fade = 1.0f;
+                        //AppMain.background_fade = 1.0f;
                         LeanTween.color(overlay, new Color(0, 0, 0, 0), 1);
                         text.color = new Color(1, 1, 1, 0);
                    }).id;
@@ -114,7 +114,7 @@ namespace Gunhouse.Credits
 
                 endingId = LeanTween.delayedCall(10, () => {
                     startScrolling = true;
-                    AppMain.background_fade = 1.0f;
+                    //AppMain.background_fade = 1.0f;
                     LeanTween.color(overlay, new Color(0, 0, 0, 0), 1);
                     text.color = new Color(1, 1, 1, 0);
                }).id;
@@ -122,7 +122,7 @@ namespace Gunhouse.Credits
             else {
                 LeanTween.cancel(endingId);
                 startScrolling = true;
-                AppMain.background_fade = 1.0f;
+                //AppMain.background_fade = 1.0f;
                 LeanTween.color(overlay, new Color(0, 0, 0, 0), 1);
                 text.color = new Color(1, 1, 1, 0);
             }
@@ -132,7 +132,7 @@ namespace Gunhouse.Credits
 
         void ExitCredits()
         {
-            AppMain.top_state = storeState ? ((State)new Options()) : ((State)new TitleState(MenuOptions.Title));
+            //AppMain.top_state = storeState ? ((State)new Options()) : ((State)new TitleState(MenuOptions.Title));
             if (storeState) { Choom.Play("Music/title"); }
             SceneManager.UnloadSceneAsync((int)SceneIndex.Credits);
         }

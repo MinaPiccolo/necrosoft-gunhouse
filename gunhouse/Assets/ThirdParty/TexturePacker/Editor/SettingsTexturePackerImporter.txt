@@ -1,0 +1,12 @@
+version: 2
+importPivots: 1
+tpsheetFileNames:
+- Assets/Bundles/MainMenu/Textures/menu.tpsheet
+- Assets/Bundles/MainMenu/Textures/portraits.tpsheet
+textureFileNames:
+- Assets/Bundles/MainMenu/Textures/menu.png
+- Assets/Bundles/MainMenu/Textures/portraits.png
+normalmapFileNames:
+- 
+- 
+enableDebugOutput: 0

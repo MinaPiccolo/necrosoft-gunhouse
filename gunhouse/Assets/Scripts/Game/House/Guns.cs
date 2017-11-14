@@ -8,7 +8,7 @@ namespace Gunhouse
     public class Gun : Entity
     {
         /* NOTE(shane): unfortunately the order of this enum matters because of how the store upgrades work */
-        public enum Ammo { DRAGON, IGLOO, SKULL, VEGETABLE, LIGHTNING, FLAME, FORK, BOUNCE, BOOMERANG, SIN, GATLING, NONE };
+        public enum Ammo { DRAGON = 0, IGLOO, SKULL, VEGETABLE, LIGHTNING, FLAME, FORK, BOUNCE, BOOMERANG, SIN, GATLING, NONE };
 
         public EntityGroup targets = null, bullets = null;
         public Target current_target = null;
@@ -40,6 +40,228 @@ namespace Gunhouse
             bullets = bullets_;
             fire_timeout = 0;
             reticle_targets = new List<Entity>();
+        }
+
+        public override void tick()
+        {
+            // Gatling guns don't shoot!
+            if (ammo == Ammo.GATLING) { return; }
+
+            time++;
+
+            if (is_destroyed) {
+                destroy--;
+                if (destroy < 0) {
+                    is_destroyed = false;
+                    feed(Ammo.GATLING, 0);
+                    firing = false;
+                }
+            }
+
+            reticle_targets.Clear();
+
+            // remove dead targets from aim list
+            for (int i = 0; i < reticle_targets.Count; i++) {
+                if (reticle_targets [i].remove || (reticle_targets [i] as Target).hp <= 0) {
+                    reticle_targets.RemoveAt(i--);
+                }
+            }
+
+            /* find aim vector for current target */
+            if (reticle_targets.Count != 0) {
+                current_target = (Target)reticle_targets[0];
+            }
+            else {
+                current_target = targets.findClosest (position, ammo, 100);
+            }
+
+            if (current_target != null) {
+                aim_at = current_target.position;
+            }
+            else {
+                aim_at = Vector2.zero;
+            }
+
+            if (aim_at == Vector2.zero) {
+                aim_vector = new Vector2 (1, 0);
+                desired_angle = 0;
+            }
+            else {
+                if (ammo == Ammo.SKULL) {
+                    aim_vector = (aim_at - (position + new Vector2 (0, 30)));
+                }
+                else {
+                    aim_vector = (aim_at - position);
+                }
+
+                aim_vector.Normalize();
+                desired_angle = (float)Math.Atan2 (aim_vector.y, aim_vector.x);
+
+                if (ammo == Ammo.DRAGON) {
+                    desired_angle -= DragonGun.aim_lead * (aim_at - position).magnitude;
+                }
+            }
+
+            /* fire at current angle */
+            angle = Math.Abs (angle - desired_angle) < turn_speed ? desired_angle : angle;
+            angle += angle < desired_angle ? turn_speed : 0;
+            angle -= angle > desired_angle ? turn_speed : 0;
+
+            // hard lock angle unless veggie gun
+            if (ammo != Ammo.IGLOO && ammo != Ammo.FLAME) {
+                angle = 0;
+                current_target = null;
+            }
+
+            int boosted_upgrade = upgrade;
+
+            if (--fire_timeout <= 0 && (firing || ammo == Ammo.GATLING)) {
+
+                var noisy_angle = angle + Util.rng.NextFloat(-aim_error, aim_error);
+                var noisy_aim = new Vector2((float)Math.Cos(noisy_angle), (float)Math.Sin(noisy_angle));
+                fire_timeout = (int)(60 / fire_rate);
+
+                if (ammo == Ammo.SIN) {
+                    Choom.PlayEffect(SoundAssets.MathShot);
+                    Game.instance.bullet_group.add(new SinBullet(position + new Vector2(150, 0), new Vector2 (2, 0),
+                                                                 Game.instance.enemy_group, null, boosted_upgrade));
+                }
+
+                if (ammo == Ammo.BOUNCE) {
+                    Choom.PlayEffect(SoundAssets.BeachBallShot);
+                    Game.instance.bullet_group.add(new BeachBall(position + new Vector2 (105, -10), new Vector2 (2, 0),
+                                                                 Game.instance.enemy_group, null, boosted_upgrade));
+                }
+
+                if (ammo == Ammo.FORK) {
+                    Choom.PlayEffect(SoundAssets.ForkShot);
+                    Forker.bullet(position + new Vector2(130, -20), boosted_upgrade);
+                }
+
+                if (ammo == Ammo.BOOMERANG) {
+                    Boomeranger.bullet(position + new Vector2(135, 10), boosted_upgrade, gun_index);
+                }
+
+                if (ammo == Ammo.FLAME) {
+                    Flamer.emitFlame(position + (noisy_aim * 75 + new Vector2(noisy_aim.y, -noisy_aim.x) * -15) * 3 / 2,
+                                     noisy_aim, boosted_upgrade, false);
+                }
+
+                if (ammo == Ammo.SKULL) {
+                    float aim_angle = Util.angle (noisy_aim);
+                    float half_arc = SkullGun.fire_arc / 2.0f;
+                    for (float a = aim_angle - half_arc; a <= aim_angle + half_arc; a +=
+                         SkullGun.fire_arc / SkullGun.skulls_per_shot) {
+                        Skuller.addBullet(position + noisy_aim * 100 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * -30,
+                                          Util.fromPolar(a, 1), boosted_upgrade, Game.instance.enemy_group,
+                                          reticle_targets.Count > 0 ? reticle_targets [0] as Target : null);
+                    }
+
+                    Choom.PlayEffect(SoundAssets.SkullShot);
+                }
+
+                if (ammo == Ammo.IGLOO) {
+                    Penguiner.penguin(position + noisy_aim * 95 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 10,
+                                      noisy_aim * IglooGun.velocity, false, boosted_upgrade, targetList());
+                    Choom.PlayEffect(SoundAssets.IceShot);
+                }
+
+                if (ammo == Ammo.LIGHTNING) {
+                    Choom.PlayEffect(SoundAssets.LightningShot);
+                    Lightning.lightningFrom(this, boosted_upgrade);
+                }
+
+                if (ammo == Ammo.VEGETABLE) {
+                    Choom.PlayEffect(SoundAssets.VegShot);
+
+                    DataStorage.ShotsFired++;
+                    //Util.trace(DataStorage.ShotsFired);
+
+                    int type = Util.rng.Next(6);
+                    Particle vb = new Particle(AppMain.textures.veggies);
+                    vb.frame = type;
+                    vb.position = position + noisy_aim * 105 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 5;
+                    vb.velocity = noisy_aim * VegetableGun.velocity;
+                    vb.angle = Util.angle(noisy_aim);
+                    vb.collides_with = targetList();
+
+                    var s = VegetableGun.size + boosted_upgrade * VegetableGun.size_upgrade;
+                    vb.scale = new Vector2(s / 8.0f, s / 8.0f);
+                    vb.ground_at = 480;
+                    vb.drawable_size = 100;
+                    vb.collide_behavior = (ref Particle p, Entity e) => {
+                        p.remove = true;
+                        if (e != null) {
+                            (e as Target).damage(VegetableGun.damage + boosted_upgrade * VegetableGun.damage_upgrade,
+                                                 Gun.Ammo.VEGETABLE);
+                        }
+
+                        Particle splat = new Particle (AppMain.textures.veggies);
+                        splat.frame = type / 2 * 4 + 8;
+                        splat.frame_speed = 0.1f;
+                        splat.loop_end = (int)splat.frame + 2;
+                        splat.loop = false;
+                        splat.position = p.position;
+                        splat.velocity = e != null ? new Vector2 (e.velocity.x, 0) : Vector2.zero;
+                        splat.angle = p.angle;
+                        splat.scale = p.scale / 2;
+                        Game.instance.bullet_manager.add(splat);
+                    };
+
+                    Game.instance.bullet_manager.add(vb);
+                }
+
+                if (ammo == Ammo.DRAGON) {
+                    DragonGun.fireBullet(position, noisy_aim, boosted_upgrade, targetList());
+                }
+
+                ammo_ct--;
+                if (ammo_ct <= 0 && ammo != Ammo.GATLING) {
+                    stopFiring();
+                    destroyGun();
+                }
+            }
+        }
+
+        public override void draw()
+        {
+            Vector2 size = new Vector2(1.0f, 1.0f) * 3 / 4;
+            if (is_destroyed)
+            {
+                AppMain.textures.gunpoof.draw((int)7 - Mathf.FloorToInt(destroy / 5.0f),
+                                              position + new Vector2(50.0f, 0), size * .5f, angle,
+                                              Vector4.one);
+
+                if (destroy < 30) return;
+            }
+
+            var vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.NextFloat(0, upgrade)) / 4;
+            if (firing) vibrate /= 4;
+
+            position += vibrate;
+
+            bool selected = Game.instance.house.isDoorClosed &&
+                            Game.instance.puzzle.selected_weapon == new Vector2(1, gun_index);
+
+            var color = Vector4.one;// Gun.color(selected);
+
+            if (selected && fireableExists() && AppMain.game_pad_active) {
+                AppMain.textures.arrow.draw(0, position - new Vector2(40 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0),
+                                            Vector2.one, 0, Vector4.one);
+            }
+
+            if (ammo == Ammo.VEGETABLE) AppMain.textures.carrotgun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.IGLOO) AppMain.textures.penguingun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.DRAGON) AppMain.textures.dragongun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.SKULL) AppMain.textures.skullgun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.LIGHTNING) AppMain.textures.lightninggun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.SIN) AppMain.textures.lasergun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.FORK) AppMain.textures.gun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.BOUNCE) AppMain.textures.beachballgun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.BOOMERANG) AppMain.textures.boomeranggun.draw(0, position, size, angle, color);
+            else if (ammo == Ammo.FLAME) AppMain.textures.flamegun.draw(0, position, size, angle, color);
+
+            position -= vibrate;
         }
 
         public void startFiring()
@@ -131,47 +353,6 @@ namespace Gunhouse
             if (ammo_ct != 0) fire_rate = Math.Max(fire_rate, ammo_ct / Puzzle.attack_round_length);
         }
 
-        public override void draw()
-        {
-            Vector2 size = new Vector2(1.0f, 1.0f) * 3 / 4;
-            if (is_destroyed)
-            {
-                AppMain.textures.gunpoof.draw((int)7 - Mathf.FloorToInt(destroy / 5.0f),
-                                              position + new Vector2(50.0f, 0), size * .5f, angle,
-                                              Vector4.one);
-
-                if (destroy < 30) return;
-            }
-
-            var vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.NextFloat(0, upgrade)) / 4;
-            if (firing) vibrate /= 4;
-
-            position += vibrate;
-
-            bool selected = Game.instance.house.isDoorClosed &&
-                            Game.instance.puzzle.selected_weapon == new Vector2(1, gun_index);
-
-            var color = Vector4.one;// Gun.color(selected);
-
-            if (selected && fireableExists() && AppMain.game_pad_active) {
-                AppMain.textures.arrow.draw(0, position - new Vector2(40 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0),
-                                            Vector2.one, 0, Vector4.one);
-            }
-
-            if (ammo == Ammo.VEGETABLE) AppMain.textures.carrotgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.IGLOO) AppMain.textures.penguingun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.DRAGON) AppMain.textures.dragongun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.SKULL) AppMain.textures.skullgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.LIGHTNING) AppMain.textures.lightninggun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.SIN) AppMain.textures.lasergun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.FORK) AppMain.textures.gun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.BOUNCE) AppMain.textures.beachballgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.BOOMERANG) AppMain.textures.boomeranggun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.FLAME) AppMain.textures.flamegun.draw(0, position, size, angle, color);
-
-            position -= vibrate;
-        }
-
         public static bool fireableExists()
         {
             foreach(Entity e in Game.instance.gun_group.entities) {
@@ -192,185 +373,25 @@ namespace Gunhouse
             return targets.entities;
         }
 
-        public override void tick()
+        public static float UpgradeMultiplier(Gun.Ammo ammo)
         {
-            // Gatling guns don't shoot!
-            if (ammo == Ammo.GATLING) { return; }
-
-            time++;
-
-            if (is_destroyed) {
-                destroy--;
-                if (destroy < 0) {
-                    is_destroyed = false;
-                    feed(Ammo.GATLING, 0);
-                    firing = false;
-                }
+            if (MetaState.hardcore_mode) {
+                return MetaState.logCurve(1,
+                                          Difficulty.gun_upgrade_base,
+                                          Difficulty.gun_upgrade_steepness,
+                                          Difficulty.gun_upgrade_amplification) / MetaState.monster_armor_coefficient;
             }
 
-            reticle_targets.Clear();
+            for (int i = 0; i < (int)Gun.Ammo.NONE; ++i) {
+                if ((Gun.Ammo)i != ammo) { continue; }
 
-            // remove dead targets from aim list
-            for (int i = 0; i < reticle_targets.Count; i++) {
-                if (reticle_targets [i].remove || (reticle_targets [i] as Target).hp <= 0) {
-                    reticle_targets.RemoveAt(i--);
-                }
+                return MetaState.logCurve(DataStorage.GunPower[i],
+                                          Difficulty.gun_upgrade_base,
+                                          Difficulty.gun_upgrade_steepness,
+                                          Difficulty.gun_upgrade_amplification) / MetaState.monster_armor_coefficient;
             }
 
-            /* find aim vector for current target */
-            if (reticle_targets.Count != 0) {
-                current_target = (Target)reticle_targets[0];
-            }
-            else {
-                current_target = targets.findClosest (position, ammo, 100);
-            }
-
-            if (current_target != null) {
-                aim_at = current_target.position;
-            }
-            else {
-                aim_at = Vector2.zero;
-            }
-
-            if (aim_at == Vector2.zero) {
-                aim_vector = new Vector2 (1, 0);
-                desired_angle = 0;
-            }
-            else {
-                if (ammo == Ammo.SKULL) {
-                    aim_vector = (aim_at - (position + new Vector2 (0, 30)));
-                }
-                else {
-                    aim_vector = (aim_at - position);
-                }
-
-                aim_vector.Normalize();
-                desired_angle = (float)Math.Atan2 (aim_vector.y, aim_vector.x);
-
-                if (ammo == Ammo.DRAGON) {
-                    desired_angle -= DragonGun.aim_lead * (aim_at - position).magnitude;
-                }
-            }
-
-            /* fire at current angle */
-            angle = Math.Abs (angle - desired_angle) < turn_speed ? desired_angle : angle;
-            angle += angle < desired_angle ? turn_speed : 0;
-            angle -= angle > desired_angle ? turn_speed : 0;
-
-            // hard lock angle unless veggie gun
-            if (ammo != Ammo.IGLOO && ammo != Ammo.FLAME) {
-                angle = 0;
-                current_target = null;
-            }
-
-            int boosted_upgrade = upgrade;
-
-            if (--fire_timeout <= 0 && (firing || ammo == Ammo.GATLING)) {
-
-                var noisy_angle = angle + Util.rng.NextFloat(-aim_error, aim_error);
-                var noisy_aim = new Vector2((float)Math.Cos(noisy_angle), (float)Math.Sin(noisy_angle));
-                fire_timeout = (int)(60 / fire_rate);
-
-                if (ammo == Ammo.SIN) {
-                    Choom.PlayEffect(SoundAssets.MathShot);
-                    Game.instance.bullet_group.add(new SinBullet(position + new Vector2(150, 0), new Vector2 (2, 0),
-                                                   Game.instance.enemy_group, null, boosted_upgrade));
-                }
-
-                if (ammo == Ammo.BOUNCE) {
-                    Choom.PlayEffect(SoundAssets.BeachBallShot);
-                    Game.instance.bullet_group.add(new BeachBall(position + new Vector2 (105, -10), new Vector2 (2, 0),
-                                                    Game.instance.enemy_group, null, boosted_upgrade));
-                }
-
-                if (ammo == Ammo.FORK) {
-                    Choom.PlayEffect(SoundAssets.ForkShot);
-                    Forker.bullet(position + new Vector2(130, -20), boosted_upgrade);
-                }
-
-                if (ammo == Ammo.BOOMERANG) {
-                    Boomeranger.bullet(position + new Vector2(135, 10), boosted_upgrade, gun_index);
-                }
-
-                if (ammo == Ammo.FLAME) {
-                    Flamer.emitFlame(position + (noisy_aim * 75 + new Vector2(noisy_aim.y, -noisy_aim.x) * -15) * 3 / 2,
-                                     noisy_aim, boosted_upgrade, false);
-                }
-
-                if (ammo == Ammo.SKULL) {
-                    float aim_angle = Util.angle (noisy_aim);
-                    float half_arc = SkullGun.fire_arc / 2.0f;
-                    for (float a = aim_angle - half_arc; a <= aim_angle + half_arc; a +=
-                         SkullGun.fire_arc / SkullGun.skulls_per_shot) {
-                        Skuller.addBullet(position + noisy_aim * 100 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * -30,
-                                          Util.fromPolar(a, 1), boosted_upgrade, Game.instance.enemy_group,
-                                          reticle_targets.Count > 0 ? reticle_targets [0] as Target : null);
-                    }
-
-                    Choom.PlayEffect(SoundAssets.SkullShot);
-                }
-
-                if (ammo == Ammo.IGLOO) {
-                    Penguiner.penguin(position + noisy_aim * 95 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 10,
-                                      noisy_aim * IglooGun.velocity, false, boosted_upgrade, targetList());
-                    Choom.PlayEffect(SoundAssets.IceShot);
-                }
-
-                if (ammo == Ammo.LIGHTNING) {
-                    Choom.PlayEffect(SoundAssets.LightningShot);
-                    Lightning.lightningFrom(this, boosted_upgrade);
-                }
-
-                if (ammo == Ammo.VEGETABLE) {
-                    Choom.PlayEffect(SoundAssets.VegShot);
-                    
-                    DataStorage.ShotsFired++;
-                    //Util.trace(DataStorage.ShotsFired);
-
-                    int type = Util.rng.Next(6);
-                    Particle vb = new Particle(AppMain.textures.veggies);
-                    vb.frame = type;
-                    vb.position = position + noisy_aim * 105 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 5;
-                    vb.velocity = noisy_aim * VegetableGun.velocity;
-                    vb.angle = Util.angle(noisy_aim);
-                    vb.collides_with = targetList();
-
-                    var s = VegetableGun.size + boosted_upgrade * VegetableGun.size_upgrade;
-                    vb.scale = new Vector2(s / 8.0f, s / 8.0f);
-                    vb.ground_at = 480;
-                    vb.drawable_size = 100;
-                    vb.collide_behavior = (ref Particle p, Entity e) => {
-                        p.remove = true;
-                        if (e != null) {
-                            (e as Target).damage(VegetableGun.damage + boosted_upgrade * VegetableGun.damage_upgrade,
-                                                 Gun.Ammo.VEGETABLE);
-                        }
-
-                        Particle splat = new Particle (AppMain.textures.veggies);
-                        splat.frame = type / 2 * 4 + 8;
-                        splat.frame_speed = 0.1f;
-                        splat.loop_end = (int)splat.frame + 2;
-                        splat.loop = false;
-                        splat.position = p.position;
-                        splat.velocity = e != null ? new Vector2 (e.velocity.x, 0) : Vector2.zero;
-                        splat.angle = p.angle;
-                        splat.scale = p.scale / 2;
-                        Game.instance.bullet_manager.add(splat);
-                    };
-
-                    Game.instance.bullet_manager.add(vb);
-                }
-
-                if (ammo == Ammo.DRAGON) {
-                    DragonGun.fireBullet(position, noisy_aim, boosted_upgrade, targetList());
-                }
-
-                ammo_ct--;
-                if (ammo_ct <= 0 && ammo != Ammo.GATLING) {
-                    stopFiring();
-                    destroyGun();
-                }
-            }
+            return 1.0f;
         }
     }
 
@@ -1450,7 +1471,7 @@ namespace Gunhouse
                 if (angle > Math.PI / 2)
                 {
                     int damage = VegetableGun.special_damage + VegetableGun.special_damage_upgrade * upgrade;
-                    damage = (int)(damage * GunUpgrade.upgradeMultiplier(Gun.Ammo.VEGETABLE));
+                    damage = (int)(damage * Gun.UpgradeMultiplier(Gun.Ammo.VEGETABLE));
 
                     AppMain.screenShake(upgrade * 5, 40);
 
@@ -1665,18 +1686,18 @@ namespace Gunhouse
             Shield.existing_shield = null;
 
             // build list of equipped ammo
-            Gun.Ammo[] equipped = new Gun.Ammo[Shop.max_equipped];
+            Gun.Ammo[] equipped = new Gun.Ammo[3];
             if (!MetaState.hardcore_mode) {
                 int equip_index = 0;
                 for (int i = 0; i < DataStorage.NumberOfGuns; ++i) {
                     if (!DataStorage.GunEquipped[i]) { continue; }
-                    equipped[equip_index++] = Shop.guns[i].ammo;
+                    equipped[equip_index++] = (Gun.Ammo)i;
                 }
             }
             else {
-                equipped[0] = Shop.guns[(int)Gun.Ammo.DRAGON].ammo;
-                equipped[1] = Shop.guns[(int)Gun.Ammo.IGLOO].ammo;
-                equipped[2] = Shop.guns[(int)Gun.Ammo.SKULL].ammo;
+                equipped[0] = Gun.Ammo.DRAGON;
+                equipped[1] = Gun.Ammo.IGLOO;
+                equipped[2] = Gun.Ammo.SKULL;
             }
 
             // choose among equpped ammo

@@ -253,7 +253,7 @@ namespace Gunhouse
             Objectives.CheckAchievements();
 
             child_state = null;
-            AppMain.top_state = new CreditState(false);
+            //AppMain.top_state = new CreditState(false);
 
             pmc = new PadMenuController();
         }
@@ -306,8 +306,8 @@ namespace Gunhouse
 
             if (true) {
                 AppMain.background = (Entity)Activator.CreateInstance(backgrounds[MetaState.wave_number % 3] as Type);
-                AppMain.background_fade = 0.0f;
-                AppMain.background_fade_delta = 1.0f / 120;
+                //AppMain.background_fade = 0.0f;
+                //AppMain.background_fade_delta = 1.0f / 120;
             }
 
             done = false;
@@ -851,7 +851,7 @@ namespace Gunhouse
                     AppMain.game_pad_active = false;
                 }
                 else if (!AppMain.game_pad_active && Input.touches.Count == 0 &&
-                         (Input.Pad.Move != Vector2.zero || Input.Pad.AnyWasPressd())) {
+                         (Input.Pad.Move != Vector2.zero || Input.Pad.AnyWasPressed)) {
                     clearTouchInputState();
                     AppMain.game_pad_active = true;
                 }

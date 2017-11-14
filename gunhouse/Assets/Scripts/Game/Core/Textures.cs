@@ -105,10 +105,9 @@ namespace Gunhouse
         public Atlas door, pickups;
 
         public Atlas minion, orphan, circle, explosion, gunpoof, block, block_logo, cracks;
-        public Atlas title, taptobegin;
+        public Atlas taptobegin;
         public Atlas font, clouds, cloudpuff;
-        public Atlas gun, bullets, dot, highlight, fade;
-        public Atlas store_board, store;
+        public Atlas gun, bullets, dot, highlight;
         public Atlas shadowblob, shadowblob2;
 
         public Atlas counter_money, counter_time;
@@ -171,11 +170,6 @@ namespace Gunhouse
 
         public Textures()
         {
-            #if LOADING_SCREEN || LOADING_CREDITS
-            loading = new Atlas("loading.png", "loading.txa.txt", 0);
-            #endif
-
-            fade = new Atlas("fade_white.png", 1);
             font = new Atlas("font.png", "font.fnt.txt", 1);
         }
 
@@ -346,8 +340,6 @@ namespace Gunhouse
             house = new Atlas("house.png", new Vector2(287, 527), z_order++);
             house.texture.hud = true;
 
-            title = new Atlas("title.png", new Vector2(376, 300), z_order++);
-
             block = new Atlas("block.png", "block.txa.txt", z_order++);
             block.texture.hud = true;
             block.texture.scissored = true;
@@ -436,7 +428,6 @@ namespace Gunhouse
             stage_pyramid_anchors = new Atlas("stage_pyramid_anchors.png", "stage_pyramid_anchors.txa.txt", z_order++);
             stage_oakland_anchors = new Atlas("stage_oakland_anchors.png", "stage_oakland_anchors.txa.txt", z_order++);
 
-            store_board = new Atlas("store_board.png", "store_board.txa.txt", z_order++);
             hud = new Atlas("hud.png", "hud.txa.txt", z_order++);
             hud.texture.hud = true;
 
@@ -551,15 +542,8 @@ namespace Gunhouse
             pickups = new Atlas("pickups.png", "pickups.txa.txt", z_order++);
             pickups.texture.hud = true;
 
-            pick_a_day = new Atlas("pick_day_button.png", z_order++);
-            pick_a_day.texture.hud = true;
-
             font = new Atlas("font.png", "font.fnt.txt", z_order++);
             font.texture.hud = true;
-
-            #if LOADING_SCREEN || LOADING_CREDITS
-            loading = new Atlas("loading.png", "loading.txa.txt", z_order++);
-            #endif
 
             money_guy = new Atlas("moneyguy.png", "moneyguy.txa.txt", z_order++);
             money_guy.texture.hud = true;
@@ -572,11 +556,6 @@ namespace Gunhouse
 
             arrow = new Atlas("arrow.png", z_order++);
             arrow.texture.hud = true;
-
-            store = new Atlas("store.png", "store.txa.txt", z_order++);
-
-            fade = new Atlas("fade_white.png", z_order++);
-            fade.texture.hud = true;
         }
     }
 }

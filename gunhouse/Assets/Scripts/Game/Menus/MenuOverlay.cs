@@ -13,15 +13,17 @@ namespace Gunhouse
         [SerializeField] RectTransform fade;
         [SerializeField] TextMeshProUGUI storyText;
         [SerializeField] Objectives objectives;
-        [SerializeField] RectTransform options;
-        [SerializeField] Image optionsMessage;
-        [SerializeField] Image leftButton;
-        [SerializeField] Button[] endWaveButtons;
-        [SerializeField] Sprite[] leftButtons;
-        [SerializeField] Sprite[] messages;
 
         [Space(10)] [SerializeField] RectTransform pauseRoot;
         [SerializeField] Button[] pauseButtons;
+
+        [Space(10)] [SerializeField] RectTransform endWaveRoot;
+        [SerializeField] Image endWaveBanner;
+        [SerializeField] Sprite[] endWaveBanners;
+        [SerializeField] Button[] endWaveButtons;
+
+        [Space(10)] [SerializeField] Image leftButton;
+        [SerializeField] Sprite[] leftButtons;
 
         bool isPaused;
         State childState;
@@ -29,10 +31,11 @@ namespace Gunhouse
         void Awake()
         {
             fade.gameObject.SetActive(false);
-            options.gameObject.SetActive(false);
+            pauseRoot.gameObject.SetActive(false);
+            endWaveRoot.gameObject.SetActive(false);
+
             storyText.richText = true;
             storyText.gameObject.SetActive(false);
-            pauseRoot.gameObject.SetActive(false);
         }
 
         void OnEnable()
@@ -43,10 +46,8 @@ namespace Gunhouse
 
         void OnDisable()
         {
-            endWaveButtons[0].onClick.RemoveAllListeners();
-            endWaveButtons[1].onClick.RemoveAllListeners();
-            pauseButtons[0].onClick.RemoveAllListeners();
-            pauseButtons[1].onClick.RemoveAllListeners();
+            for (int i = 0; i < pauseButtons.Length; ++i) { pauseButtons[i].onClick.RemoveAllListeners(); }
+            for (int i = 0; i < endWaveButtons.Length; ++i) { endWaveButtons[i].onClick.RemoveAllListeners(); }
         }
 
         public void Show(bool won)
@@ -57,10 +58,11 @@ namespace Gunhouse
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 0;
 
             fade.gameObject.SetActive(true);
-            options.gameObject.SetActive(true);
+            endWaveRoot.gameObject.SetActive(true);
+
             objectives.UpdateText();
 
-            optionsMessage.sprite = messages[won ? 1 : 0];
+            endWaveBanner.sprite = endWaveBanners[won ? 1 : 0];
 
             if (MetaState.hardcore_mode) {
                 leftButton.sprite = leftButtons[1];
@@ -99,8 +101,9 @@ namespace Gunhouse
 #else
             TextBlock.Display(storyText, text);
 #endif
+
             // disable buttons until fade is complete
-            foreach(var b in endWaveButtons) b.onClick.RemoveAllListeners();
+            for (int i = 0; i < endWaveButtons.Length; ++i) { endWaveButtons[i].onClick.RemoveAllListeners(); }
 
             LeanTween.alphaCanvas(root[0], 1, 1);
             LeanTween.alphaCanvas(root[1], 1, 1).setOnComplete(() => {
@@ -124,11 +127,12 @@ namespace Gunhouse
             fade.gameObject.SetActive(false);
             endWaveButtons[0].onClick.RemoveAllListeners();
             endWaveButtons[1].onClick.RemoveAllListeners();
+            endWaveButtons[2].onClick.RemoveAllListeners();
 
             storyText.StopAllCoroutines();  /* NOTE(shane): Dialog Display uses coroutine. */
             storyText.gameObject.SetActive(false);
 
-            options.gameObject.SetActive(false);
+            endWaveRoot.gameObject.SetActive(false);
 
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 0;
         }
@@ -142,14 +146,14 @@ namespace Gunhouse
             Hide();
 
             AppMain.top_state.Dispose();
-            AppMain.top_state = new Shop();
+            //AppMain.top_state = new Shop();
 
             Choom.StopAllEffects();
             Choom.Pause(false);
 
             Choom.PlayEffect(SoundAssets.UIConfirm);
-            AppMain.background_fade = 0;
-            AppMain.background_fade_delta = 1.0f / 120;
+            //AppMain.background_fade = 0;
+            //AppMain.background_fade_delta = 1.0f / 120;
         }
 
         void SelectWave(bool won)
@@ -164,11 +168,11 @@ namespace Gunhouse
             MetaState.resetWave(won);
             AppMain.top_state.Dispose();
 
-#if LOADING_SCREEN
-            AppMain.top_state = new LoadState(() => { return new Game(); }, DataStorage.StartOnWave / 3 % 5);
-#else
+//#if LOADING_SCREEN
+//            AppMain.top_state = new LoadState(() => { return new Game(); }, DataStorage.StartOnWave / 3 % 5);
+//#else
             AppMain.top_state = new Game();
-#endif
+//#endif
         }
 
         public void Pause(State state)
@@ -181,6 +185,8 @@ namespace Gunhouse
 
             fade.gameObject.SetActive(true);
             pauseRoot.gameObject.SetActive(true);
+            endWaveRoot.gameObject.SetActive(false);
+
             objectives.UpdateText();
 
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 1;
@@ -215,12 +221,14 @@ namespace Gunhouse
             Choom.Pause(false);
 
             AppMain.top_state.Dispose();
-            AppMain.top_state = new TitleState(MenuOptions.Title);
+            AppMain.top_state = new MenuState();
 
             Game.instance = null;
 
             pauseRoot.gameObject.SetActive(false);
+            endWaveRoot.gameObject.SetActive(false);
             fade.gameObject.SetActive(false);
+
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 0;
         }
    }

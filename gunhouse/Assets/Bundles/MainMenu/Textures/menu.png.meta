@@ -1,0 +1,975 @@
+fileFormatVersion: 2
+guid: caf443334219e47cb8a8242f4bed2708
+timeCreated: 1510193242
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: arrow
+    21300002: controllers-ps_circle
+    21300004: controllers-ps_square
+    21300006: controllers-ps_triangle
+    21300008: controllers-ps_x
+    21300010: controllers-xbox_a
+    21300012: controllers-xbox_b
+    21300014: controllers-xbox_x
+    21300016: controllers-xbox_y
+    21300018: fade_white
+    21300020: gunhouse_logo
+    21300022: hud
+    21300024: loading
+    21300026: portrait_title
+    21300028: store-board
+    21300030: store-cat
+    21300032: store-leaderboard
+    21300034: store-reticle
+    21300036: store-shield
+    21300038: store-skull
+    21300040: store-slider_blue
+    21300042: store-slider_red
+    21300044: store-square_large
+    21300046: store-square_small
+    21300048: store-wheel
+    21300050: portrait_0
+    21300052: portrait_1
+    21300054: portrait_2
+    21300056: gunhouse_text
+    21300058: portrait_3
+    21300060: portrait_4
+    21300062: board
+    21300064: reticle
+    21300066: shield
+    21300068: skull
+    21300070: slider_blue
+    21300072: slider_red
+    21300074: icons-ball
+    21300076: icons-boomerang
+    21300078: icons-carrot
+    21300080: icons-dragon
+    21300082: icons-flame
+    21300084: icons-fork
+    21300086: icons-ice
+    21300088: icons-lightning
+    21300090: icons-skull
+    21300092: icons-wave
+    21300094: heart
+    21300096: coin
+    21300098: coins
+    21300100: note
+    21300102: notes
+    21300104: select_large
+    21300106: select_small
+    21300108: option_button
+    21300110: option_button_selection
+    21300112: backboard
+    21300114: backboard_equipped
+    21300116: backboard_money
+    21300118: title_options
+    21300120: title_secret
+    21300122: title_stats
+    21300124: title_store
+    21300126: board-bottom
+    21300128: board-bottom_corner
+    21300130: board-chimney
+    21300132: board-flowerpot
+    21300134: board-interior_dark
+    21300136: board-interior_light
+    21300138: board-pillar
+    21300140: board-top
+    21300142: board-top_corner
+    21300144: board_chimney
+    21300146: board_flowerpot
+    21300148: board_interior_dark
+    21300150: board_interior_light
+    21300152: board_money
+    21300154: board_money_gears
+    21300156: board_sign_options
+    21300158: board_sign_secrets
+    21300160: board_sign_stats
+    21300162: board_sign_store
+    21300164: board_weapon
+    21300166: cat-body
+    21300168: cat-eyes_closed
+    21300170: cat-eyes_half_open
+    21300172: cat-eyes_open
+    21300174: cat-paw_0
+    21300176: cat-paw_1
+    21300178: cat-paw_2
+    21300180: cat-tail_0
+    21300182: cat-tail_1
+    21300184: cat-tail_2
+    21300186: cat-tail_3
+    21300188: element-ball
+    21300190: element-boomerang
+    21300192: element-dragon
+    21300194: element-flame
+    21300196: element-fork
+    21300198: element-ice
+    21300200: element-lightning
+    21300202: element-skull
+    21300204: element-vegetable
+    21300206: element-wave
+    21300208: selection_large
+    21300210: selection_small
+    21300212: arrow_vertical
+  externalObjects: {}
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 0
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: tvOS
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: arrow_vertical
+      rect:
+        serializedVersion: 2
+        x: 1238
+        y: 959
+        width: 90
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: backboard
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 1085
+        width: 526
+        height: 408
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 173, y: 136, z: 173, w: 136}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_chimney
+      rect:
+        serializedVersion: 2
+        x: 1175
+        y: 968
+        width: 47
+        height: 115
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_flowerpot
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 188
+        width: 102
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_interior_dark
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 43
+        width: 182
+        height: 143
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 1, z: 1, w: 1}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_interior_light
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 48
+        width: 182
+        height: 138
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 1, z: 1, w: 1}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_money
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 9
+        width: 59
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 27, y: 30, z: 27, w: 30}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_money_gears
+      rect:
+        serializedVersion: 2
+        x: 1175
+        y: 858
+        width: 45
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_sign_options
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 210
+        width: 873
+        height: 234
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_sign_secrets
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 1866
+        width: 828
+        height: 181
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_sign_stats
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 1697
+        width: 714
+        height: 167
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_sign_store
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 1495
+        width: 694
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: board_weapon
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1718
+        width: 120
+        height: 146
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 56, y: 70, z: 56, w: 70}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-body
+      rect:
+        serializedVersion: 2
+        x: 1335
+        y: 962
+        width: 178
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-eyes_closed
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 20
+        width: 83
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-eyes_half_open
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 15
+        width: 84
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-eyes_open
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 4
+        width: 83
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-paw_0
+      rect:
+        serializedVersion: 2
+        x: 1649
+        y: 987
+        width: 42
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-paw_1
+      rect:
+        serializedVersion: 2
+        x: 1469
+        y: 871
+        width: 38
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-paw_2
+      rect:
+        serializedVersion: 2
+        x: 1238
+        y: 870
+        width: 38
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-tail_0
+      rect:
+        serializedVersion: 2
+        x: 1198
+        y: 12
+        width: 68
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-tail_1
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 7
+        width: 62
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-tail_2
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 10
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: cat-tail_3
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 6
+        width: 50
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-ps_circle
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-ps_square
+      rect:
+        serializedVersion: 2
+        x: 679
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-ps_triangle
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-ps_x
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-xbox_a
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-xbox_b
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-xbox_x
+      rect:
+        serializedVersion: 2
+        x: 1009
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-xbox_y
+      rect:
+        serializedVersion: 2
+        x: 1075
+        y: 10
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-ball
+      rect:
+        serializedVersion: 2
+        x: 1896
+        y: 1336
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-boomerang
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-dragon
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-flame
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-fork
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-ice
+      rect:
+        serializedVersion: 2
+        x: 905
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-lightning
+      rect:
+        serializedVersion: 2
+        x: 1039
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-skull
+      rect:
+        serializedVersion: 2
+        x: 1173
+        y: 76
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-vegetable
+      rect:
+        serializedVersion: 2
+        x: 1515
+        y: 951
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: element-wave
+      rect:
+        serializedVersion: 2
+        x: 1335
+        y: 828
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: gunhouse_logo
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1088
+        width: 1201
+        height: 959
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: gunhouse_text
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 446
+        width: 945
+        height: 640
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: heart
+      rect:
+        serializedVersion: 2
+        x: 1732
+        y: 1349
+        width: 162
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: option_button
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 861
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: option_button_selection
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 188
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: reticle
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 9
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: selection_large
+      rect:
+        serializedVersion: 2
+        x: 1732
+        y: 1042
+        width: 291
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: selection_small
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1606
+        width: 109
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: shield
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 1470
+        width: 132
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: skull
+      rect:
+        serializedVersion: 2
+        x: 1268
+        y: 12
+        width: 65
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: slider_blue
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 18
+        width: 29
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 9, y: 9, z: 9, w: 9}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: slider_red
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 18
+        width: 29
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 9, y: 9, z: 9, w: 9}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    outline: []
+    physicsShape: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
