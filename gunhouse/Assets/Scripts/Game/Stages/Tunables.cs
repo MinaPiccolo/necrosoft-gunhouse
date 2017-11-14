@@ -697,35 +697,6 @@ namespace Gunhouse
         };
     }
 
-    public partial class Shop
-    {
-        const int base_heart_price = 1200;
-        const float heart_price_multiplier = 1.5f;
-        const int base_armor_price = 3000;
-        const float armor_price_multiplier = 1.5f;
-        const int base_healing_price = 400;
-        const float healing_price_multiplier = 1.5f;
-        const int base_upgrade_price = 400;
-        const float upgrade_price_multiplier = 1.65f;
-
-        public static int max_equipped = 3;
-
-        public static GunUpgrade[] guns = {
-            // row 1
-            new GunUpgrade(Gun.Ammo.DRAGON, "Dragon Gun", "Upgrade to a dragon friend!", 0),
-            new GunUpgrade(Gun.Ammo.IGLOO, "Penguin Gun", "Your enemies will chill out.", 0),
-            new GunUpgrade(Gun.Ammo.SKULL, "Skull Gun", "These guys are champing at the bit.", 0),
-            new GunUpgrade(Gun.Ammo.VEGETABLE, "Vegetable Gun", "Veggies make you a straight shooter.", 1500),
-            new GunUpgrade(Gun.Ammo.LIGHTNING, "Lightning Gun", "Tesla-style chain attacks.", 2000),
-            // row 2
-            new GunUpgrade(Gun.Ammo.FLAME, "Flame Gun", "The Dragon Gun's enthusiastic cousin.", 2500),
-            new GunUpgrade(Gun.Ammo.FORK, "Fork Gun", "Defensive, with a split personality.", 3500),
-            new GunUpgrade(Gun.Ammo.BOUNCE, "Beach Ball Gun", "Bouncy, bouncy, bouncy!", 1500),
-            new GunUpgrade(Gun.Ammo.BOOMERANG, "Boomerang Gun", "There and back again.", 1000),
-            new GunUpgrade(Gun.Ammo.SIN, "Sine Wave Gun", "Sine on the line which is dotted!", 2500)
-        };
-    }
-
     public class Difficulty
     {
         public const float door_openness_start         = 2.5f;

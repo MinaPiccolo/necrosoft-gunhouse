@@ -59,8 +59,8 @@ namespace Gunhouse
         public static float[] cc =  new float[128];
         public static bool[] cc_changed = new bool[128];
 
-        public static PlayerInput controllerInput;
-        public static PlayerActions Pad { get { return controllerInput.pad; } }
+        public static PlayerInput Pad;
+        //public static PlayerActions Pad { get { return controllerInput.pad; } }
 
         public static void clearTouches()
         {

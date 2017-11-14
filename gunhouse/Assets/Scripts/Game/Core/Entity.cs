@@ -666,9 +666,6 @@ namespace Gunhouse
             AppMain.textures.shadowblob2.draw(0, new Vector2(position.x, 530),
                                               Vector2.one / 5, new Vector4(1, 1, 1, 0.5f));
 
-            color.w = AppMain.background_fade;
-            if (AppMain.top_state is EndWaveState) { color.w = 1; }
-
             Vector2 money_pos = position + new Vector2(-56, -38 + sign_y) + new Vector2(printed_score.Length * 16, 0);
 
             for (int i = 0; i < printed_score.Length; ++i) {
@@ -821,7 +818,7 @@ namespace Gunhouse
 
             max_hp = max_hp == 0 ? hp : max_hp;
 
-            float amt = (by * GunUpgrade.upgradeMultiplier(type));
+            float amt = (by * Gun.UpgradeMultiplier(type));
 
             if (!Target.damages.ContainsKey(type)) {
                 Target.damages[type] = 0;
