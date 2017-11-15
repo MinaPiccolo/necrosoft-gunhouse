@@ -68,7 +68,8 @@ namespace Gunhouse.Menu
                 currentMenu = pageID;
             }
 
-            if (currentMenu == MenuState.Title && !portraits.gameObject.activeSelf) {
+            if (currentMenu >= MenuState.Title && currentMenu != MenuState.Loading &&
+                !portraits.gameObject.activeSelf) {
                 portraits.gameObject.SetActive(true);
                 portraits.SelectPortrait(Random.Range(0, 4));
             }

@@ -38,8 +38,10 @@ namespace Gunhouse
 
         public override void draw()
         {
-            AppMain.textures.stage_space_anchor.draw(0, new Vector2(350 * 0.5f, AppMain.vscreen.y - 125 * 0.5f),
-                                                     scaleAmount, Vector4.one);
+            if (AppMain.DisplayAnchor) {
+                AppMain.textures.stage_space_anchor.draw(0, new Vector2(350 * 0.5f, AppMain.vscreen.y - 125 * 0.5f),
+                                                         scaleAmount, Vector4.one);
+            }
 
             Atlas a = AppMain.textures.stage_space;
 

@@ -701,7 +701,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 2
   scriptingDefineSymbols:
-    1: TOUCH
+    1: CONTROLLER_AND_TOUCH
     4: BUNDLED;LOADING_SCREEN;TOUCH
     7: LOADING_SCREEN;TRACKING;TOUCH;PLAY_STORE
     17: LOADING_SCREEN;TOUCH

@@ -44,16 +44,15 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int sprite = (int)stage_drhoot_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_drhoot_dusk)
-                sprite = (int)stage_drhoot_anchors.Sprites.dusk_anchor;
-            if (atlas() == AppMain.textures.stage_drhoot_night)
-                sprite = (int)stage_drhoot_anchors.Sprites.night_anchor;
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_drhoot_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_drhoot_dusk) sprite = (int)stage_drhoot_anchors.Sprites.dusk_anchor;
+                if (atlas() == AppMain.textures.stage_drhoot_night) sprite = (int)stage_drhoot_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_drhoot_anchors.draw(sprite,
-                                                       new Vector2(390 * 0.5f, AppMain.vscreen.y - 175 * 0.5f),
-                                                       scaleAmount, Vector4.one);
-
+                AppMain.textures.stage_drhoot_anchors.draw(sprite,
+                                                           new Vector2(390 * 0.5f, AppMain.vscreen.y - 175 * 0.5f),
+                                                           scaleAmount, Vector4.one);
+            }
             atlas().draw((int)stage_drhoot_noon.Sprites.background,
                          new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y * 0.5f), scaleAmount, Vector4.one);
 

@@ -10,12 +10,9 @@ namespace Gunhouse
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
-        bool displayAnchor = false;
 
         public DrDogBackgroundDay()
         {
-            displayAnchor = !(AppMain.top_state is MenuState);
-
             for (int i = 0; i < n_clouds; i++)
                 clouds[i] = new Vector4(Util.rng.NextFloat(0, AppMain.vscreen.x),
                                         Util.rng.NextFloat(0, 400),
@@ -40,7 +37,7 @@ namespace Gunhouse
 
         public override void draw()
         {
-            if (displayAnchor) {
+            if (AppMain.DisplayAnchor) {
                 int sprite = (int)stage_drdog_anchors.Sprites.noon_anchor;
                 if (atlas() == AppMain.textures.stage_drdog_dusk) { sprite = (int)stage_drdog_anchors.Sprites.dusk_anchor; }
                 if (atlas() == AppMain.textures.stage_drdog_night) { sprite = (int)stage_drdog_anchors.Sprites.night_anchor; }

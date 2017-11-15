@@ -12,9 +12,11 @@ namespace Gunhouse.Menu
         float scrollFactor = 100;
         bool speedTouch;
         bool speedController;
-        [SerializeField] [Range(0, 5)] float scrollDelay = 2f;
         [SerializeField] [Range(0, 10)] float finishedDelay = 2f;
         PlayerInput input;
+
+        public static float ScrollDelay;
+        public static bool DisplayEnding;
 
         protected override void Initalise() { pageID = MenuState.Credits; transitionID = MenuState.Options; }
         protected override void IntroReady()
@@ -35,6 +37,7 @@ namespace Gunhouse.Menu
         void OnEnable()
         {
             input = FindObjectOfType<PlayerInput>();
+            for (int i = 0; i < gameEnding.Length; ++i) {gameEnding[i].SetActive(DisplayEnding); }
         }
 
         void Update()
@@ -45,7 +48,7 @@ namespace Gunhouse.Menu
 
         IEnumerator BeginAutoScroll()
         {
-            yield return new WaitForSeconds(scrollDelay);
+            yield return new WaitForSeconds(ScrollDelay);
 
             while (scroll.verticalNormalizedPosition > 0) {
                 scroll.verticalNormalizedPosition -= Time.deltaTime * ((scrollSpeed / scrollFactor) *
@@ -55,7 +58,7 @@ namespace Gunhouse.Menu
 
             yield return new WaitForSeconds(finishedDelay);
 
-            //transitionID = MenuState.Title; // check if game over here.
+            transitionID = DisplayEnding ? MenuState.Title : MenuState.Options;
             Play(HashIDs.menu.Outtro);
             menu.SetActiveContextButtons(false);
         }

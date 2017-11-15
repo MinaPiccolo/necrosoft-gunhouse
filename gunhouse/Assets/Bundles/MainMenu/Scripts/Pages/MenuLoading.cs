@@ -59,8 +59,10 @@ namespace Gunhouse.Menu
         IEnumerator LoadStage()
         {
             AppMain.top_state = new Game();
+            AppMain.DisplayAnchor = true;
 
             yield return new WaitForEndOfFrame();
+
 
             menu.FadeInOut(true);
             menu.PortraitsHide();

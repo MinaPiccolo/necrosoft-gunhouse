@@ -11,8 +11,12 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             Tracker.ScreenVisit(SCREEN_NAME.OPTIONS);
+
             menu.SetActiveContextButtons(true, true);
             MainMenu.SetFocus(lastSelected);
+
+            MenuCredits.ScrollDelay = 2;
+            MenuCredits.DisplayEnding = false;
         }
 
         protected override void OuttroStartNextIntro()

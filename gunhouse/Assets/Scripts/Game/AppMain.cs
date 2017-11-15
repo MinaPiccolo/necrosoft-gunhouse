@@ -51,6 +51,7 @@ namespace Gunhouse
         public static bool game_pad_active = true;
         #endif
 
+        public static bool DisplayAnchor;
         public static Menu.MainMenu MainMenu;
 
         public static void Start()

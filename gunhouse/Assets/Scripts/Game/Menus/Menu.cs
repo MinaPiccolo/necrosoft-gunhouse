@@ -1,4 +1,5 @@
 using Necrosoft;
+using Gunhouse.Menu;
 
 namespace Gunhouse
 {
@@ -6,13 +7,17 @@ namespace Gunhouse
     {
         public MenuState(Menu.MenuState menuState = Menu.MenuState.Splash)
         {
-            menuState = Menu.MenuState.Stats;
-
             AppMain.MainMenu.SetPage(menuState);
+
+            AppMain.DisplayAnchor = false;
 
             switch (menuState)
             {
-            case Menu.MenuState.Credits: Choom.Play("Music/credits"); break;
+            case Menu.MenuState.Credits: {
+                MenuCredits.ScrollDelay = 10;
+                MenuCredits.DisplayEnding = true;
+                Choom.Play("Music/credits"); 
+            } break;
             default: Choom.Play("Music/title"); break;
             }
         }

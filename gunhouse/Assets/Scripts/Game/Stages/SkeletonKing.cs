@@ -45,14 +45,14 @@ namespace Gunhouse
             atlas().draw((int)stage_skeleton_noon.Sprites.background,
                          new Vector2(AppMain.vscreen.x * 0.5f, 394 * 0.5f), scaleOne, Vector4.one);
 
-            int sprite = (int)stage_skeleton_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_skeleton_dusk)
-                sprite = (int)stage_skeleton_anchors.Sprites.dusk_anchor;
-            if (atlas() == AppMain.textures.stage_skeleton_night)
-                sprite = (int)stage_skeleton_anchors.Sprites.night_anchor;
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_skeleton_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_skeleton_dusk) sprite = (int)stage_skeleton_anchors.Sprites.dusk_anchor;
+                if (atlas() == AppMain.textures.stage_skeleton_night) sprite = (int)stage_skeleton_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_skeleton_anchors.draw(sprite, new Vector2(290 * 0.5f, 514),
-                                                         scaleAmount, Vector4.one);
+                AppMain.textures.stage_skeleton_anchors.draw(sprite, new Vector2(290 * 0.5f, 514),
+                                                             scaleAmount, Vector4.one);
+            }
 
             for (int i = 0; i < n_clouds; i++) {
                 atlas().draw((int)stage_skeleton_noon.Sprites.cloud_0 + i, (Vector2)clouds[i], scaleOne, Vector4.one);

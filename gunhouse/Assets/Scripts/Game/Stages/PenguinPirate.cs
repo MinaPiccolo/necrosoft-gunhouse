@@ -58,14 +58,15 @@ namespace Gunhouse
 
             atlas().draw((int)stage_penguin_noon.Sprites.ground, groundPosition, scaleOne, Vector4.one);
 
-            int sprite = (int)stage_penguin_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_penguin_dusk)
-                sprite = (int)stage_penguin_anchors.Sprites.dusk_anchor;
-            if (atlas() == AppMain.textures.stage_penguin_night)
-                sprite = (int)stage_penguin_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_penguin_anchors.draw(sprite, new Vector2(320 * 0.5f, AppMain.vscreen.y - 119 * 0.5f),
-                                                        scaleAmount, Vector4.one);
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_penguin_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_penguin_dusk) sprite = (int)stage_penguin_anchors.Sprites.dusk_anchor;
+                if (atlas() == AppMain.textures.stage_penguin_night) sprite = (int)stage_penguin_anchors.Sprites.night_anchor;
+
+                AppMain.textures.stage_penguin_anchors.draw(sprite, new Vector2(320 * 0.5f, AppMain.vscreen.y - 119 * 0.5f),
+                                                            scaleAmount, Vector4.one);
+            }
         }
     }
 
