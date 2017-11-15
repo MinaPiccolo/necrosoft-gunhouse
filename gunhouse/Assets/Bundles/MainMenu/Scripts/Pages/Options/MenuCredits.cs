@@ -10,7 +10,8 @@ namespace Gunhouse.Menu
         [SerializeField] ScrollRect scroll;
         [SerializeField] [Range(1, 100)] float scrollSpeed = 10f;
         float scrollFactor = 100;
-        int speedMultiplier = 1;
+        bool speedTouch;
+        bool speedController;
         [SerializeField] [Range(0, 5)] float scrollDelay = 2f;
         [SerializeField] [Range(0, 10)] float finishedDelay = 2f;
         PlayerInput input;
@@ -39,7 +40,7 @@ namespace Gunhouse.Menu
         void Update()
         {
             if (menu.ignore_input) return;
-            IncreaseScrollSpeed(input.AnyIsPressed);
+            ControllerIncreaseScrollSpeed(input.AnyIsPressed);
         }
 
         IEnumerator BeginAutoScroll()
@@ -47,7 +48,8 @@ namespace Gunhouse.Menu
             yield return new WaitForSeconds(scrollDelay);
 
             while (scroll.verticalNormalizedPosition > 0) {
-                scroll.verticalNormalizedPosition -= Time.deltaTime * ((scrollSpeed / scrollFactor) * speedMultiplier);
+                scroll.verticalNormalizedPosition -= Time.deltaTime * ((scrollSpeed / scrollFactor) *
+                                                                       (speedController || speedTouch ? 6 : 1));
                 yield return null;
             }
 
@@ -58,6 +60,7 @@ namespace Gunhouse.Menu
             menu.SetActiveContextButtons(false);
         }
 
-        public void IncreaseScrollSpeed(bool increase) { speedMultiplier = increase ? 6 : 1; }
+        public void ControllerIncreaseScrollSpeed(bool increase) { speedController = increase; }
+        public void IncreaseScrollSpeed(bool increase) { speedTouch = increase; }
     }
 }
