@@ -1,5 +1,4 @@
-﻿using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -28,7 +27,6 @@ namespace Gunhouse.Menu
         [Header("Order the same as menuitem enum")]
         [SerializeField] Image[] buttonImages;
 
-        StringBuilder builder = new StringBuilder(50);
         StoreItem currentItem;
 
         int[] equipIndex = new int[3] { 0, 1, 2 };
@@ -58,7 +56,7 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             SetMoneyCounter();
-            menu.SetActiveContextButtons(true);
+            menu.SetActiveContextButtons(true, true);
             MainMenu.SetFocus(selectedItem);
         }
 
@@ -110,33 +108,33 @@ namespace Gunhouse.Menu
 
             itemTitle.text = item_title[item_index];
 
-            builder.Length = 0;
-            builder.Append(item_info[item_index]);
+            menu.builder.Length = 0;
+            menu.builder.Append(item_info[item_index]);
 
             switch (item)
             {
             case StoreItem.StoreHeart: {
-                builder.AppendFormat("\nHEARTS: {0}\nHEALING: {1}", DataStorage.Hearts, DataStorage.Healing);
+                menu.builder.AppendFormat("\nHEARTS: {0}\nHEALING: {1}", DataStorage.Hearts, DataStorage.Healing);
             } break;
             case StoreItem.StoreArmor: {
                 if (DataStorage.Hearts >= heartsBeforeArmor) {
-                    builder.AppendFormat("\nARMOR: {0}", DataStorage.Armor);
+                    menu.builder.AppendFormat("\nARMOR: {0}", DataStorage.Armor);
                 }
                 else {
-                    builder.AppendFormat("\n<color=#F97797FF>YOU NEED MORE HEARTS FIRST!</color>");
+                    menu.builder.AppendFormat("\n<color=#F97797FF>YOU NEED MORE HEARTS FIRST!</color>");
                 }
             } break;
             default: {
                 if (DataStorage.GunOwned[item_index]) {
-                    builder.AppendFormat("\nLEVEL: {0}", DataStorage.GunPower[item_index]);
+                    menu.builder.AppendFormat("\nLEVEL: {0}", DataStorage.GunPower[item_index]);
                 }
                 else {
-                    builder.AppendFormat("\n<color=#FFF192FF>PURCHASE TO UNLOCK!</color>");
+                    menu.builder.AppendFormat("\n<color=#FFF192FF>PURCHASE TO UNLOCK!</color>");
                 }
             } break;
             }
 
-            itemInfo.text = builder.ToString();
+            itemInfo.text = menu.builder.ToString();
         }
 
         void ShowItemButtonOptions(int index)
@@ -214,9 +212,9 @@ namespace Gunhouse.Menu
 
         void SetMoneyCounter()
         {
-            builder.Length = 0;
-            builder.AppendFormat("${0}", DataStorage.Money > 999999999 ? 999999999 : DataStorage.Money);
-            moneyText.text = builder.ToString();
+            menu.builder.Length = 0;
+            menu.builder.AppendFormat("${0}", DataStorage.Money > 999999999 ? 999999999 : DataStorage.Money);
+            moneyText.text = menu.builder.ToString();
         }
 
         bool IsSwap(int item_index)

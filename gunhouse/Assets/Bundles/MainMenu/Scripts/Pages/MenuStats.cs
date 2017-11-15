@@ -12,7 +12,7 @@ namespace Gunhouse.Menu
         protected override void Initalise() { pageID = MenuState.Stats; transitionID = MenuState.Title; }
         protected override void IntroReady()
         {
-            menu.SetActiveContextButtons(true);
+            menu.SetActiveContextButtons(true, false);
             MainMenu.SetFocus(arrows[1]);
         }
 
@@ -25,8 +25,6 @@ namespace Gunhouse.Menu
 
             for (int i = 0; i < pages.Length; ++i) { pages[i].SetActive(false); }
             pages[page_index].SetActive(true);
-
-            menu.SetActiveContextButtons(true);
         }
 
         void Update()

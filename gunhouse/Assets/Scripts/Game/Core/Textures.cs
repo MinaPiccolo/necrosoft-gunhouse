@@ -96,11 +96,7 @@ namespace Gunhouse
     {
         #region Field Properties
 
-        #if LOADING_SCREEN || LOADING_CREDITS
-        public Atlas loading;
-        #endif
-
-        public Atlas arrow, pick_a_day;
+        public Atlas arrow;
         public Atlas ui, hud, house, housebits, elements;
         public Atlas door, pickups;
 

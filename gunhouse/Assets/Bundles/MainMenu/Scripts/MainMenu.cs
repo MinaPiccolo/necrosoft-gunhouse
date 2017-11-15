@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using System.Text;
 
 namespace Gunhouse.Menu
 {
@@ -23,6 +24,7 @@ namespace Gunhouse.Menu
         MenuPage activePage;
         PlayerInput input;
         [System.NonSerialized] public bool ignore_input = true;
+        [System.NonSerialized] public StringBuilder builder = new StringBuilder(170);
         public float FadeAlpha { get { return fade.color.a; } }
 
         void Awake()
@@ -68,7 +70,7 @@ namespace Gunhouse.Menu
 
             if (currentMenu == MenuState.Title && !portraits.gameObject.activeSelf) {
                 portraits.gameObject.SetActive(true);
-                portraits.SelectPortrait(Random.Range(0, 5));
+                portraits.SelectPortrait(Random.Range(0, 4));
             }
 
             if (currentMenu != MenuState.Loading) {
@@ -81,11 +83,11 @@ namespace Gunhouse.Menu
             }
         }
 
-        public void SetActiveContextButtons(bool enable)
+        public void SetActiveContextButtons(bool enable, bool selectEnabled = true)
         {
             ignore_input = !enable;
             buttons.gameObject.SetActive(enable);
-            buttons.EnableButtons();
+            buttons.EnableButtons(selectEnabled);
         }
 
         public void QuitGame()
@@ -123,7 +125,7 @@ namespace Gunhouse.Menu
             if (currentMenu == MenuState.Title) { PortraitsHide(); }
         }
 
-        public void PortraitFlipOrder() { portraits.SortOrder = portraits.SortOrder == 0 ? 2 : 0; }
+        public void PortraitOrder(int index) { portraits.SortOrder = index; }
         public void PortraitsHide() { portraits.Play(HashIDs.menu.Outtro); }
     
         public void FadeInOut(bool fadeIn, float time = 1.0f)

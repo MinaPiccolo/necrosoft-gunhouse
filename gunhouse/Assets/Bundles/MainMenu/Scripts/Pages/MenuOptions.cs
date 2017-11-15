@@ -11,7 +11,7 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             Tracker.ScreenVisit(SCREEN_NAME.OPTIONS);
-            menu.SetActiveContextButtons(true);
+            menu.SetActiveContextButtons(true, true);
             MainMenu.SetFocus(lastSelected);
         }
 

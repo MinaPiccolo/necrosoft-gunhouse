@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Text;
 using TMPro;
 
 namespace Gunhouse.Menu
@@ -8,21 +7,20 @@ namespace Gunhouse.Menu
     public class MenuLoading : MenuPage
     {
         TextMeshProUGUI text;
-        StringBuilder builder  = new StringBuilder(200);
         bool loading;
 
         protected override void Initalise() { pageID = MenuState.Loading; transitionID = MenuState.PlayGame; }
         protected override void OuttroStartNextIntro() { }
-        protected override void OuttroFinished() { base.OuttroFinished(); menu.PortraitFlipOrder(); }
+        protected override void OuttroFinished() { base.OuttroFinished(); }
 
         void OnEnable()
         {
             menu.ignore_input = true;
             loading = false;
             text = GetComponentInChildren<TextMeshProUGUI>();
-            builder.Length = 0;
-            text.text = builder.AppendFormat("<size=300%>LOADING...</size>\n{0}",
-                                             Story.tips[Util.rng.Next(Story.tips.Length)]).ToString();
+            menu.builder.Length = 0;
+            text.text = menu.builder.AppendFormat("<size=300%>LOADING...</size>\n{0}",
+                                                  Story.tips[Util.rng.Next(Story.tips.Length)]).ToString();
         }
 
         void Update()

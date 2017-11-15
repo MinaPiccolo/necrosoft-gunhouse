@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Necrosoft;
 using Necrosoft.ThirdParty;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
@@ -24,6 +25,10 @@ namespace Gunhouse
 
         [Space(10)] [SerializeField] Image leftButton;
         [SerializeField] Sprite[] leftButtons;
+
+        [Space(10)] [SerializeField] CanvasGroup canvasDay;
+        [SerializeField] TextMeshProUGUI dayText;
+        LTDescr dayTween;
 
         bool isPaused;
         State childState;
@@ -141,15 +146,18 @@ namespace Gunhouse
         {
             AppMain.tutorial.SetLesson(Lesson.NONE);
 
-            Tracker.EndMode(MetaState.hardcore_mode, Game.dayName(MetaState.wave_number),
+            Tracker.EndMode(MetaState.hardcore_mode, DayName(),
                             MetaState.hardcore_mode ? MetaState.hardcore_score : DataStorage.Money);
             Hide();
 
             AppMain.top_state.Dispose();
-            //AppMain.top_state = new Shop();
+            AppMain.top_state = new MenuState(Menu.MenuState.Store);
 
             Choom.StopAllEffects();
             Choom.Pause(false);
+
+            LeanTween.cancel(dayTween.id);
+            canvasDay.gameObject.SetActive(false);
 
             Choom.PlayEffect(SoundAssets.UIConfirm);
             //AppMain.background_fade = 0;
@@ -168,6 +176,9 @@ namespace Gunhouse
             MetaState.resetWave(won);
             AppMain.top_state.Dispose();
 
+            LeanTween.cancel(dayTween.id);
+            canvasDay.gameObject.SetActive(false);
+
 //#if LOADING_SCREEN
 //            AppMain.top_state = new LoadState(() => { return new Game(); }, DataStorage.StartOnWave / 3 % 5);
 //#else
@@ -180,6 +191,8 @@ namespace Gunhouse
             isPaused = true;
             Tracker.ScreenVisit(SCREEN_NAME.PAUSE);
             AppMain.tutorial.Pause(true);
+
+            LeanTween.pause(dayTween.id);
 
             childState = state;
 
@@ -203,6 +216,8 @@ namespace Gunhouse
 
             AppMain.tutorial.Pause(false);
 
+            LeanTween.resume(dayTween.id);
+
             pauseRoot.gameObject.SetActive(false);
             fade.gameObject.SetActive(false);
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 0;
@@ -213,7 +228,7 @@ namespace Gunhouse
             AppMain.tutorial.SetLesson(Lesson.NONE);
 
             if (isPaused) { Tracker.LevelQuit(MetaState.wave_number); }
-            Tracker.EndMode(MetaState.hardcore_mode, Game.dayName(MetaState.wave_number),
+            Tracker.EndMode(MetaState.hardcore_mode, DayName(),
                             MetaState.hardcore_mode ? MetaState.hardcore_score : DataStorage.Money);
 
 
@@ -221,15 +236,40 @@ namespace Gunhouse
             Choom.Pause(false);
 
             AppMain.top_state.Dispose();
-            AppMain.top_state = new MenuState();
+            AppMain.top_state = new MenuState(Menu.MenuState.Title);
 
             Game.instance = null;
+
+            LeanTween.cancel(dayTween.id);
+            canvasDay.gameObject.SetActive(false);
 
             pauseRoot.gameObject.SetActive(false);
             endWaveRoot.gameObject.SetActive(false);
             fade.gameObject.SetActive(false);
 
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 0;
+        }
+
+        string DayName()
+        {
+            int wave = MetaState.wave_number;
+            AppMain.MainMenu.builder.Length = 0;
+            AppMain.MainMenu.builder.AppendFormat("DAY {0}, {1}", (wave / 3 + 1),
+                                                  wave % 3 == 0 ? "NOON" : wave % 3 == 1 ? "DUSK" : "NIGHT");
+
+            return AppMain.MainMenu.builder.ToString();
+        }
+
+        public void DisplayDayName()
+        {
+            canvasDay.gameObject.SetActive(true);
+            canvasDay.alpha = 0;
+
+            dayText.text = DayName();
+
+            dayTween = LeanTween.alphaCanvas(canvasDay, 1, 1).setLoopPingPong(1)
+                                .setDelay(0.5f).setEase(LeanTweenType.easeOutQuint)
+                                .setOnComplete(()=> { canvasDay.gameObject.SetActive(false); });
         }
    }
 }

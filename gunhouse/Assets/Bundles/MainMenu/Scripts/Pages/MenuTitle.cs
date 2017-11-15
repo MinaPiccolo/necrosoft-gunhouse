@@ -11,7 +11,7 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             Tracker.ScreenVisit(SCREEN_NAME.MAIN_MENU);
-            menu.SetActiveContextButtons(true);
+            menu.SetActiveContextButtons(true, true);
             MainMenu.SetFocus(lastSelected);
         }
 
@@ -37,7 +37,7 @@ namespace Gunhouse.Menu
             menu.SetActiveContextButtons(false);
 
             if (onclick.item != MenuState.PlayGame && onclick.item != MenuState.Hardcore) return;
-            menu.PortraitFlipOrder();
+            menu.PortraitOrder(2);
             menu.FadeInOut(false);
         }
     }

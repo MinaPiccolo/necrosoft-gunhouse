@@ -253,7 +253,7 @@ namespace Gunhouse
             Objectives.CheckAchievements();
 
             child_state = null;
-            //AppMain.top_state = new CreditState(false);
+            AppMain.top_state = new MenuState(Menu.MenuState.Credits);
 
             pmc = new PadMenuController();
         }
@@ -405,9 +405,6 @@ namespace Gunhouse
 
         public Puzzle puzzle;
 
-        public string day_name;
-
-        int dayTextTimer = 60 * 2;
         int startWaveTimer = 60 * 3;
 
         bool hidePauseButton = false;
@@ -507,7 +504,8 @@ namespace Gunhouse
             if ((MetaState.wave_number % 30) == 9 * 3 + 2) { music = "/Boss/boss3"; }
 
             Choom.Play("Music" + music);
-            day_name = dayName(MetaState.wave_number);
+
+            AppMain.menuOverlay.DisplayDayName();
 
             #if UNITY_SWITCH
             hidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
@@ -592,10 +590,6 @@ namespace Gunhouse
                 if (time > startWaveTimer) {
                     AppMain.tutorial.SetLesson(Lesson.MAKE_BLOCKS);
                 }
-
-                float fade = 1;
-                if (time > dayTextTimer) { fade = 1 - (time - dayTextTimer) / 60.0f; }
-                Text.Draw(new Vector2(650, 240), day_name, Vector2.one * 1.25f, new Vector4 (1, 1, 1, fade));
             }
         }
 
@@ -723,18 +717,6 @@ namespace Gunhouse
             if (DataStorage.BestHardcoreScores.Count > DataStorage.SCORES_TO_KEEP) {
                 DataStorage.BestHardcoreScores.RemoveAt(DataStorage.SCORES_TO_KEEP);
             }
-        }
-
-        public static string dayName(int wave)
-        {
-            string day_name = "Day " + (wave / 3 + 1).ToString() + ", ";
-
-            switch (wave % 3) {
-                case 0: day_name += "noon"; break;
-                case 1: day_name += "dusk"; break;
-                case 2: day_name += "night"; break;
-            }
-            return day_name;
         }
 
         public static int ammoTypesPerWave(int wave_number)

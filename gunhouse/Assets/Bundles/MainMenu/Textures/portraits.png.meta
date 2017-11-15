@@ -116,7 +116,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 1508
+        y: 5
         width: 802
         height: 960
       alignment: 0
@@ -129,8 +129,8 @@ TextureImporter:
       name: portrait_1
       rect:
         serializedVersion: 2
-        x: 963
-        y: 3106
+        x: 805
+        y: 55
         width: 960
         height: 989
       alignment: 0
@@ -143,8 +143,8 @@ TextureImporter:
       name: portrait_2
       rect:
         serializedVersion: 2
-        x: 1
-        y: 3094
+        x: 688
+        y: 1046
         width: 960
         height: 1001
       alignment: 0
@@ -158,51 +158,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 426
+        y: 967
         width: 685
         height: 1080
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: portrait_4
-      rect:
-        serializedVersion: 2
-        x: 963
-        y: 2247
-        width: 943
-        height: 857
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: portrait_5
-      rect:
-        serializedVersion: 2
-        x: 805
-        y: 1560
-        width: 688
-        height: 685
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: portrait_6
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 2470
-        width: 847
-        height: 622
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -10,7 +10,7 @@ namespace Gunhouse.Menu
 
         protected override void IntroReady()
         {
-            menu.SetActiveContextButtons(true);
+            menu.SetActiveContextButtons(true, true);
             MainMenu.SetFocus(lastSelected);
         }
 
