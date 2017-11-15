@@ -146,7 +146,7 @@ namespace Gunhouse
         {
             AppMain.tutorial.SetLesson(Lesson.NONE);
 
-            Tracker.EndMode(MetaState.hardcore_mode, DayName(),
+            Tracker.EndMode(MetaState.hardcore_mode, AppMain.MainMenu.DayName(MetaState.wave_number),
                             MetaState.hardcore_mode ? MetaState.hardcore_score : DataStorage.Money);
             Hide();
 
@@ -228,7 +228,7 @@ namespace Gunhouse
             AppMain.tutorial.SetLesson(Lesson.NONE);
 
             if (isPaused) { Tracker.LevelQuit(MetaState.wave_number); }
-            Tracker.EndMode(MetaState.hardcore_mode, DayName(),
+            Tracker.EndMode(MetaState.hardcore_mode, AppMain.MainMenu.DayName(MetaState.wave_number),
                             MetaState.hardcore_mode ? MetaState.hardcore_score : DataStorage.Money);
 
 
@@ -250,22 +250,12 @@ namespace Gunhouse
             for (int i = 0; i < root.Length; ++i) root[i].alpha = 0;
         }
 
-        string DayName()
-        {
-            int wave = MetaState.wave_number;
-            AppMain.MainMenu.builder.Length = 0;
-            AppMain.MainMenu.builder.AppendFormat("DAY {0}, {1}", (wave / 3 + 1),
-                                                  wave % 3 == 0 ? "NOON" : wave % 3 == 1 ? "DUSK" : "NIGHT");
-
-            return AppMain.MainMenu.builder.ToString();
-        }
-
         public void DisplayDayName()
         {
             canvasDay.gameObject.SetActive(true);
             canvasDay.alpha = 0;
 
-            dayText.text = DayName();
+            dayText.text = AppMain.MainMenu.DayName(MetaState.wave_number);
 
             dayTween = LeanTween.alphaCanvas(canvasDay, 1, 1).setLoopPingPong(1)
                                 .setDelay(0.5f).setEase(LeanTweenType.easeOutQuint)

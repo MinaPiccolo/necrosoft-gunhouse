@@ -6,6 +6,8 @@ namespace Gunhouse
     {
         public MenuState(Menu.MenuState menuState = Menu.MenuState.Splash)
         {
+            menuState = Menu.MenuState.Stats;
+
             AppMain.MainMenu.SetPage(menuState);
 
             switch (menuState)
