@@ -1847,7 +1847,7 @@ namespace Gunhouse
                 }
             }
 
-            if (AppMain.top_state != Game.instance && !(AppMain.top_state is PauseState)) {
+            if (AppMain.top_state != Game.instance && !AppMain.IsPaused) {
                 door_position = 1.0f;
                 door_target_position = 1.0f;
                 closeDoor();

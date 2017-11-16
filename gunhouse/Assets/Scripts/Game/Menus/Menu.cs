@@ -5,12 +5,27 @@ namespace Gunhouse
 {
     public class MenuState : State
     {
-        public MenuState(Menu.MenuState menuState = Menu.MenuState.Splash)
+        public MenuState(Menu.MenuState menuState = Menu.MenuState.Splash, State game_state = null)
         {
+            /* ============================== */
+            /* this is to get around having to greate multiple
+                state classes from the old menu system */
+
+            switch (menuState)
+            {
+            case Menu.MenuState.Pause: {
+                child_state = game_state;
+                AppMain.IsPaused = true;
+                AppMain.tutorial.Pause(true);
+                Choom.Pause();
+            } break;
+            default: { AppMain.DisplayAnchor = false; } break;
+            }
+
             AppMain.MainMenu.SetPage(menuState);
 
-            AppMain.DisplayAnchor = false;
-
+            /* ============================== */
+            /* what music to play */
             switch (menuState)
             {
             case Menu.MenuState.Credits: {

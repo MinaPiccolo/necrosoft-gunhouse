@@ -1,32 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using Necrosoft.ThirdParty;
 
 namespace Gunhouse.Menu
 {
     public class MenuLoading : MenuPage
     {
         TextMeshProUGUI text;
-        bool loading;
 
-        protected override void Initalise() { pageID = MenuState.Loading; transitionID = MenuState.PlayGame; }
+        protected override void Initalise() { pageID = MenuState.Loading; transitionID = MenuState.Pause; }
         protected override void OuttroStartNextIntro() { }
-        protected override void OuttroFinished() { base.OuttroFinished(); }
+
+        protected override void OuttroFinished()
+        {
+            base.OuttroFinished();
+        }
+
+        protected override void IntroReady()
+        {
+            base.IntroReady();
+            LeanTween.delayedCall(0.25f, () => { LoadGame(); });
+        }
 
         void OnEnable()
         {
             menu.ignore_input = true;
-            loading = false;
+
             text = GetComponentInChildren<TextMeshProUGUI>();
             menu.builder.Length = 0;
             text.text = menu.builder.AppendFormat("<size=300%>LOADING...</size>\n{0}",
                                                   Story.tips[Util.rng.Next(Story.tips.Length)]).ToString();
-        }
-
-        void Update()
-        {
-            if (loading) return;
-            if (menu.FadeAlpha > 0.9f) { LoadGame(); loading = true;}
         }
 
         void LoadGame()
@@ -36,7 +40,7 @@ namespace Gunhouse.Menu
 
             if (MetaState.hardcore_mode) {
                 MetaState.hardcore_score = 0;
-                MetaState.reset(0);
+                menu.SelectedWave = 0;
             }
             else {
                 #if TRACKING
@@ -48,9 +52,6 @@ namespace Gunhouse.Menu
                 }
                 Tracker.StartMode(Game.dayName(MetaState.wave_number), equippedNames, DataStorage.Money);
                 #endif
-
-                MetaState.reset();
-                MetaState.reset(DataStorage.StartOnWave);
             }
 
             StartCoroutine(LoadStage());
@@ -58,11 +59,11 @@ namespace Gunhouse.Menu
 
         IEnumerator LoadStage()
         {
+            MetaState.reset(menu.SelectedWave);
             AppMain.top_state = new Game();
             AppMain.DisplayAnchor = true;
 
             yield return new WaitForEndOfFrame();
-
 
             menu.FadeInOut(true);
             menu.PortraitsHide();

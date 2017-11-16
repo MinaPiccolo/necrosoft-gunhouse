@@ -18,6 +18,13 @@ namespace Gunhouse.Menu
         protected override void OuttroStartNextIntro()
         {
             base.OuttroStartNextIntro();
+
+            if (transitionID == MenuState.Loading) { /* only for hardcore */
+                MetaState.hardcore_mode = true;
+                menu.PortraitOrder(2);
+                menu.FadeInOut(false, 0.5f);
+            }
+
             transitionID = MenuState.Splash; /* reset it for next time */
         }
 
@@ -35,10 +42,6 @@ namespace Gunhouse.Menu
             transitionID = onclick.item;
             Play(HashIDs.menu.Outtro);
             menu.SetActiveContextButtons(false);
-
-            if (onclick.item != MenuState.PlayGame && onclick.item != MenuState.Hardcore) return;
-            menu.PortraitOrder(2);
-            menu.FadeInOut(false);
         }
     }
 }

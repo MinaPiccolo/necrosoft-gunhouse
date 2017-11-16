@@ -3,10 +3,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using System.Text;
+using Necrosoft.ThirdParty;
+using TMPro;
 
 namespace Gunhouse.Menu
 {
-    public enum MenuState { None, Splash, Title, PlayGame, Hardcore, Store, Options, Stats, Quit,
+    public enum MenuState { None, Splash, Title, PickADay, Pause, Store, Options, Stats, Quit,
                             Graphics, Audio, Help, Input, Credits, About, Loading };
 
     public class MainMenu : MonoBehaviour
@@ -15,6 +17,9 @@ namespace Gunhouse.Menu
         [SerializeField] MenuLoading loading;
         [SerializeField] Portraits portraits;
         [SerializeField] MenuContextButtons buttons;
+        [Space(10)][SerializeField] CanvasGroup canvasDay; 
+        [SerializeField] TextMeshProUGUI dayText; 
+        LTDescr dayTween;
 
         MenuState currentMenu = MenuState.Splash;
         GameObject lastSelected;
@@ -23,8 +28,10 @@ namespace Gunhouse.Menu
         MenuPage[] pages;
         MenuPage activePage;
         PlayerInput input;
+
         [System.NonSerialized] public bool ignore_input = true;
         [System.NonSerialized] public StringBuilder builder = new StringBuilder(170);
+        [System.NonSerialized] public int SelectedWave = 0;
         public float FadeAlpha { get { return fade.color.a; } }
 
         void Awake()
@@ -73,15 +80,6 @@ namespace Gunhouse.Menu
                 portraits.gameObject.SetActive(true);
                 portraits.SelectPortrait(Random.Range(0, 4));
             }
-
-            if (currentMenu != MenuState.Loading) {
-                if (pageID == MenuState.PlayGame || pageID == MenuState.Hardcore) {
-                    currentMenu = pageID;
-                    MetaState.hardcore_mode = pageID == MenuState.Hardcore;
-                    loading.gameObject.SetActive(true);
-                    loading.Play(HashIDs.menu.Intro);
-                }
-            }
         }
 
         public void SetActiveContextButtons(bool enable, bool selectEnabled = true)
@@ -123,7 +121,11 @@ namespace Gunhouse.Menu
 
             activePage.Play(HashIDs.menu.Outtro);
             buttons.gameObject.SetActive(false);
-            if (currentMenu == MenuState.Title) { PortraitsHide(); }
+
+            if (currentMenu == MenuState.Title ||
+                currentMenu == MenuState.Pause) {
+                PortraitsHide();
+            }
         }
 
         public void PortraitOrder(int index) { portraits.SortOrder = index; }
@@ -185,6 +187,34 @@ namespace Gunhouse.Menu
                                  wave % 3 == 0 ? "NOON" : wave % 3 == 1 ? "DUSK" : "NIGHT");
 
             return AppMain.MainMenu.builder.ToString();
+        }
+
+        public void DisplayDayName()
+        {
+            canvasDay.gameObject.SetActive(true);
+            canvasDay.alpha = 0;
+
+            dayText.text = AppMain.MainMenu.DayName(MetaState.wave_number);
+
+            dayTween = LeanTween.alphaCanvas(canvasDay, 1, 1).setLoopPingPong(1)
+                                .setDelay(0.5f).setEase(LeanTweenType.easeOutQuint)
+                                .setOnComplete(()=> { canvasDay.gameObject.SetActive(false); });
+        }
+
+        public void SetActiveDayName(bool active, bool cancel = false)
+        {
+            if (active) {
+                LeanTween.resume(dayTween.id);
+            }
+            else {
+                if (cancel) {
+                    LeanTween.cancel(dayTween.id);
+                    canvasDay.gameObject.SetActive(false);
+                }
+                else {
+                    LeanTween.pause(dayTween.id);
+                }
+            }
         }
     }
 }

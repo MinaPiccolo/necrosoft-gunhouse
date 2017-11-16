@@ -121,7 +121,7 @@ namespace Gunhouse.Menu
         {
             equip_icon.color = Color.white;
             equip_icon.sprite = buttonImages[index].sprite;
-            float speed = 2000.0f;
+            float speed = 3000.0f;
 
             float step = (speed / (from - to).magnitude) * Time.deltaTime;
             float t = 0;

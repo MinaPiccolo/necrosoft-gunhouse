@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using Gunhouse.Credits;
 
 namespace Gunhouse
 {
@@ -76,23 +75,6 @@ namespace Gunhouse
         void OnApplicationQuit()
         {
             Platform.SavePlayerData();
-        }
-        
-        public static void LoadCreditsSceneAsync(bool autoMove)
-        {
-            instance.StartCoroutine(LoadCreditsSceneAsyncInternal(autoMove));
-        }
-
-        static System.Collections.IEnumerator LoadCreditsSceneAsyncInternal(bool autoMove)
-        {
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync((int)SceneIndex.Credits, LoadSceneMode.Additive);
-
-            while (!asyncOperation.isDone) { yield return null; }
-
-            /* NOTE(shane): this function is only used in two cases, end wave and end game.
-                To save time I've just but this code here. */
-
-            GameObject.FindObjectOfType<CreditsScene>().Display(autoMove);
         }
 
         public static bool HasAppStarted()

@@ -121,38 +121,6 @@ namespace Gunhouse
         }
     }
 
-    public class PauseState : State
-    {
-        public int time = 120;
-        PadMenuController pmc;
-
-        public PauseState(State child_state_)
-        {
-            child_state = child_state_;
-
-            Choom.Pause();
-
-            AppMain.menuOverlay.Pause(child_state);
-
-            pmc = new PadMenuController();
-        }
-
-        public override void tick()
-        {
-            time++;
-
-            pmc.tick();
-
-            if (Input.Pad.Start.WasPressed) { AppMain.menuOverlay.Resume(); }
-            if (AppMain.back) { AppMain.back = false; }
-        }
-
-        public override void draw()
-        {
-            base.draw();
-        }
-    }
-
     public class EndWaveState : State
     {
         public int time = 0;
@@ -505,7 +473,7 @@ namespace Gunhouse
 
             Choom.Play("Music" + music);
 
-            AppMain.menuOverlay.DisplayDayName();
+            AppMain.MainMenu.DisplayDayName();
 
             #if UNITY_SWITCH
             hidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
@@ -605,18 +573,18 @@ namespace Gunhouse
 
                     Rect pauseButtonRect = new Rect(AppMain.vscreen.x - 100, 10, 90, 90);
                     if (pauseButtonRect.Contains(Input.touches[i].position)) {
-                        AppMain.top_state = new PauseState(this);
+                        AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
                     }
                 }
 
-                if (Input.Pad.Start.WasPressed) AppMain.top_state = new PauseState(this);
+                if (Input.Pad.Start.WasPressed) AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
             }
 
             if (AppMain.back) {
                 AppMain.back = false;
                 if (Input.touches.Count > 0 || MetaState.wave.done) return;
 
-                AppMain.top_state = new PauseState(this);
+                AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
             }
 
             #endregion

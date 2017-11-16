@@ -52,6 +52,7 @@ namespace Gunhouse
         #endif
 
         public static bool DisplayAnchor;
+        public static bool IsPaused;
         public static Menu.MainMenu MainMenu;
 
         public static void Start()
