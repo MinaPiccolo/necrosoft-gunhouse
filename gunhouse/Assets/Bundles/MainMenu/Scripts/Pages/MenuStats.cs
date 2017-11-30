@@ -13,18 +13,28 @@ namespace Gunhouse.Menu
         int page_index = 0;
         PlayerInput input;
 
+        int arrow_input;
+        int arrow_input_last;
+        public void ArrowPressed(bool right) { arrow_input = right ? 1 : -1; }
+        public void ArrowReleased() { arrow_input = 0; arrow_input_last = 0; }
+        public void ArrowEnter(bool right) { if (arrow_input_last == (right ? 1 : -1)) { arrow_input = right ? 1 : -1; } }
+        public void ArrowExit() { if (arrow_input == 0) { return; } arrow_input_last = arrow_input; arrow_input = 0; }
+
         protected override void Initalise() { pageID = MenuState.Stats; transitionID = MenuState.Title; }
         protected override void IntroReady()
         {
-            menu.SetActiveContextButtons(true, false);
-            MainMenu.SetFocus(arrows[1]);
+            menu.SetActiveContextButtons(false, true);
+            menu.SetFocus(null);
         }
 
         void OnEnable()
         {
             Tracker.ScreenVisit(SCREEN_NAME.STATS);
 
+            arrow_input = 0;
+            arrow_input_last = 0;
             input = FindObjectOfType<PlayerInput>();
+            page_index = 0;
             SetArrows(false, true);
             UpdateText();
         }
@@ -33,8 +43,9 @@ namespace Gunhouse.Menu
         {
             if (menu.ignore_input) return;
 
-            if (input.Left.WasPressed) { SetPage(false); }
-            else if (input.Right.WasPressed) { SetPage(true);}
+            int horitzonal = Util.keyRepeat("arrow_directional", 0, 30, 10,
+                                            arrow_input == 0 ? (int)input.Move.x : arrow_input);
+            switch (horitzonal) { case -1: SetPage(false); break; case 1: SetPage(true); break; }
         }
 
         void SetArrows(bool left, bool right)
@@ -43,12 +54,13 @@ namespace Gunhouse.Menu
             arrows[1].SetActive(right);
         }
 
-        public void SetPage(bool right)
+        void SetPage(bool right)
         {
             int new_index = Mathf.Clamp(right ? page_index + 1 : page_index - 1, 0, 3 - 1); 
             if (new_index == page_index) return;
             page_index = new_index;
 
+            Necrosoft.Choom.PlayEffect(SoundAssets.UIConfirm);
             SetArrows(page_index != 0, page_index != 3 - 1);
             UpdateText();
         }
@@ -70,7 +82,7 @@ namespace Gunhouse.Menu
         void SetBestHardcore()
         {
             menu.builder.Length = 0;
-            title.text = menu.builder.Append("BEST HARDCORE SCORES").ToString();
+            title.text = menu.builder.Append(GText.best_hardcore_scores).ToString();
 
             menu.builder.Length = 0;
 
@@ -85,7 +97,7 @@ namespace Gunhouse.Menu
                     menu.builder.AppendFormat("{0}: ${1}, {2}\n", i + 1, amount, menu.DayName(day));
                 }
                 else {
-                    menu.builder.AppendFormat("{0}: $0, DAY X\n", i + 1);
+                    menu.builder.AppendFormat("{0}: $0, {1} X\n", i + 1, GText.day);
                 }
             }
 
@@ -95,7 +107,7 @@ namespace Gunhouse.Menu
         void SetInfo()
         {
             menu.builder.Length = 0;
-            title.text = menu.builder.Append("INFO").ToString();
+            title.text = menu.builder.Append(GText.info).ToString();
 
             menu.builder.Length = 0;
 
@@ -108,10 +120,10 @@ namespace Gunhouse.Menu
                 }
             }
 
-            menu.builder.AppendFormat("Favorite Gun: {0}\n", (Gunhouse.Gun.Ammo)most);
-            menu.builder.AppendFormat("Shots Fired: {0}\n", DataStorage.ShotsFired);
-            menu.builder.AppendFormat("Times Defeated: {0}\n", DataStorage.TimesDefeated);
-            menu.builder.AppendFormat("Best Match Streak: {0}", DataStorage.MatchStreak);
+            menu.builder.AppendFormat("{0}: {1}\n", GText.favourite_gun, (Gunhouse.Gun.Ammo)most);
+            menu.builder.AppendFormat("{0}: {1}\n", GText.shots_fired, DataStorage.ShotsFired);
+            menu.builder.AppendFormat("{0}: {1}\n", GText.times_defeated, DataStorage.TimesDefeated);
+            menu.builder.AppendFormat("{0}: {1}", GText.best_match_streak, DataStorage.MatchStreak);
 
             details.text = menu.builder.ToString();
         }
@@ -119,7 +131,7 @@ namespace Gunhouse.Menu
         void SetBlocksLoaded()
         {
             menu.builder.Length = 0;
-            title.text = menu.builder.Append("BLOCKS LOADED").ToString();
+            title.text = menu.builder.Append(GText.blocks_loaded).ToString();
 
             int n = 0;
             for (int x = 2; x <= 3; x++) {

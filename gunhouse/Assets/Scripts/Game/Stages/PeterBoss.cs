@@ -12,12 +12,7 @@ namespace Gunhouse
 
         public int time = 0;
         Vector2 backgroundPosition = AppMain.vscreen * .5f;
-
-        #if FIXED_16X9
-        Vector2 groundPosition = AppMain.vscreen * 0.5f + new Vector2(0, -63);
-        #else
         Vector2 groundPosition = AppMain.vscreen * .5f;
-        #endif
 
         public SpaceBackground()
         {
@@ -82,13 +77,11 @@ namespace Gunhouse
 
             bool facing = ((time / 250.0f) % (Math.PI * 2)) < Math.PI;
 
-            if (facing)
-            {
+            if (facing) {
                 a.draw((int)stage_space.Sprites.object_2, ship_pos, scaleAmount, Vector4.one);
                 a.draw((int)stage_space.Sprites.object_1, dog_pos, scaleOne, Vector4.one);
             }
-            else
-            {
+            else {
                 a.draw((int)stage_space.Sprites.object_1, dog_pos, scaleAmount, Vector4.one);
                 a.draw((int)stage_space.Sprites.object_2, ship_pos, scaleAmount, Vector4.one);
             }
@@ -122,8 +115,8 @@ namespace Gunhouse
         public float drop_damage = 0;
         public int last_missile = 0;
         public string animation;
-        public int orphans_eaten = 0;
         public float summon_position;
+        public int orphans_eaten = 0;
         public Vector2 pos;
 
         public PeterBoss()
@@ -136,6 +129,7 @@ namespace Gunhouse
             hp = level1_health;
             state = State.START;
             boost = new Vector2(0, -1.0f);
+            orphans_eaten = 0;
         }
 
         static public void loadAssets()
@@ -152,9 +146,10 @@ namespace Gunhouse
 
             Choom.PlayEffect(SoundAssets.BossDie2);
             state = State.DYING;
-            frame = 0;
-            releaseOrphans();
             Game.instance.removeBoss();
+            frame = 0;
+            for (int i = 0; i < orphans_eaten; i++) held_orphans.Add(new Orphan(Vector2.zero));
+            releaseOrphans();
         }
 
         public override void damage(float by, Gun.Ammo type)
@@ -171,76 +166,59 @@ namespace Gunhouse
             frame += 5;
             if (dmg == Level.LEVEL3) frame += 5;
 
-            if (state == State.START)
-            {
-                if (frame > 980)
-                {
+            if (state == State.START) {
+                if (frame > 980) {
                     frame = 0;
                     state = State.IDLE;
                 }
             }
 
-            if (hp < level2_health && dmg == Level.LEVEL1)
-            {
+            if (hp < level2_health && dmg == Level.LEVEL1) {
                 Game.instance.particle_group.add(new Pickup(position,
                                                             level2_heal_bonus * MetaState.healing_coefficient, 0));
                 dmg = Level.LEVEL2;
                 idle_mult /= 2;
             }
 
-            if (hp < level3_health && dmg == Level.LEVEL2)
-            {
+            if (hp < level3_health && dmg == Level.LEVEL2) {
                 Game.instance.particle_group.add(new Pickup(position,
                                                             level3_heal_bonus * MetaState.healing_coefficient, 0));
                 dmg = Level.LEVEL3;
                 idle_mult /= 2;
             }
 
-            if (state == State.IDLE)
-            {
-                if (--idle_timeout <= 0)
-                {
+            if (state == State.IDLE) {
+                if (--idle_timeout <= 0) {
                     frame = 0;
                     switch (dmg)
                     {
-                        case Level.LEVEL1:
-                            state = level1_actions[(int)Util.rng.NextFloat(0, level1_actions.Length)];
-                            break;
-                        case Level.LEVEL2:
-                            state = level2_actions[(int)Util.rng.NextFloat(0, level2_actions.Length)];
-                            break;
-                        case Level.LEVEL3:
-                            state = level3_actions[(int)Util.rng.NextFloat(0, level3_actions.Length)];
-                            break;
-                        default: state = State.IDLE; break;
+                    case Level.LEVEL1: { state = level1_actions[(int)Util.rng.NextFloat(0, level1_actions.Length)]; } break;
+                    case Level.LEVEL2: { state = level2_actions[(int)Util.rng.NextFloat(0, level2_actions.Length)]; } break;
+                    case Level.LEVEL3: { state = level3_actions[(int)Util.rng.NextFloat(0, level3_actions.Length)]; } break;
+                    default: { state = State.IDLE; } break;
                     }
 
                     switch (state)
                     {
-                        case State.LASER: Choom.PlayEffect(SoundAssets.HootLaser); break;
-                        case State.RAISE: summon_position = 0; break;
+                    case State.LASER: { Choom.PlayEffect(SoundAssets.HootLaser); } break;
+                    case State.RAISE: { summon_position = 0; } break;
                     }
                 }
             }
 
-            if (state == State.MISSILES)
-            {
-                if (frame > 100 && frame < 600)
-                {
+            if (state == State.MISSILES) {
+                if (frame > 100 && frame < 600) {
 
                     int frames_per_missile = (500) / missiles_per_burst;
                     int next_missile = last_missile + frames_per_missile;
-                    if (frame - 100 > next_missile)
-                    {
-
+                    if (frame - 100 > next_missile) {
                         var missile = new PeterMissile(pos + new Vector2(130, -250));
                         missile.peter = this;
                         Game.instance.enemy_bullet_group.add(missile);
                         last_missile += frames_per_missile;
                     }
                 }
-                if (frame > 980)
-                {
+                if (frame > 980) {
                     frame = 0;
                     idle_timeout = (int)(Util.rng.NextFloat(idle_time_min, idle_time_max) * idle_mult);
                     state = State.IDLE;
@@ -248,10 +226,8 @@ namespace Gunhouse
                 }
             }
 
-            if (state == State.SLAM)
-            {
-                if (frame > 300 && !slam)
-                {
+            if (state == State.SLAM) {
+                if (frame > 300 && !slam) {
                     Game.instance.damageTargetPiece(PeterBoss.slam_damage);
 
                     Choom.PlayEffect(SoundAssets.Explosion[Util.rng.Next(SoundAssets.Explosion.Length)]);
@@ -259,8 +235,7 @@ namespace Gunhouse
                     30, 0, Gun.Ammo.NONE));
                     slam = true;
                 }
-                if (frame > 400)
-                {
+                if (frame > 400) {
                     slam = false;
                     frame = 0;
                     state = State.IDLE;
@@ -268,36 +243,30 @@ namespace Gunhouse
                 }
             }
 
-            if (state == State.RAISE)
-            {
-                if (frame > 960)
-                {
+            if (state == State.RAISE) {
+                if (frame > 960) {
                     frame = 0;
                     state = State.CAST;
+                    orphans_eaten += 2;
                 }
             }
 
-            if (state == State.LOWER)
-            {
+            if (state == State.LOWER) {
                 frame -= 10;
                 if (dmg == Level.LEVEL3) frame -= 5;
-                if (frame < 250)
-                {
+                if (frame < 250) {
                     frame = 0;
                     state = State.IDLE;
                 }
             }
 
-            if (state == State.SHOOT)
-            {
-                if (frame >= 390 && !mouth_fired)
-                {
+            if (state == State.SHOOT) {
+                if (frame >= 390 && !mouth_fired) {
                     mouth_fired = true;
                     Game.instance.enemy_bullet_group.add(
                       new PeterBossBullet(pos + new Vector2(-140, -215)));
                 }
-                if (frame >= 700)
-                {
+                if (frame >= 700) {
                     frame = 0;
                     mouth_fired = false;
                     state = State.IDLE;
@@ -305,78 +274,37 @@ namespace Gunhouse
                 }
             }
 
-            if (state == State.CAST)
-            {
+            if (state == State.CAST) {
                 frame += 5;
                 summon_position += 0.0025f;
-                if (summon_position >= 1)
-                {
+                if (summon_position >= 1) {
                     state = State.LOWER;
                     frame = 550;
                     Game.instance.house.damage(2);
                 }
             }
 
-
-            if (state == State.DYING)
-            {
-                //frame += 5;
+            if (state == State.DYING) {
                 if (frame > 1400) finishDying();
             }
 
-            //      if(state == State.GRAB)
-            //      {
-            //        if(frame >= 700 && !added_orphan)
-            //        {
-            //          added_orphan = true;
-            //          int n_grabs = Util.rng.Next(min_orphans_grabbed, max_orphans_grabbed);
-            //          if(drop_damage > orphan_drop_damage)
-            //          {
-            //            for(int i=0; i<n_grabs; i++)
-            //            {
-            //              var o = new Orphan(new Vector2(111+Util.rng.Next(-40, 40), -95));
-            //              Game.instance.orphan_group.add(o);
-            //              o.enterWorld(position+o.position);
-            //            }
-            //          }
-            //          else
-            //          {
-            //            Game.instance.house.damage(n_grabs);
-            //            AppMain.sounds.blockland.play();
-            //            AppMain.sounds.orphantake.play();
-            //            for(int i=0; i<n_grabs; i++)
-            //              held_orphans.Add(new Orphan(new Vector2(111+Util.rng.Next(-40, 40), -95)));
-            //          }
-            //        }
-            //        if(frame >= 1000)
-            //        {
-            //          frame = 0;
-            //          idle_timeout = (int)(Util.rng.NextFloat(idle_time_min, idle_time_max)*60);
-            //          state = State.IDLE;
-            //        }
-            //      }
-
-            if (state == State.LASER)
-            {
-                if (frame > 750 || Shield.existing_shield != null)
-                {
+            if (state == State.LASER) {
+                if (frame > 750 || Shield.existing_shield != null) {
                     frame = 0;
                     idle_timeout = (int)(Util.rng.NextFloat(idle_time_min, idle_time_max) * idle_mult);
                     state = State.IDLE;
                 }
-                if (frame >= 300 && frame <= 600)
+                if (frame >= 300 && frame <= 600) {
                     Game.instance.damageTargetPiece(laser_damage);
+                }
             }
         }
 
         public Vector2 bubblePosition(int orphan)
         {
             float interp = Util.smoothStep(summon_position);
-            if (orphan == 0)
-                return new Vector2(225, 350) * (1 - interp) +
-                  interp * (pos + new Vector2(-25, -130));
-            return new Vector2(150, 200) * (1 - interp) +
-              interp * (pos + new Vector2(-25, -140));
+            if (orphan == 0) { return new Vector2(225, 350) * (1 - interp) + interp * (pos + new Vector2(-25, -130)); }
+            return new Vector2(150, 200) * (1 - interp) + interp * (pos + new Vector2(-25, -140));
         }
 
         public override void draw()
@@ -384,77 +312,58 @@ namespace Gunhouse
             string anim = "stance-normal";
             switch (dmg)
             {
-                case (Level.LEVEL1):
-                    if (state == State.START) anim = "entrance";
-                    if (state == State.IDLE) anim = "stance-normal";
-                    if (state == State.SHOOT) anim = "shoot";
-                    if (state == State.SLAM) anim = "slam";
-                    if (state == State.MISSILES) anim = "missilehatch";
-                    if (state == State.RAISE) anim = "summon-orphan";
-                    if (state == State.LOWER) anim = "summon-orphan";
-                    if (state == State.CAST) anim = "summon-orphan-sparkles";
-                    if (state == State.LASER) anim = "laser";
-                    break;
-                case (Level.LEVEL2):
-                    if (state == State.IDLE) anim = "stance-damage1";
-                    if (state == State.SHOOT) anim = "shoot-damage1";
-                    if (state == State.SLAM) anim = "slam-damage1";
-                    if (state == State.LASER) anim = "laser-damage1";
-                    if (state == State.MISSILES) anim = "missilehatch-damage1";
-                    if (state == State.RAISE) anim = "summon-orphan-damage1";
-                    if (state == State.LOWER) anim = "summon-orphan-damage1";
-                    if (state == State.CAST) anim = "summon-orphan-sparkles-damage1";
-                    break;
-                case (Level.LEVEL3):
-                    if (state == State.IDLE) anim = "stance-damage2";
-                    if (state == State.SHOOT) anim = "shoot-damage2";
-                    if (state == State.SLAM) anim = "slam-damage2";
-                    if (state == State.MISSILES) anim = "missilehatch-damage2";
-                    if (state == State.RAISE) anim = "summon-orphan-damage2";
-                    if (state == State.LOWER) anim = "summon-orphan-damage2";
-                    if (state == State.CAST) anim = "summon-orphan-sparkles-damage2";
-                    if (state == State.LASER) anim = "laser-damage2";
-                    if (state == State.DYING) anim = "death";
-                    break;
-                default:
-                    anim = "stance-normal";
-                    break;
+            case (Level.LEVEL1): {
+                if (state == State.START) anim = "entrance";
+                if (state == State.IDLE) anim = "stance-normal";
+                if (state == State.SHOOT) anim = "shoot";
+                if (state == State.SLAM) anim = "slam";
+                if (state == State.MISSILES) anim = "missilehatch";
+                if (state == State.RAISE) anim = "summon-orphan";
+                if (state == State.LOWER) anim = "summon-orphan";
+                if (state == State.CAST) anim = "summon-orphan-sparkles";
+                if (state == State.LASER) anim = "laser";
+            } break;
+            case (Level.LEVEL2): {
+                if (state == State.IDLE) anim = "stance-damage1";
+                if (state == State.SHOOT) anim = "shoot-damage1";
+                if (state == State.SLAM) anim = "slam-damage1";
+                if (state == State.LASER) anim = "laser-damage1";
+                if (state == State.MISSILES) anim = "missilehatch-damage1";
+                if (state == State.RAISE) anim = "summon-orphan-damage1";
+                if (state == State.LOWER) anim = "summon-orphan-damage1";
+                if (state == State.CAST) anim = "summon-orphan-sparkles-damage1";
+            } break;
+            case (Level.LEVEL3): {
+                if (state == State.IDLE) anim = "stance-damage2";
+                if (state == State.SHOOT) anim = "shoot-damage2";
+                if (state == State.SLAM) anim = "slam-damage2";
+                if (state == State.MISSILES) anim = "missilehatch-damage2";
+                if (state == State.RAISE) anim = "summon-orphan-damage2";
+                if (state == State.LOWER) anim = "summon-orphan-damage2";
+                if (state == State.CAST) anim = "summon-orphan-sparkles-damage2";
+                if (state == State.LASER) anim = "laser-damage2";
+                if (state == State.DYING) anim = "death";
+            } break;
+            default: { anim = "stance-normal"; } break;
             }
 
-            //AppMain.textures.shadowblob.draw(0, new Vector2(position.x, 455),
-            //  Vector2.one/(1.5f+(float)Math.Abs(position.y-320)/60),
-            //  new Vector4(1, 1, 1, 0.5f));
             AppMain.textures.peterboss.draw(anim, (int)frame, pos, new Vector2(-1, 1), 0, flashColor());
             drawSubOrphans();
-            //      if(state!=State.DYING)
-            //      {
-            //        AppMain.textures.drhootnest.draw(0, position+
-            //          new Vector2(114, -25-(float)Math.Cos(frame*Math.PI/200)*5),
-            //          new Vector2(-1, 1), Vector4.one);
-            //        AppMain.textures.drhoot.draw("apples", (int)frame,
-            //          position+new Vector2(0, (float)(Math.Sin(time/20.0f)*4)),
-            //          new Vector2(-1, 1), 0, flashColor());
-            //      }
+
             drawSubBullets();
-            if (state == State.CAST)
-            {
+            if (state == State.CAST) {
                 var size = 1.0f;
                 if (summon_position < 0.2f) size = summon_position * 5;
+
                 int f = (int)frame;
                 string a = "orphan-bubble";
-                if (summon_position > 0.9f)
-                {
+                if (summon_position > 0.9f) {
                     a = "ophan-absorb";
                     f = (int)((summon_position - 0.9) * 10 * 480);
                 }
-                AppMain.textures.skeletonkingprojectile.draw(a, f,
-                  bubblePosition(0),
-                  Vector2.one * size, 0,
-                  /*Game.instance.house.visibleDoorPosition()<1?new Vector4(1, 1, 1, 0.4f):*/Vector4.one);
-                AppMain.textures.skeletonkingprojectile.draw(a, f,
-                  bubblePosition(1),
-                  Vector2.one * size, 0,
-                  /*Game.instance.house.visibleDoorPosition()<1?new Vector4(1, 1, 1, 0.4f):*/Vector4.one);
+
+                AppMain.textures.skeletonkingprojectile.draw(a, f, bubblePosition(0), Vector2.one * size, 0, Vector4.one);
+                AppMain.textures.skeletonkingprojectile.draw(a, f, bubblePosition(1), Vector2.one * size, 0, Vector4.one);
             }
         }
     }
@@ -475,8 +384,7 @@ namespace Gunhouse
             frame += 5.0f;
             position += velocity;
 
-            if (position.x < 250)
-            {
+            if (position.x < 250) {
                 remove = true;
                 Choom.PlayEffect(SoundAssets.HitHouse[Util.rng.Next(SoundAssets.HitHouse.Length)]);
                 Game.instance.enemy_bullet_group.add(new Explosion(position, Vector2.zero, 30, 0, Gun.Ammo.NONE));
@@ -522,8 +430,7 @@ namespace Gunhouse
 
             if (angle < dest_angle) angle += PeterBoss.missile_rotation_speed;
             if (angle > dest_angle) angle -= PeterBoss.missile_rotation_speed;
-            if (Math.Abs(dest_angle - angle) < PeterBoss.missile_rotation_speed)
-            {
+            if (Math.Abs(dest_angle - angle) < PeterBoss.missile_rotation_speed) {
                 angle = dest_angle;
                 velocity += Util.fromPolar(angle, PeterBoss.missile_acceleration);
             }
@@ -532,8 +439,7 @@ namespace Gunhouse
 
             position += velocity;
 
-            if (position.x < Puzzle.grid_left + Puzzle.piece_size * 3 || age > PeterBoss.missile_lifetime)
-            {
+            if (position.x < Puzzle.grid_left + Puzzle.piece_size * 3 || age > PeterBoss.missile_lifetime) {
                 remove = true;
                 Choom.PlayEffect(SoundAssets.HitHouse[Util.rng.Next(SoundAssets.HitHouse.Length)]);
                 Game.instance.enemy_bullet_group.add(new Explosion(position, Vector2.zero, 20, 0, Gun.Ammo.NONE));
@@ -544,7 +450,8 @@ namespace Gunhouse
         public override void draw()
         {
             AppMain.textures.peterbossbullet.draw("hatch-missile", (int)frame, position,
-                                                  new Vector2(-0.5f * 3 / 2, 0.5f * 3 / 2) / 2, angle + (float)Math.PI, Vector4.one);
+                                                  new Vector2(-0.5f * 3 / 2, 0.5f * 3 / 2) / 2,
+                                                  angle + (float)Math.PI, Vector4.one);
         }
     }
 }

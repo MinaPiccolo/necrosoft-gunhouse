@@ -5,7 +5,7 @@ namespace Gunhouse
 {
     public class PlayerInput : MonoBehaviour
     {
-        [HideInInspector] PlayerActions actions;
+        PlayerActions actions;
         InControlInputModule inControlInputModule;
 
         public PlayerAction Left { get { return actions.Left; } }
@@ -18,6 +18,7 @@ namespace Gunhouse
         public PlayerAction Start { get { return actions.Start; } }
         public PlayerAction Cancel { get { return actions.Cancel; } }
         public PlayerAction Escape { get { return actions.Escape; } }
+
         public bool AnyWasPressed { get { return actions.AnyWasPressed(); } }
         public bool AnyIsPressed { get { return actions.AnyIsPressed(); } }
         public Vector2 Move = Vector2.zero;
@@ -33,7 +34,7 @@ namespace Gunhouse
             inControlInputModule.MoveAction = actions.Direction;
         }
 
-        void FixedUpdate()
+        void Update()
         {
             Move = Vector2.zero;
 
@@ -44,15 +45,17 @@ namespace Gunhouse
 
             if (actions.Direction.Value.magnitude > 0.5f) {
                 if (Mathf.Abs(actions.Direction.X) > Mathf.Abs(actions.Direction.Y)) {
-                    if (actions.Direction.X > 0) Move = new Vector2(1, 0);
-                    else Move = new Vector2(-1, 0);
+                    if (actions.Direction.X > 0) { Move = new Vector2(1, 0); }
+                    else { Move = new Vector2(-1, 0); }
                 }
                 else {
-                    if (actions.Direction.Y > 0) Move = new Vector2(0, -1);
-                    else Move = new Vector2(0, 1);
+                    if (actions.Direction.Y > 0) { Move = new Vector2(0, -1); }
+                    else { Move = new Vector2(0, 1); }
                 }
             }
         }
+
+        public void ClearInput() { actions.ClearInputState(); }
     }
 
     class PlayerActions : PlayerActionSet
@@ -113,19 +116,21 @@ namespace Gunhouse
             actions.Left.AddDefaultBinding(InputControlType.DPadLeft);
             actions.Right.AddDefaultBinding(InputControlType.DPadRight);
 
-            actions.Submit.AddDefaultBinding(Key.Return);
-            actions.Submit.AddDefaultBinding(Key.Space);
-            actions.Submit.AddDefaultBinding(InputControlType.Action1);
-
-            actions.Cancel.AddDefaultBinding(Key.Backspace);
-            actions.Cancel.AddDefaultBinding(InputControlType.Action2);
-
             actions.Start.AddDefaultBinding(InputControlType.Start);
             actions.Start.AddDefaultBinding(InputControlType.Command);
 
             #if UNITY_SWITCH
             actions.Start.AddDefaultBinding(InputControlType.Plus);
             actions.Start.AddDefaultBinding(InputControlType.Minus);
+            actions.Submit.AddDefaultBinding(InputControlType.Action2);
+            actions.Cancel.AddDefaultBinding(InputControlType.Action1);
+            #else
+            actions.Submit.AddDefaultBinding(Key.Return);
+            actions.Submit.AddDefaultBinding(Key.Space);
+            actions.Submit.AddDefaultBinding(InputControlType.Action1);
+
+            actions.Cancel.AddDefaultBinding(Key.Backspace);
+            actions.Cancel.AddDefaultBinding(InputControlType.Action2);
             #endif
 
             #if UNITY_WEBGL

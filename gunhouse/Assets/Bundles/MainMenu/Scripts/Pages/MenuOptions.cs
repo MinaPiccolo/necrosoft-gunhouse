@@ -4,7 +4,7 @@ namespace Gunhouse.Menu
 {
     public class MenuOptions : MenuPage
     {
-        [SerializeField] GameObject lastSelected;
+        GameObject lastSelected;
 
         protected override void Initalise() { pageID = MenuState.Options; transitionID = MenuState.Title; }
 
@@ -12,8 +12,8 @@ namespace Gunhouse.Menu
         {
             Tracker.ScreenVisit(SCREEN_NAME.OPTIONS);
 
-            menu.SetActiveContextButtons(true, true);
-            MainMenu.SetFocus(lastSelected);
+            menu.SetActiveContextButtons();
+            menu.SetFocus(lastSelected == null ? refocusSelected : lastSelected);
 
             MenuCredits.ScrollDelay = 2;
             MenuCredits.DisplayEnding = false;
@@ -25,20 +25,17 @@ namespace Gunhouse.Menu
             transitionID = MenuState.Title; /* reset it for next time */
         }
 
-        protected override void OuttroFinished()
+        public override void CancelPressed()
         {
             /* record last selected item for if the player returns */
-            lastSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            MainMenu.SetFocus(null);
-
-            base.OuttroFinished();
+            lastSelected = transitionID == MenuState.Title ? null : UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+            base.CancelPressed();
         }
 
         public void ChangePage(OnClickPage onclick)
         {
             transitionID = onclick.item;
-            Play(HashIDs.menu.Outtro);
-            menu.SetActiveContextButtons(false);
+            CancelPressed();
         }
     }
 }

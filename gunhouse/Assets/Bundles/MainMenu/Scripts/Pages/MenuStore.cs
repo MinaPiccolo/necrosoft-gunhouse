@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Necrosoft.ThirdParty;
 
 namespace Gunhouse.Menu
 {
     public partial class MenuStore : MenuPage
     {
-        [Space(10)] [SerializeField] GameObject selectedItem;
-        GameObject lastItemSelected;
+        [SerializeField] GameObject cat;
 
         [SerializeField] MenuStoreSelector selector;
         [SerializeField] Color lockedColor;
+        [SerializeField] RectTransform moneyBoard;
         [SerializeField] TextMeshProUGUI moneyText;
 
         [Space(10)] [SerializeField] TextMeshProUGUI itemTitle;
@@ -21,14 +22,14 @@ namespace Gunhouse.Menu
 
         [Space(10)] [SerializeField] Image equip_icon;
         [SerializeField] Image[] equips;
-        //[Header("Order the same as menuitem enum")]
-        //[SerializeField] Sprite[] equipIcons;
 
         [Header("Order the same as menuitem enum")]
         [SerializeField] Image[] buttonImages;
 
+        GameObject lastItemSelected;
         StoreItem currentItem;
 
+        bool moneyBoardMoving;
         int[] equipIndex = new int[3] { 0, 1, 2 };
         int heartsBeforeArmor = 6;
         public static int current_selection;
@@ -56,8 +57,9 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             SetMoneyCounter();
-            menu.SetActiveContextButtons(true, true);
-            MainMenu.SetFocus(selectedItem);
+            menu.SetActiveContextButtons();
+            menu.SetActiveBackButton(true);
+            menu.SetFocus(refocusSelected);
         }
 
         protected override void OuttroStartNextIntro()
@@ -71,8 +73,15 @@ namespace Gunhouse.Menu
             /* set equips */
             for (int i = 0; i < DataStorage.GunEquipped.Length; ++i) { DataStorage.GunEquipped[i] = false; }
             for (int i = 0; i < equipIndex.Length; ++i) { DataStorage.GunEquipped[equipIndex[i]] = true; }
+            CloseItemOptions();
 
             base.OuttroFinished();
+        }
+
+        public override void CancelPressed()
+        {
+            if (optionsBoard.gameObject.activeInHierarchy) { CloseItemOptions(); }
+            else { base.CancelPressed(); }
         }
 
         public void StoreItemInfo(OnClickStoreItem onclick)
@@ -97,7 +106,7 @@ namespace Gunhouse.Menu
             ShowItemButtonOptions((int)currentItem);
 
             lastItemSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            MainMenu.SetFocus(optionsBoard.Button());
+            menu.SetFocus(optionsBoard.Button());
 
             for (int i = 0; i < itemButtons.Length; ++i) { itemButtons[i].interactable = false; }
         }
@@ -106,30 +115,32 @@ namespace Gunhouse.Menu
         {
             int item_index = (int)item;
 
-            itemTitle.text = item_title[item_index];
+            itemTitle.text = GText.item_title[item_index];
 
             menu.builder.Length = 0;
-            menu.builder.Append(item_info[item_index]);
+            menu.builder.Append(GText.item_info[item_index]);
 
             switch (item)
             {
             case StoreItem.StoreHeart: {
-                menu.builder.AppendFormat("\nHEARTS: {0}\nHEALING: {1}", DataStorage.Hearts, DataStorage.Healing);
+                menu.builder.AppendFormat("\n{0}: {1}\n{2}: {3}",
+                                          GText.hearts, DataStorage.Hearts,
+                                          GText.healing, DataStorage.Healing);
             } break;
             case StoreItem.StoreArmor: {
                 if (DataStorage.Hearts >= heartsBeforeArmor) {
-                    menu.builder.AppendFormat("\nARMOR: {0}", DataStorage.Armor);
+                    menu.builder.AppendFormat("\n{0}: {1}", GText.armor, DataStorage.Armor);
                 }
                 else {
-                    menu.builder.AppendFormat("\n<color=#F97797FF>YOU NEED MORE HEARTS FIRST!</color>");
+                    menu.builder.AppendFormat("\n<color=#F97797FF>{0}</color>", GText.more_hearts);
                 }
             } break;
             default: {
                 if (DataStorage.GunOwned[item_index]) {
-                    menu.builder.AppendFormat("\nLEVEL: {0}", DataStorage.GunPower[item_index]);
+                    menu.builder.AppendFormat("\n{0}: {1}", GText.level, DataStorage.GunPower[item_index]);
                 }
                 else {
-                    menu.builder.AppendFormat("\n<color=#FFF192FF>PURCHASE TO UNLOCK!</color>");
+                    menu.builder.AppendFormat("\n<color=#FFF192FF>{0}</color>", GText.purchase_to_unlock);
                 }
             } break;
             }
@@ -229,25 +240,5 @@ namespace Gunhouse.Menu
 
             return false;
         }
-
-        static string[] item_title = {
-            "DRAGON GUN", "PENGUIN GUN", "SKULL GUN", "VEGETABLE GUN", "LIGHTNING GUN",
-            "FLAME GUN", "FORK GUN", "BEACH BALL GUN", "BOOMERANG GUN", "SINE WAVE GUN",
-            "HEART", "ARMOR"
-        };
-
-        static string[] item_info = {
-            "UPGRADE TO A DRAGON FRIEND!",
-            "YOUR ENEMIES WILL CHILL OUT.",
-            "THESE GUYS ARE CHAMPING AT THE BIT.",
-            "VEGGIES MAKE YOU A STRAIGHT SHOOTER.",
-            "TESLA-STYLE CHAIN ATTACK.",
-            "THE DRAGON GUN'S ENTHUSIASTIC COUSIN.",
-            "DEFENSIVE, WITH A SPLIT PERSONALITY.",
-            "BOUNCY, BOUNCY, BOUNCY!",
-            "THERE AND BACK AGAIN.",
-            "SINE ON THE LINE WHICH IS DOTTED!",
-            "HEART INFO.", "ARMOR INFO."
-        };
     }
 }

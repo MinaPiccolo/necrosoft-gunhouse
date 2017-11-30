@@ -7,8 +7,9 @@ namespace Gunhouse.Menu
     {
         protected MainMenu menu;
         public MenuState pageID;
+        public GameObject refocusSelected;
         protected MenuState transitionID;
-        Animator animator;
+        protected Animator animator;
 
         void Awake()
         {
@@ -23,5 +24,10 @@ namespace Gunhouse.Menu
         protected virtual void IntroReady() { menu.ignore_input = false; }
         protected virtual void OuttroFinished() { gameObject.SetActive(false); }
         protected virtual void OuttroStartNextIntro() { menu.SetPage(transitionID); }
+        public virtual void CancelPressed()
+        {
+            Play(HashIDs.menu.Outtro);
+            menu.SetActiveContextButtons(false, false);
+        }
     }
 }

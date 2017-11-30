@@ -13,7 +13,6 @@ namespace Gunhouse
         public static Entity background;
         public static Vector2 vscreen;
 
-        public static MenuOverlay menuOverlay;
         public static MenuTutorial tutorial;
         public static MenuAchievements menuAchievements;
 
@@ -31,7 +30,6 @@ namespace Gunhouse
 
         public static int shake_int = -1;
         public static int shake_max = -1;
-        public static int shake_dur = 0;
         public static int shake_time = 0;
 
         public static bool back;
@@ -53,7 +51,9 @@ namespace Gunhouse
 
         public static bool DisplayAnchor;
         public static bool IsPaused;
+        public static bool HasWon;
         public static Menu.MainMenu MainMenu;
+        public static MatchBonus MatchBonus;
 
         public static void Start()
         {
@@ -65,21 +65,19 @@ namespace Gunhouse
             Util.rng = new Util.UtilRandom(seed);
             background = new DrDogBackgroundDay();
             MoneyGuy.me = new MoneyGuy();
-            AppMain.MainMenu.FadeInOut(true);
         }
 
         public static void initialize()
         {
             renderer = new GHRenderer();
             textures = new Textures();
-            top_state = new MenuState();
+            top_state = new MenuState(Menu.MenuState.Splash);
         }
 
         public static void screenShake(int amount, int length)
         {
             shake_int = (int)(amount * .15f);
             if (shake_int > shake_max) { shake_max = shake_int; }
-            shake_dur = length;
             shake_time = length;
         }
 

@@ -56,14 +56,8 @@ namespace Gunhouse
 
             atlas().draw((int)stage_drdog_noon.Sprites.platform,
                          new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 396 * 0.5f - 10), scaleAmount, Vector4.one);
-
-            #if FIXED_16X9
-            atlas().draw((int)stage_drdog_noon.Sprites.ground,
-                         new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 80), scaleAmount, Vector4.one);
-            #else
             atlas().draw((int)stage_drdog_noon.Sprites.ground,
                          new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 45), scaleAmount, Vector4.one);
-            #endif
         }
     }
 
@@ -941,13 +935,6 @@ namespace Gunhouse
             AppMain.textures.minion.draw(frame, position, facingScale() / 2, angle,
                                    flashColor());
             drawSubBullets();
-            /*bb.Add(new BitmapDrawCall(AppMain.textures.drdog.atlas.texture,
-        position+origin,
-        AppMain.textures.drdog.atlas.sprite_bounds[1], flashColor(), facingScale(),
-        AppMain.textures.drdog.atlas.centers[1], 0));*/
-            //scale.x = -scale.x;
-            //AppMain.textures.drdog.draw("stance", 0, position, scale,
-            //  angle, flashColor());
         }
     }
 }

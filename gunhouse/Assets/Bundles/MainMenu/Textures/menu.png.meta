@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: caf443334219e47cb8a8242f4bed2708
-timeCreated: 1510812354
+timeCreated: 1511370288
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -141,6 +141,21 @@ TextureImporter:
     21300268: clock-hand_long
     21300270: clock-hand_short
     21300272: clock-nose
+    21300274: controllers-touch_back
+    21300276: title_game_over
+    21300278: title_paused
+    21300280: title_success
+    21300282: titles-continue
+    21300284: titles-game_over
+    21300286: titles-options
+    21300288: titles-paused
+    21300290: titles-stats
+    21300292: titles-store
+    21300294: titles-success
+    21300296: objectives-board
+    21300298: titles-secret
+    21300300: controllers-switch_down_invert
+    21300302: controllers-switch_right_invert
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -245,8 +260,8 @@ TextureImporter:
       name: arrow_vertical
       rect:
         serializedVersion: 2
-        x: 1541
-        y: 1429
+        x: 358
+        y: 642
         width: 90
         height: 124
       alignment: 0
@@ -259,8 +274,8 @@ TextureImporter:
       name: backboard
       rect:
         serializedVersion: 2
-        x: 1043
-        y: 882
+        x: 1012
+        y: 305
         width: 526
         height: 408
       alignment: 0
@@ -273,8 +288,8 @@ TextureImporter:
       name: board_chimney
       rect:
         serializedVersion: 2
-        x: 1429
-        y: 3
+        x: 963
+        y: 652
         width: 47
         height: 115
       alignment: 0
@@ -287,8 +302,8 @@ TextureImporter:
       name: board_flowerpot
       rect:
         serializedVersion: 2
-        x: 1541
-        y: 1555
+        x: 574
+        y: 361
         width: 102
         height: 256
       alignment: 0
@@ -301,8 +316,8 @@ TextureImporter:
       name: board_interior_dark
       rect:
         serializedVersion: 2
-        x: 1604
-        y: 422
+        x: 1746
+        y: 1120
         width: 182
         height: 143
       alignment: 0
@@ -315,8 +330,8 @@ TextureImporter:
       name: board_money
       rect:
         serializedVersion: 2
-        x: 1884
-        y: 1330
+        x: 513
+        y: 578
         width: 59
         height: 65
       alignment: 0
@@ -329,66 +344,10 @@ TextureImporter:
       name: board_money_gears
       rect:
         serializedVersion: 2
-        x: 1478
-        y: 10
+        x: 1867
+        y: 887
         width: 45
         height: 108
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: board_sign_continue
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 142
-        width: 872
-        height: 200
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: board_sign_options
-      rect:
-        serializedVersion: 2
-        x: 1027
-        y: 1813
-        width: 873
-        height: 234
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: board_sign_stats
-      rect:
-        serializedVersion: 2
-        x: 1043
-        y: 713
-        width: 714
-        height: 167
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: board_sign_store
-      rect:
-        serializedVersion: 2
-        x: 963
-        y: 120
-        width: 694
-        height: 200
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -399,8 +358,8 @@ TextureImporter:
       name: board_weapon
       rect:
         serializedVersion: 2
-        x: 1811
-        y: 1665
+        x: 1540
+        y: 556
         width: 120
         height: 146
       alignment: 0
@@ -413,8 +372,8 @@ TextureImporter:
       name: cat-body
       rect:
         serializedVersion: 2
-        x: 1645
-        y: 1523
+        x: 1746
+        y: 997
         width: 178
         height: 121
       alignment: 0
@@ -427,8 +386,8 @@ TextureImporter:
       name: cat-eyes_closed
       rect:
         serializedVersion: 2
-        x: 1788
-        y: 444
+        x: 875
+        y: 1440
         width: 83
         height: 21
       alignment: 0
@@ -441,8 +400,8 @@ TextureImporter:
       name: cat-eyes_half_open
       rect:
         serializedVersion: 2
-        x: 1525
-        y: 19
+        x: 875
+        y: 1507
         width: 84
         height: 26
       alignment: 0
@@ -455,8 +414,8 @@ TextureImporter:
       name: cat-eyes_open
       rect:
         serializedVersion: 2
-        x: 1933
-        y: 1679
+        x: 875
+        y: 1463
         width: 83
         height: 42
       alignment: 0
@@ -469,8 +428,8 @@ TextureImporter:
       name: cat-paw_0
       rect:
         serializedVersion: 2
-        x: 1932
-        y: 1431
+        x: 1867
+        y: 691
         width: 42
         height: 96
       alignment: 0
@@ -483,8 +442,8 @@ TextureImporter:
       name: cat-paw_1
       rect:
         serializedVersion: 2
-        x: 1633
-        y: 1432
+        x: 2009
+        y: 1958
         width: 38
         height: 89
       alignment: 0
@@ -497,8 +456,8 @@ TextureImporter:
       name: cat-paw_2
       rect:
         serializedVersion: 2
-        x: 1900
-        y: 706
+        x: 2009
+        y: 1869
         width: 38
         height: 87
       alignment: 0
@@ -511,8 +470,8 @@ TextureImporter:
       name: cat-tail_0
       rect:
         serializedVersion: 2
-        x: 1814
-        y: 1333
+        x: 789
+        y: 1269
         width: 68
         height: 62
       alignment: 0
@@ -525,8 +484,8 @@ TextureImporter:
       name: cat-tail_1
       rect:
         serializedVersion: 2
-        x: 1750
-        y: 1320
+        x: 963
+        y: 1596
         width: 62
         height: 67
       alignment: 0
@@ -539,8 +498,8 @@ TextureImporter:
       name: cat-tail_2
       rect:
         serializedVersion: 2
-        x: 1599
-        y: 54
+        x: 963
+        y: 839
         width: 55
         height: 64
       alignment: 0
@@ -553,8 +512,8 @@ TextureImporter:
       name: cat-tail_3
       rect:
         serializedVersion: 2
-        x: 1900
-        y: 636
+        x: 963
+        y: 769
         width: 50
         height: 68
       alignment: 0
@@ -567,10 +526,10 @@ TextureImporter:
       name: clock-face
       rect:
         serializedVersion: 2
-        x: 1027
-        y: 1292
-        width: 512
-        height: 519
+        x: 1540
+        y: 84
+        width: 461
+        height: 467
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -581,10 +540,10 @@ TextureImporter:
       name: clock-hand_long
       rect:
         serializedVersion: 2
-        x: 875
-        y: 159
-        width: 38
-        height: 183
+        x: 2009
+        y: 1702
+        width: 34
+        height: 165
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -595,10 +554,10 @@ TextureImporter:
       name: clock-hand_short
       rect:
         serializedVersion: 2
-        x: 915
-        y: 207
-        width: 32
-        height: 135
+        x: 2009
+        y: 1578
+        width: 29
+        height: 122
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -609,10 +568,10 @@ TextureImporter:
       name: clock-nose
       rect:
         serializedVersion: 2
-        x: 1675
-        y: 1309
-        width: 73
-        height: 78
+        x: 859
+        y: 1218
+        width: 66
+        height: 70
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -623,8 +582,8 @@ TextureImporter:
       name: controllers-ps_circle
       rect:
         serializedVersion: 2
-        x: 1768
-        y: 655
+        x: 789
+        y: 1139
         width: 64
         height: 64
       alignment: 0
@@ -637,8 +596,8 @@ TextureImporter:
       name: controllers-ps_square
       rect:
         serializedVersion: 2
-        x: 1768
-        y: 589
+        x: 789
+        y: 1073
         width: 64
         height: 64
       alignment: 0
@@ -651,8 +610,8 @@ TextureImporter:
       name: controllers-ps_triangle
       rect:
         serializedVersion: 2
-        x: 1834
-        y: 729
+        x: 629
+        y: 885
         width: 64
         height: 64
       alignment: 0
@@ -665,8 +624,8 @@ TextureImporter:
       name: controllers-ps_x
       rect:
         serializedVersion: 2
-        x: 1834
-        y: 663
+        x: 629
+        y: 819
         width: 64
         height: 64
       alignment: 0
@@ -679,8 +638,22 @@ TextureImporter:
       name: controllers-switch_down
       rect:
         serializedVersion: 2
-        x: 1702
-        y: 296
+        x: 1926
+        y: 879
+        width: 121
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-switch_down_invert
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 642
         width: 121
         height: 124
       alignment: 0
@@ -693,8 +666,8 @@ TextureImporter:
       name: controllers-switch_dpad
       rect:
         serializedVersion: 2
-        x: 1176
-        y: 18
+        x: 630
+        y: 56
         width: 100
         height: 100
       alignment: 0
@@ -707,8 +680,8 @@ TextureImporter:
       name: controllers-switch_left
       rect:
         serializedVersion: 2
-        x: 1824
-        y: 918
+        x: 450
+        y: 645
         width: 124
         height: 121
       alignment: 0
@@ -721,8 +694,22 @@ TextureImporter:
       name: controllers-switch_right
       rect:
         serializedVersion: 2
-        x: 1825
-        y: 795
+        x: 682
+        y: 546
+        width: 124
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-switch_right_invert
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 35
         width: 124
         height: 121
       alignment: 0
@@ -735,8 +722,8 @@ TextureImporter:
       name: controllers-switch_stick_l
       rect:
         serializedVersion: 2
-        x: 1074
-        y: 17
+        x: 528
+        y: 55
         width: 100
         height: 101
       alignment: 0
@@ -749,9 +736,23 @@ TextureImporter:
       name: controllers-switch_up
       rect:
         serializedVersion: 2
-        x: 1809
-        y: 1397
+        x: 235
+        y: 642
         width: 121
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: controllers-touch_back
+      rect:
+        serializedVersion: 2
+        x: 1930
+        y: 1005
+        width: 116
         height: 124
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -763,8 +764,8 @@ TextureImporter:
       name: controllers-xbox_a
       rect:
         serializedVersion: 2
-        x: 1834
-        y: 597
+        x: 629
+        y: 753
         width: 64
         height: 64
       alignment: 0
@@ -777,8 +778,8 @@ TextureImporter:
       name: controllers-xbox_b
       rect:
         serializedVersion: 2
-        x: 1900
-        y: 570
+        x: 1662
+        y: 638
         width: 64
         height: 64
       alignment: 0
@@ -791,8 +792,8 @@ TextureImporter:
       name: controllers-xbox_x
       rect:
         serializedVersion: 2
-        x: 1834
-        y: 531
+        x: 1662
+        y: 572
         width: 64
         height: 64
       alignment: 0
@@ -805,8 +806,8 @@ TextureImporter:
       name: controllers-xbox_y
       rect:
         serializedVersion: 2
-        x: 1900
-        y: 504
+        x: 336
+        y: 18
         width: 64
         height: 64
       alignment: 0
@@ -819,8 +820,8 @@ TextureImporter:
       name: element-ball
       rect:
         serializedVersion: 2
-        x: 1541
-        y: 1295
+        x: 1599
+        y: 972
         width: 132
         height: 132
       alignment: 0
@@ -833,8 +834,8 @@ TextureImporter:
       name: element-boomerang
       rect:
         serializedVersion: 2
-        x: 1571
-        y: 1161
+        x: 695
+        y: 803
         width: 132
         height: 132
       alignment: 0
@@ -847,8 +848,8 @@ TextureImporter:
       name: element-dragon
       rect:
         serializedVersion: 2
-        x: 1571
-        y: 1027
+        x: 829
+        y: 771
         width: 132
         height: 132
       alignment: 0
@@ -861,8 +862,8 @@ TextureImporter:
       name: element-flame
       rect:
         serializedVersion: 2
-        x: 1571
-        y: 893
+        x: 695
+        y: 669
         width: 132
         height: 132
       alignment: 0
@@ -875,8 +876,8 @@ TextureImporter:
       name: element-fork
       rect:
         serializedVersion: 2
-        x: 1659
-        y: 162
+        x: 829
+        y: 637
         width: 132
         height: 132
       alignment: 0
@@ -889,8 +890,8 @@ TextureImporter:
       name: element-ice
       rect:
         serializedVersion: 2
-        x: 1659
-        y: 28
+        x: 1733
+        y: 863
         width: 132
         height: 132
       alignment: 0
@@ -903,8 +904,8 @@ TextureImporter:
       name: element-lightning
       rect:
         serializedVersion: 2
-        x: 1675
-        y: 1389
+        x: 1599
+        y: 838
         width: 132
         height: 132
       alignment: 0
@@ -917,8 +918,8 @@ TextureImporter:
       name: element-skull
       rect:
         serializedVersion: 2
-        x: 1793
-        y: 162
+        x: 1733
+        y: 729
         width: 132
         height: 132
       alignment: 0
@@ -931,8 +932,8 @@ TextureImporter:
       name: element-vegetable
       rect:
         serializedVersion: 2
-        x: 1793
-        y: 28
+        x: 1599
+        y: 704
         width: 132
         height: 132
       alignment: 0
@@ -945,8 +946,8 @@ TextureImporter:
       name: element-wave
       rect:
         serializedVersion: 2
-        x: 1705
-        y: 1175
+        x: 1914
+        y: 745
         width: 132
         height: 132
       alignment: 0
@@ -959,10 +960,10 @@ TextureImporter:
       name: gunhouse_logo
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1230
-        width: 1024
-        height: 817
+        x: 1027
+        y: 1265
+        width: 980
+        height: 782
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -973,8 +974,8 @@ TextureImporter:
       name: gunhouse_text
       rect:
         serializedVersion: 2
-        x: 1027
-        y: 322
+        x: 1022
+        y: 715
         width: 575
         height: 389
       alignment: 0
@@ -987,8 +988,8 @@ TextureImporter:
       name: heart
       rect:
         serializedVersion: 2
-        x: 1604
-        y: 567
+        x: 851
+        y: 905
         width: 162
         height: 144
       alignment: 0
@@ -1002,7 +1003,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 77
+        y: 1600
         width: 960
         height: 63
       alignment: 0
@@ -1015,8 +1016,8 @@ TextureImporter:
       name: loading-fill
       rect:
         serializedVersion: 2
-        x: 1759
-        y: 721
+        x: 875
+        y: 1290
         width: 73
         height: 50
       alignment: 0
@@ -1030,7 +1031,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 12
+        y: 1535
         width: 960
         height: 63
       alignment: 0
@@ -1044,7 +1045,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 344
+        y: 1665
         width: 1024
         height: 382
       alignment: 0
@@ -1057,8 +1058,8 @@ TextureImporter:
       name: objectives-banner-box
       rect:
         serializedVersion: 2
-        x: 1604
-        y: 324
+        x: 732
+        y: 60
         width: 96
         height: 96
       alignment: 0
@@ -1071,8 +1072,8 @@ TextureImporter:
       name: objectives-banner-check-green
       rect:
         serializedVersion: 2
-        x: 1525
-        y: 47
+        x: 950
+        y: 1227
         width: 72
         height: 71
       alignment: 0
@@ -1082,16 +1083,16 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: objectives-banner
+      name: objectives-board
       rect:
         serializedVersion: 2
         x: 1
-        y: 728
-        width: 1040
-        height: 500
+        y: 8
+        width: 333
+        height: 295
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 155, y: 140, z: 165, w: 140}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -1099,8 +1100,8 @@ TextureImporter:
       name: selection_large
       rect:
         serializedVersion: 2
-        x: 1645
-        y: 1646
+        x: 856
+        y: 1051
         width: 164
         height: 165
       alignment: 0
@@ -1113,8 +1114,8 @@ TextureImporter:
       name: selection_small
       rect:
         serializedVersion: 2
-        x: 963
-        y: 8
+        x: 1
+        y: 641
         width: 109
         height: 110
       alignment: 0
@@ -1127,8 +1128,8 @@ TextureImporter:
       name: shield
       rect:
         serializedVersion: 2
-        x: 1825
-        y: 1529
+        x: 717
+        y: 937
         width: 132
         height: 134
       alignment: 0
@@ -1141,8 +1142,8 @@ TextureImporter:
       name: skull
       rect:
         serializedVersion: 2
-        x: 1788
-        y: 467
+        x: 789
+        y: 1205
         width: 65
         height: 62
       alignment: 0
@@ -1155,8 +1156,8 @@ TextureImporter:
       name: slider_blue
       rect:
         serializedVersion: 2
-        x: 1902
-        y: 1832
+        x: 2009
+        y: 1553
         width: 29
         height: 23
       alignment: 0
@@ -1169,8 +1170,8 @@ TextureImporter:
       name: slider_red
       rect:
         serializedVersion: 2
-        x: 1705
-        y: 882
+        x: 2009
+        y: 1528
         width: 29
         height: 23
       alignment: 0
@@ -1183,8 +1184,8 @@ TextureImporter:
       name: store-2d_1
       rect:
         serializedVersion: 2
-        x: 1759
-        y: 773
+        x: 961
+        y: 1398
         width: 64
         height: 132
       alignment: 0
@@ -1197,8 +1198,8 @@ TextureImporter:
       name: store-2d_2
       rect:
         serializedVersion: 2
-        x: 1705
-        y: 907
+        x: 1930
+        y: 1131
         width: 117
         height: 132
       alignment: 0
@@ -1211,8 +1212,8 @@ TextureImporter:
       name: store-2d_3
       rect:
         serializedVersion: 2
-        x: 1933
-        y: 1723
+        x: 576
+        y: 619
         width: 104
         height: 132
       alignment: 0
@@ -1225,8 +1226,8 @@ TextureImporter:
       name: store-3d_1
       rect:
         serializedVersion: 2
-        x: 1959
-        y: 1581
+        x: 1867
+        y: 789
         width: 45
         height: 96
       alignment: 0
@@ -1239,8 +1240,8 @@ TextureImporter:
       name: store-3d_2
       rect:
         serializedVersion: 2
-        x: 1278
-        y: 22
+        x: 875
+        y: 1342
         width: 81
         height: 96
       alignment: 0
@@ -1253,10 +1254,122 @@ TextureImporter:
       name: store-3d_3
       rect:
         serializedVersion: 2
-        x: 1361
-        y: 22
+        x: 958
+        y: 1300
         width: 66
         height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-continue
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1333
+        width: 872
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-game_over
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 158
+        width: 510
+        height: 145
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-options
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1120
+        width: 786
+        height: 211
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-paused
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 308
+        width: 510
+        height: 327
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-secret
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1106
+        width: 720
+        height: 157
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-stats
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 951
+        width: 714
+        height: 167
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-store
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 768
+        width: 626
+        height: 181
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: titles-success
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 76
+        width: 510
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1267,8 +1380,8 @@ TextureImporter:
       name: tutorial-cursor
       rect:
         serializedVersion: 2
-        x: 1902
-        y: 1857
+        x: 1911
+        y: 553
         width: 124
         height: 190
       alignment: 0
@@ -1281,8 +1394,8 @@ TextureImporter:
       name: tutorial-skull_icon
       rect:
         serializedVersion: 2
-        x: 1705
-        y: 1041
+        x: 1733
+        y: 595
         width: 132
         height: 132
       alignment: 0
@@ -1295,8 +1408,8 @@ TextureImporter:
       name: tutorial-text_box
       rect:
         serializedVersion: 2
-        x: 1825
-        y: 380
+        x: 963
+        y: 1532
         width: 62
         height: 62
       alignment: 0

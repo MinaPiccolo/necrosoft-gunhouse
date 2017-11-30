@@ -7,6 +7,7 @@ namespace Necrosoft
     {
         /* N3DS, PS4, PSP2, Switch, Tizen, tvOS, WebGL, XboxOne already exist */
         static string[] platforms = { "BUNDLED",
+                                      "LOADING_SCREEN", "LOADING_CREDITS",
                                       "TRACKING",
                                       "CONTROLLER_AND_TOUCH", "CONTROLLER", "TOUCH",
                                       "JUMP_STORE",

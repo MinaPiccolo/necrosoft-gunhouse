@@ -10,11 +10,7 @@ namespace Gunhouse
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
-        #if FIXED_16X9
-        Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 100);
-        #else
         Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 60);
-        #endif
 
         public ForestBackgroundDay()
         {
@@ -57,12 +53,7 @@ namespace Gunhouse
                          new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y * 0.5f), scaleAmount, Vector4.one);
 
             atlas().draw((int)stage_drhoot_noon.Sprites.platform, new Vector2(715, 410), scaleAmount, Vector4.one);
-
-            #if FIXED_16X9
-            atlas().draw((int)stage_drhoot_noon.Sprites.ground, groundPosition, scaleAmount, Vector4.one);
-            #else
             atlas().draw((int)stage_drhoot_noon.Sprites.floor, groundPosition, scaleAmount, Vector4.one);
-            #endif
         }
     }
 

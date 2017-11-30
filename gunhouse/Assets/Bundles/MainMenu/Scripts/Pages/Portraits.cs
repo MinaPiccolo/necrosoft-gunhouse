@@ -4,10 +4,8 @@ namespace Gunhouse.Menu
 {
     public class Portraits : MonoBehaviour
     {
-        [SerializeField] Canvas canvas;
         [SerializeField] GameObject[] portratis;
         Animator animator;
-        public int SortOrder { get { return canvas.sortingOrder; } set { canvas.sortingOrder = value; } }
 
         void Awake()
         {
@@ -24,7 +22,6 @@ namespace Gunhouse.Menu
 
         void AnimationEventDisableMenu()
         {
-            canvas.sortingOrder = 0;
             for (int i = 0; i < portratis.Length; ++i) portratis[i].SetActive(false);
             gameObject.SetActive(false);
         }

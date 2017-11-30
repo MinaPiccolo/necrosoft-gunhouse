@@ -44,19 +44,18 @@ namespace Gunhouse.Menu
 
             switch (item)
             {
-                case StoreOption.StoreOptionEquip: { builder.Append("EQUIP"); } break;
-                case StoreOption.StoreOptionSwap: { builder.Append("SWAP"); } break;
-                case StoreOption.StoreOptionPurchase: { builder.AppendFormat("PURCHASE ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionUpgrade: { builder.AppendFormat("UPGRADE ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionRefund: { builder.AppendFormat("REFUND ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionAddHeart: { builder.AppendFormat("ADD HEART ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionAddHeadling: { builder.AppendFormat("ADD HEALING ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionArmor: { builder.AppendFormat("ADD ARMOR ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionRefundHeart: { builder.AppendFormat("REFUND HEART ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionRefundHealing: { builder.AppendFormat("REFUND HEALING ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionRefundArmor: { builder.AppendFormat("REFUND ARMOR ${0}", buttons[index].Money); } break;
-                case StoreOption.StoreOptionSlot: { builder.AppendFormat("SLOT {0}", index + 1); } break;
-                    
+            case StoreOption.StoreOptionSwap:
+            case StoreOption.StoreOptionEquip: { builder.Append(GText.equip); } break;
+            case StoreOption.StoreOptionPurchase: { builder.AppendFormat("{0} ${1}", GText.purchase, buttons[index].Money); } break;
+            case StoreOption.StoreOptionUpgrade: { builder.AppendFormat("{0} ${1}", GText.upgrade, buttons[index].Money); } break;
+            case StoreOption.StoreOptionRefund: { builder.AppendFormat("{0} ${1}", GText.refund, buttons[index].Money); } break;
+            case StoreOption.StoreOptionAddHeart: { builder.AppendFormat("{0} ${1}", GText.add_heart, buttons[index].Money); } break;
+            case StoreOption.StoreOptionAddHeadling: { builder.AppendFormat("{0} ${1}", GText.add_healing, buttons[index].Money); } break;
+            case StoreOption.StoreOptionArmor: { builder.AppendFormat("{0} ${1}", GText.add_armor, buttons[index].Money); } break;
+            case StoreOption.StoreOptionRefundHeart: { builder.AppendFormat("{0} ${1}", GText.refund_heart, buttons[index].Money); } break;
+            case StoreOption.StoreOptionRefundHealing: { builder.AppendFormat("{0} ${1}", GText.refund_healing, buttons[index].Money); } break;
+            case StoreOption.StoreOptionRefundArmor: { builder.AppendFormat("{0} ${1}", GText.refund_armor, buttons[index].Money); } break;
+            case StoreOption.StoreOptionSlot: { builder.AppendFormat("{0} ${1}", GText.slot, index + 1); } break;
             }
 
             buttons[index].Text = builder.ToString();

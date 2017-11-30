@@ -163,13 +163,11 @@ namespace Necrosoft
 
         public static void Pause(bool pause = true)
         {
-            if (pause)
-            {
+            if (pause) {
                 musicLayer.volume = musicVolume * pauseVolume;
                 for (int i = 0; i < MAX_EFFECT_LAYERS; ++i) effectLayers[i].Pause();
             }
-            else
-            {
+            else {
                 MusicVolume = musicVolume;
                 for (int i = 0; i < MAX_EFFECT_LAYERS; ++i) effectLayers[i].UnPause();
             }

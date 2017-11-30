@@ -8,7 +8,7 @@ namespace Gunhouse.Menu
         [SerializeField] TextMeshProUGUI text;
 
         protected override void Initalise() { pageID = MenuState.About; transitionID = MenuState.Options; }
-        protected override void IntroReady() { menu.SetActiveContextButtons(true, false); }
+        protected override void IntroReady() { menu.SetActiveContextButtons(false, true); }
     
         void OnEnable()
         {

@@ -10,11 +10,7 @@ namespace Gunhouse
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
-        #if FIXED_16X9
-        Vector2 groundPosition = AppMain.vscreen * 0.5f + new Vector2(0, 20);
-        #else
         Vector2 groundPosition = AppMain.vscreen * 0.5f;
-        #endif
 
         public PyramidBackgroundDay()
         {

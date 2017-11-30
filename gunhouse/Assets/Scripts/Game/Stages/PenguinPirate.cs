@@ -12,11 +12,7 @@ namespace Gunhouse
         public const int n_clouds = 3;
         public Vector2[] clouds = new Vector2[n_clouds];
         public int time = 100;
-        #if FIXED_16X9
-        Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 100);
-        #else
         Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 40);
-        #endif
 
         public PenguinPirateBackgroundDay()
         {

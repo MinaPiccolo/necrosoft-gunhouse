@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Necrosoft.ThirdParty;
 
 namespace Gunhouse.Menu
 {
@@ -7,15 +8,51 @@ namespace Gunhouse.Menu
     {
         public void CloseItemOptions()
         {
+            Necrosoft.Choom.PlayEffect(SoundAssets.UIConfirm);
             optionsBoard.gameObject.SetActive(false);
             for (int i = 0; i < itemButtons.Length; ++i) { itemButtons[i].interactable = true; }
 
-            MainMenu.SetFocus(lastItemSelected);
+            menu.SetFocus(lastItemSelected);
         }
 
         public void SelectOption(OptionButton button)
         {
-            if (button.Money > DataStorage.Money) { Debug.Log("not enough money"); return; }
+            switch (button.item)
+            {
+            case StoreOption.StoreOptionEquip:
+            case StoreOption.StoreOptionSwap:
+            case StoreOption.StoreOptionPurchase:
+            case StoreOption.StoreOptionUpgrade:
+            case StoreOption.StoreOptionAddHeart:
+            case StoreOption.StoreOptionAddHeadling:
+            case StoreOption.StoreOptionArmor: { Necrosoft.Choom.PlayEffect(SoundAssets.UISelect); } break;
+            case StoreOption.StoreOptionRefund:
+            case StoreOption.StoreOptionRefundHeart:
+            case StoreOption.StoreOptionRefundHealing:
+            case StoreOption.StoreOptionRefundArmor: { Necrosoft.Choom.PlayEffect(SoundAssets.UIConfirm); } break;
+            }
+
+            switch (button.item)
+            {
+            case StoreOption.StoreOptionPurchase:
+            case StoreOption.StoreOptionUpgrade:
+            case StoreOption.StoreOptionAddHeart:
+            case StoreOption.StoreOptionArmor:
+            case StoreOption.StoreOptionAddHeadling: {
+                if (button.Money > DataStorage.Money) {
+                    if (moneyBoardMoving) { return; }
+                    moneyBoardMoving = true;
+                    LeanTween.moveY(moneyBoard, 50f, 0.5f)
+                             .setLoopPingPong(1).setEase(LeanTweenType.easeInOutQuad)
+                             .setOnComplete(() => { moneyBoardMoving = false; });
+                            moneyBoardMoving = true;
+                    LeanTween.value(moneyText.gameObject, moneyText.color, Color.red, 0.2f)
+                             .setOnUpdate((Color col) => { moneyText.color = col; })
+                             .setLoopPingPong(2).setEase(LeanTweenType.easeInOutQuad);
+                    return;
+                }
+            } break;
+            }
 
             GameObject selectedButton = button.gameObject; 
             StoreOption buttonOption = button.item;
@@ -63,13 +100,13 @@ namespace Gunhouse.Menu
                 case StoreOption.StoreOptionUpgrade: {
                     DataStorage.GunPower[(int)currentItem]++;
                     DataStorage.Money -= button.Money;
-                    Tracker.ShopItemUpgrade(item_title[(int)currentItem], DataStorage.GunPower[(int)currentItem]);
+                    Tracker.ShopItemUpgrade(GText.item_title[(int)currentItem], DataStorage.GunPower[(int)currentItem]);
                 } break;
                 case StoreOption.StoreOptionRefund: {
                     DataStorage.GunPower[(int)currentItem]--;
                     if (DataStorage.GunPower[(int)currentItem] == 1) { selectedButton = optionsBoard.Button(); }
                     DataStorage.Money += button.Money;
-                    Tracker.ShopItemDowngrade(item_title[(int)currentItem], DataStorage.GunPower[(int)currentItem]);
+                    Tracker.ShopItemDowngrade(GText.item_title[(int)currentItem], DataStorage.GunPower[(int)currentItem]);
                 } break;
                 case StoreOption.StoreOptionAddHeart: {
                     DataStorage.Hearts++;
@@ -107,10 +144,10 @@ namespace Gunhouse.Menu
                 } break;
             }
 
-            if (optionsBoard.gameObject.activeSelf &&
+            if (optionsBoard.gameObject.activeInHierarchy &&
                 buttonOption != StoreOption.StoreOptionEquip) {
                 ShowItemButtonOptions((int)currentItem);
-                MainMenu.SetFocus(selectedButton);
+                menu.SetFocus(selectedButton);
             }
 
             SetItemInfo(currentItem);

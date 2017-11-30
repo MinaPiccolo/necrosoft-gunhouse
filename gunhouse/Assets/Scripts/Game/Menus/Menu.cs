@@ -1,11 +1,8 @@
-using Necrosoft;
-using Gunhouse.Menu;
-
 namespace Gunhouse
 {
     public class MenuState : State
     {
-        public MenuState(Menu.MenuState menuState = Menu.MenuState.Splash, State game_state = null)
+        public MenuState(Menu.MenuState menuState, State game_state = null)
         {
             /* ============================== */
             /* this is to get around having to greate multiple
@@ -13,11 +10,17 @@ namespace Gunhouse
 
             switch (menuState)
             {
+            case Menu.MenuState.EndGame:
+            case Menu.MenuState.EndWave: {
+                child_state = game_state;
+                AppMain.tutorial.Pause(true);
+                AppMain.MatchBonus.DismissAnimations();
+            } break;
             case Menu.MenuState.Pause: {
                 child_state = game_state;
                 AppMain.IsPaused = true;
                 AppMain.tutorial.Pause(true);
-                Choom.Pause();
+                AppMain.MatchBonus.PauseAnimations();
             } break;
             default: { AppMain.DisplayAnchor = false; } break;
             }
@@ -28,12 +31,10 @@ namespace Gunhouse
             /* what music to play */
             switch (menuState)
             {
-            case Menu.MenuState.Credits: {
-                MenuCredits.ScrollDelay = 10;
-                MenuCredits.DisplayEnding = true;
-                Choom.Play("Music/credits"); 
-            } break;
-            default: Choom.Play("Music/title"); break;
+            case Menu.MenuState.EndGame:
+            case Menu.MenuState.EndWave:
+            case Menu.MenuState.Pause: { } break;
+            default: Necrosoft.Choom.Play("Music/title"); break;
             }
         }
     }

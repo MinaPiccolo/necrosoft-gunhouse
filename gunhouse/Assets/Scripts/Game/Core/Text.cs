@@ -5,8 +5,6 @@ namespace Gunhouse
 {
     public static class Text
     {
-        static StringBuilder builder = new StringBuilder(200);
-
         public static void Draw(Vector2 position, string text, Vector2 scale, Vector4 color)
         {
             Draw(position, text, scale, color, color, 0, false);
@@ -42,65 +40,6 @@ namespace Gunhouse
                     position.x += x_adv * scale.x * 0.9f;
                 }
             }
-        }
-
-        public static Vector2 Size(Atlas font, string text)
-        {
-            float line_width = 0.0f;
-            Vector2 size = new Vector2(0, 1);
-
-            for (int i = 0; i < text.Length; ++i) {
-                if (text[i] != '\n') {
-                    int index = text[i] - ' ';
-                    if (index >= 0 && index < 96) {
-                        line_width += font.sprites[index].brmargin.x;
-                    }
-                    size.x = Mathf.Max(size.x, line_width);
-                }
-                else {
-                    line_width = 0.0f;
-                    size.y++;
-                }
-            }
-
-            return new Vector2(size.x, size.y * 44);
-        }
-
-        public static string Wrap(string text, int width = 70)
-        {
-            if (text.Contains("\n")) {
-                string output = "";
-                string[] lines = text.Split(new char[] { '\n' });
-                for (int i = 0; i < lines.Length; ++i) {
-                    output += Wrap(lines[i], width) + "\n";
-                }
-                return output.TrimEnd(new char[] { '\n' });
-            }
-
-            int column = 0;
-            builder.Length = 0;
-
-            string[] words = text.Split(new char[] { ' ' });
-            for (int i = 0; i < words.Length; ++i) {
-
-                if (column + words[i].Length >= width) {
-                    column = 0;
-                    builder.Append("\n");
-                }
-                builder.Append(words[i]).Append(" ");
-                column += words[i].Length + 1;
-            }
-            return builder.ToString();
-        }
-
-        public static int[] IntAsArray(int value)
-        {
-            /* NOTE(shane): think should be a queue in our case */
-            System.Collections.Generic.Stack<int> numbers = new System.Collections.Generic.Stack<int>();
-
-            for (; value > 0; value /= 10) numbers.Push(value % 10);
-
-            return numbers.ToArray();
         }
     }
 }

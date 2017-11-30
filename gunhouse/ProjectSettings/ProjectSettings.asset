@@ -43,8 +43,8 @@ PlayerSettings:
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
-  defaultScreenWidth: 960
-  defaultScreenHeight: 544
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
@@ -65,7 +65,7 @@ PlayerSettings:
   use32BitDisplayBuffer: 0
   disableDepthAndStencilBuffers: 0
   androidBlitType: 0
-  defaultIsFullScreen: 0
+  defaultIsFullScreen: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
   runInBackground: 0
@@ -73,6 +73,8 @@ PlayerSettings:
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
+  deferSystemGesturesMode: 0
+  hideHomeButton: 0
   submitAnalytics: 0
   usePlayerLog: 0
   bakeCollisionMeshes: 1
@@ -191,6 +193,8 @@ PlayerSettings:
   iPhone47inSplashScreen: {fileID: 0}
   iPhone55inPortraitSplashScreen: {fileID: 0}
   iPhone55inLandscapeSplashScreen: {fileID: 0}
+  iPhone58inPortraitSplashScreen: {fileID: 0}
+  iPhone58inLandscapeSplashScreen: {fileID: 0}
   iPadPortraitSplashScreen: {fileID: 0}
   iPadHighResPortraitSplashScreen: {fileID: 0}
   iPadLandscapeSplashScreen: {fileID: 0}

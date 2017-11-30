@@ -9,7 +9,7 @@ namespace Gunhouse.Menu
     {
         TextMeshProUGUI text;
 
-        protected override void Initalise() { pageID = MenuState.Loading; transitionID = MenuState.Pause; }
+        protected override void Initalise() { pageID = MenuState.Loading; transitionID = MenuState.None; }
         protected override void OuttroStartNextIntro() { }
 
         protected override void OuttroFinished()
@@ -20,7 +20,7 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             base.IntroReady();
-            LeanTween.delayedCall(0.25f, () => { LoadGame(); });
+            LeanTween.delayedCall(gameObject, 0.25f, LoadGame);
         }
 
         void OnEnable()
@@ -29,8 +29,10 @@ namespace Gunhouse.Menu
 
             text = GetComponentInChildren<TextMeshProUGUI>();
             menu.builder.Length = 0;
-            text.text = menu.builder.AppendFormat("<size=300%>LOADING...</size>\n{0}",
-                                                  Story.tips[Util.rng.Next(Story.tips.Length)]).ToString();
+            text.SetText(menu.builder.AppendFormat("<size=300%>LOADING...</size>\n{0}",
+                                                   GText.Story.tips[Util.rng.Next(GText.Story.tips.Length)]));
+
+            menu.Fade(1, 0.5f);
         }
 
         void LoadGame()
@@ -63,11 +65,11 @@ namespace Gunhouse.Menu
             AppMain.top_state = new Game();
             AppMain.DisplayAnchor = true;
 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.2f);
 
-            menu.FadeInOut(true);
             menu.PortraitsHide();
             Play(HashIDs.menu.Outtro);
+            menu.Fade(0, 0.5f);
         }
     }
 }

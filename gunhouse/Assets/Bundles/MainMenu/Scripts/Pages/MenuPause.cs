@@ -5,34 +5,33 @@ namespace Gunhouse.Menu
 {
     public class MenuPause : MenuPage
     {
-        [SerializeField] GameObject selected;
+        GameObject lastSelected;
         [SerializeField] Objectives objectives;
 
         protected override void Initalise() { pageID = MenuState.Pause; transitionID = MenuState.None; }
 
         protected override void IntroReady()
         {
-            menu.SetActiveContextButtons(true, true);
-            MainMenu.SetFocus(selected);
-
-            /* check objectives complete here update only don't complete? */
+            menu.SetActiveContextButtons();
+            menu.SetFocus(lastSelected == null ? refocusSelected : lastSelected);
         }
 
         protected override void OuttroStartNextIntro()
         {
-            menu.PortraitOrder(0);
-
-            if (transitionID != MenuState.None) {
-                base.OuttroStartNextIntro();
+            if (transitionID != MenuState.None && !AppMain.IsPaused) {
+                Choom.Play("Music/title");
             }
+
+            base.OuttroStartNextIntro();
         }
 
         protected override void OuttroFinished()
         {
+            /* record last selected item for if the player returns */
+            lastSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+
             if (transitionID == MenuState.None) {
-                AppMain.IsPaused = false;
                 Choom.Pause(false);
-                Choom.PlayEffect(SoundAssets.UIConfirm);
 
                 State game_state = AppMain.top_state.child_state;
                 AppMain.top_state.Dispose();
@@ -40,44 +39,70 @@ namespace Gunhouse.Menu
 
                 menu.SetActiveDayName(true);
                 AppMain.tutorial.Pause(false);
+                lastSelected = null;
             }
 
             transitionID = MenuState.None; /* reset it for next time */
+
             base.OuttroFinished();
+        }
+
+        public override void CancelPressed()
+        {
+            objectives.Play(HashIDs.menu.Outtro);
+
+            if (transitionID == MenuState.None) {
+                AppMain.IsPaused = false;
+                AppMain.MatchBonus.ResumeAnimations();
+            }
+
+            if (transitionID == MenuState.None ||
+                transitionID == MenuState.Title) {
+                menu.Fade(0, 0.25f);
+            }
+
+            base.CancelPressed();
         }
 
         void OnEnable()
         {
             Tracker.ScreenVisit(SCREEN_NAME.PAUSE);
-            menu.PortraitOrder(2);
+
+            Choom.Pause();
+            AppMain.screenShake(0, 0);
+
+            objectives.Play(HashIDs.menu.Intro);
             objectives.UpdateText();
+
             menu.SetActiveDayName(false);
+            menu.Fade(0.9f, 0.25f);
         }
 
         public void SetButton(OnClickItem item)
         {
+            menu.SetActiveContextButtons(false, false);
+
             switch (item.item)
             {
-            case MenuItem.Resume: {
-                transitionID = MenuState.None;
-                menu.PortraitsHide();
-                menu.SetActiveContextButtons(false);
-                Choom.PlayEffect(SoundAssets.UIConfirm);
-            } break;
-            case MenuItem.MainMenu: {
-                transitionID = MenuState.Title;
-            } break;
-            case MenuItem.Store: {
-                transitionID = MenuState.Store;
-            } break;
+            case MenuItem.Resume: { transitionID = MenuState.None; } break;
+            case MenuItem.MainMenu: { transitionID = MenuState.Title; } break;
+            case MenuItem.Audio: { transitionID = MenuState.Audio; } break;
             }
 
             switch (item.item)
             {
-            case MenuItem.MainMenu:
-            case MenuItem.Store: {
+            case MenuItem.Audio: {
+                menu.SetActiveDayName(false, true);
+                Choom.Pause(false);
+            } break;
+            case MenuItem.MainMenu: {
+                AppMain.HasWon = false;
                 AppMain.DisplayAnchor = false;
+                MetaState.hardcore_mode = false;
+
                 AppMain.tutorial.SetLesson(Lesson.NONE);
+                AppMain.tutorial.SetDisplay(false);
+                AppMain.MatchBonus.DismissAnimations();
 
                 Choom.StopAllEffects();
                 Choom.Pause(false);
@@ -86,15 +111,21 @@ namespace Gunhouse.Menu
                 AppMain.top_state.child_state = null;
                 Game.instance = null;
 
-                Tracker.LevelQuit(MetaState.wave_number);
-                Tracker.EndMode(MetaState.hardcore_mode, AppMain.MainMenu.DayName(MetaState.wave_number),
-                        MetaState.hardcore_mode ? MetaState.hardcore_score : DataStorage.Money);
+                if (AppMain.IsPaused) {
+                    Tracker.LevelQuit(MetaState.wave_number);
+                }
+                else {
+                    Tracker.EndMode(MetaState.hardcore_mode, AppMain.MainMenu.DayName(MetaState.wave_number),
+                            MetaState.hardcore_mode ? MetaState.hardcore_score : DataStorage.Money);
+                }
 
                 menu.SetActiveDayName(false, true);
+
+                AppMain.IsPaused = false;
             } break;
             }
 
-            Play(HashIDs.menu.Outtro);
+            CancelPressed();
         }
     }
 }

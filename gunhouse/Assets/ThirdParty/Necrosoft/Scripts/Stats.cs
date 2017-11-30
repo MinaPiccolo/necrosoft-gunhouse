@@ -4,7 +4,6 @@ using UnityEngine.Profiling;
 
 namespace Necrosoft
 {
-    [ExecuteInEditMode]
     public class Stats : MonoBehaviour
     {
         [SerializeField] Font font;

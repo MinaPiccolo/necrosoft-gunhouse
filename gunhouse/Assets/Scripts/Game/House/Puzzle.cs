@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Necrosoft;
 
 namespace Gunhouse
@@ -88,158 +87,6 @@ namespace Gunhouse
                                                  new Vector4(0.5f, 0.5f, 0.5f, 0.5f),
                                                  1.0f);
             }
-        }
-    }
-    
-    public class PadMenuController
-    {
-        int selected_button = 0;
-        Button[] live_buttons;
-
-        public PadMenuController()
-        {
-            live_buttons = AppMain.menuOverlay.GetLiveButtons();
-        }
-
-        public void tick()
-        {
-            Vector2 direction = Util.keyRepeat("menuoverlay_pad_repeat", Vector2.zero, 20, 5, Input.Pad.Move);
-
-            if (direction.x != 0) {
-                selected_button += Util.sign(direction.x);
-                selected_button = Util.clamp(selected_button, 0, live_buttons.Length - 1);
-            }
-
-            if (Input.Pad.Submit.WasPressed) { live_buttons[selected_button].onClick.Invoke(); }
-
-            for (int i = 0; i < live_buttons.Length; ++i) {
-                Button b = live_buttons[i];
-                float pulse = 1 + Mathf.Sin(AppMain.frame / 30.0f) / 10;
-                if (i != selected_button) { pulse = 1; }
-                b.GetComponent<RectTransform>().localScale = new Vector3(pulse, pulse, 1);
-            }
-        }
-    }
-
-    public class EndWaveState : State
-    {
-        public int time = 0;
-        public float alpha = 0.0f;
-        public bool won;
-
-        public string story = "";
-        public string story_so_far;
-
-        public int money_ticker;
-        public int money_tick_amt;
-
-        PadMenuController pmc;
-
-        public EndWaveState(bool won_, State child_state_)
-        {
-            MetaState.end_game = false;
-            AppMain.screenShake(0, 0);
-            Choom.StopAllEffects();
-
-            won = won_;
-            child_state = child_state_;
-            tick_child_state = false;
-
-            AppMain.tutorial.SetDisplay(false);
-            AppMain.menuOverlay.Show(won);
-
-            if (!won) { DataStorage.TimesDefeated++; }
-
-            if (!won && MetaState.hardcore_mode) {
-                Game.instance.saveHardcoreScore();
-                Platform.SaveHardcore();
-            }
-
-            pmc = new PadMenuController();
-
-            money_ticker = DataStorage.Money;
-            money_tick_amt = (DataStorage.Money - money_ticker) / 180;
-
-            if (won && MetaState.wave_number + 1 > DataStorage.StartOnWave &&
-                !MetaState.hardcore_mode) {
-
-                if ((MetaState.wave_number % 3) == 2) { Objectives.BossDefeated(); }
-                DataStorage.StartOnWave = MetaState.wave_number + 1;
-            }
-
-            Platform.SaveEndWave();
-            Objectives.CheckAchievements();
-        }
-
-        override public void tick()
-        {
-            if (AppMain.top_state != this) { return; }
-
-            base.tick();
-
-            pmc.tick();
-
-            MoneyGuy.me.tick();
-
-            money_ticker += money_tick_amt;
-            if (money_ticker >= DataStorage.Money) {
-                money_ticker = DataStorage.Money;
-            }
-        }
-
-        override public void draw()
-        {
-            base.draw();
-        }
-    }
-
-    public class EndGameState : State
-    {
-        public int time = 0;
-        public float alpha = 0.0f;
-
-        public string story = "";
-        public string story_so_far;
-
-        PadMenuController pmc;
-
-        public EndGameState(State child_state_)
-        {
-            MetaState.end_game = false;
-            AppMain.screenShake(0, 0);
-
-            Choom.StopAllEffects();
-
-            child_state = child_state_;
-
-            if (MetaState.wave_number + 1 > DataStorage.StartOnWave) {
-                DataStorage.StartOnWave = MetaState.wave_number + 1;
-            }
-
-            Objectives.BossDefeated();
-            Objectives.SurvivedFinalStage();
-            Objectives.CheckAchievements();
-
-            child_state = null;
-            AppMain.top_state = new MenuState(Menu.MenuState.Credits);
-
-            pmc = new PadMenuController();
-        }
-
-        public override void tick()
-        {
-            if (AppMain.top_state != this) { return; }
-
-            pmc.tick();
-
-            base.tick();
-        }
-
-        override public void draw()
-        {
-            if (this != AppMain.top_state) { return; }
-
-            base.draw();
         }
     }
 
@@ -333,7 +180,7 @@ namespace Gunhouse
         public void load()
         {
             AppMain.textures.orphan.touch();
-            AppMain.textures.ui.touch();
+
             foreach (Type t in enemy_list.Keys) {
                 t.GetMethod("loadAssets").Invoke(null, null);
             }
@@ -577,13 +424,15 @@ namespace Gunhouse
                     }
                 }
 
-                if (Input.Pad.Start.WasPressed) AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
+                if (Input.Pad.Start.WasPressed) {
+                    AppMain.IsPaused = true;
+                    AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
+                }
             }
 
             if (AppMain.back) {
                 AppMain.back = false;
                 if (Input.touches.Count > 0 || MetaState.wave.done) return;
-
                 AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
             }
 
@@ -637,12 +486,13 @@ namespace Gunhouse
 
             #if UNITY_EDITOR
 
-            if (Input.keys[(int)KeyCode.Delete]) { house.health = 0; }
+            if (UnityEngine.Input.GetKeyDown(KeyCode.N)) { house.health = 0; }
 
             #endif
 
             if (house.health <= 0 && AppMain.top_state == this) {
-                AppMain.top_state = new EndWaveState(false, this);
+                AppMain.HasWon = false;
+                AppMain.top_state = new MenuState(Menu.MenuState.EndWave, this);
                 return;
             }
 
@@ -667,10 +517,14 @@ namespace Gunhouse
                     particle_group.flushAddRemove();
 
                     MoneyGuy.me.sign_v = 0;
+                    AppMain.HasWon = true;
 
-                    //if (MetaState.end_game) { AppMain.top_state = new EndGameState(this); }
-                    if (MetaState.wave_number == 29) { AppMain.top_state = new EndGameState(this); }
-                    else { AppMain.top_state = new EndWaveState(true, this); }
+                    if (MetaState.wave_number == 29) {
+                        AppMain.top_state = new MenuState(Menu.MenuState.EndGame, this);
+                    }
+                    else {
+                        AppMain.top_state = new MenuState(Menu.MenuState.EndWave, this);
+                    }
                 }
             }
             else {
@@ -1429,8 +1283,7 @@ namespace Gunhouse
                     AppMain.tutorial.loadMultiplierAmount++;
                 }
 
-                spawnFloatyText("Match! x" + Game.instance.match_combo,
-                                new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 130, 42.5f), 1.5f, Vector4.one);
+                AppMain.MatchBonus.SpawnFloatyText(Game.instance.match_combo);
                 Game.instance.match_combo++;
                 Game.instance.match_streak++;
                 Game.instance.house.advanceNext();
@@ -1462,7 +1315,7 @@ namespace Gunhouse
 
                     if (loading_specials) {
                         Game.instance.house.addSpecialAttack(i, feed_type, amt);
-                        splash_position = new Vector2 (Puzzle.grid_left, Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
+                        splash_position = new Vector2(Puzzle.grid_left, Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
 
                         if (!recordOnce && AppMain.tutorial.LoadedSpecial &&
                             AppMain.tutorial.loadedSpecialAmount >= AppMain.tutorial.repeatAmount) {
@@ -1497,8 +1350,9 @@ namespace Gunhouse
                     lightninged = true;
                     spawnFlash(splash_position, ammoColor(feed_type), 0.25f + 0.1f * amt);
 
-                    spawnFloatyText("+" + gun_feed_amt[i].ToString() + (multiplier == 1 ? "" : "x" + multiplier.ToString()),
-                                    splash_position, 1 + 1.0f * (float)Math.Log(amt), ammoColor(feed_type));
+                    AppMain.MatchBonus.SpawnFloatyText(gun_feed_amt[i], multiplier,
+                                                       splash_position, 1 + 1.0f * (float)Math.Log(amt),
+                                                       feed_type);
                 }
             }
 
@@ -1643,21 +1497,6 @@ namespace Gunhouse
             flash.color_delta = new Vector4(0, 0, 0, -1.0f / (60 * decay_time));
 
             Game.instance.particle_manager.add(flash);
-        }
-
-        public static void spawnFloatyText(string text, Vector2 position, float size, Vector4 color)
-        {
-            Particle floaty = new Particle(AppMain.textures.font);
-
-            floaty.position = position;
-            floaty.velocity = new Vector2(0, -0.2f);
-            floaty.scale = Vector2.one / 2 * size;
-            floaty.color = color;
-            floaty.color_delta = new Vector4(0, 0, 0, -0.25f / 60);
-            floaty.text = text;
-            floaty.position.x = Math.Max(floaty.position.x, 24 * floaty.scale.x * text.Length);
-
-            Game.instance.particle_manager.add(floaty);
         }
 
         public static Vector4 ammoColor(Gun.Ammo type)

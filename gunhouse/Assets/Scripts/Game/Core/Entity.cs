@@ -337,7 +337,6 @@ namespace Gunhouse
         public int timeout;
 
         public Atlas atlas;
-        public string text;
         public float frame;
         public float frame_speed;
         public bool loop;
@@ -354,10 +353,9 @@ namespace Gunhouse
 
         public List<Entity> collides_with;
 
-        public void Dispose ()
+        public void Dispose()
         {
             atlas = null;
-            text = null;
             collides_with = null;
             collide_behavior = null;
             tick_behavior = null;
@@ -385,7 +383,6 @@ namespace Gunhouse
             loop_start = 0;
             loop_end = a.n_sprites;
             remove = false;
-            text = null;
             ground_at = 600;
             time = 0;
             collide_behavior = null;
@@ -495,11 +492,10 @@ namespace Gunhouse
         public override void draw()
         {
             for (int i = 0; i < particle_count; i++) {
-                Particle p = particles [i];
+                Particle p = particles[i];
                 if (p.remove) continue;
 
-                if (p.text == null) p.atlas.draw((int)p.frame, p.position, p.origin, p.scale, p.angle, p.color);
-                else Text.Draw(p.position, p.text, p.scale, p.color);
+                p.atlas.draw((int)p.frame, p.position, p.origin, p.scale, p.angle, p.color);
             }
         }
     }

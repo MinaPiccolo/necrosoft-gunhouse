@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using System.Collections;
 using System.Text;
 using Necrosoft.ThirdParty;
 using TMPro;
@@ -9,11 +7,11 @@ using TMPro;
 namespace Gunhouse.Menu
 {
     public enum MenuState { None, Splash, Title, PickADay, Pause, Store, Options, Stats, Quit,
-                            Graphics, Audio, Help, Input, Credits, About, Loading };
+                            Graphics, Audio, Help, Input, Credits, About, Loading, EndWave, EndGame };
 
     public class MainMenu : MonoBehaviour
     {
-        [SerializeField] Image fade;
+        [SerializeField] CanvasGroup fade;
         [SerializeField] MenuLoading loading;
         [SerializeField] Portraits portraits;
         [SerializeField] MenuContextButtons buttons;
@@ -28,11 +26,16 @@ namespace Gunhouse.Menu
         MenuPage[] pages;
         MenuPage activePage;
         PlayerInput input;
+        public static bool ignoreFocus;
+        bool ignoreEffect;
+        bool ignoreSelectEffectForever;
+        int clearInput;
+        GameObject[] lastEffect = new GameObject[2];
 
         [System.NonSerialized] public bool ignore_input = true;
         [System.NonSerialized] public StringBuilder builder = new StringBuilder(170);
-        [System.NonSerialized] public int SelectedWave = 0;
-        public float FadeAlpha { get { return fade.color.a; } }
+        [System.NonSerialized] public int SelectedWave;
+        public void PortraitsHide() { portraits.Play(HashIDs.menu.Outtro); }
 
         void Awake()
         {
@@ -41,26 +44,89 @@ namespace Gunhouse.Menu
             pages = GetComponentsInChildren<MenuPage>(true);
 
             HashIDs.GenerateAnimationHashIDs();
+
+            fade.gameObject.SetActive(true);
+            fade.alpha = 1;
         }
+
+        void Start() { Fade(0, 0.5f); }
 
         void Update()
         {
             Cheats();
+            ShouldFocus();
 
             if (ignore_input) return;
 
-            ExitMenu();
+            if (input.AnyWasPressed && currentMenu == MenuState.Splash) { ClosePage(); }
+            if (input.Cancel.WasPressed) { ClosePage(); }
+
+            RefocusMenu();
         }
 
-        void LateUpdate()
+        void Cheats()
         {
-            if (ignore_input) return;
+            #if UNITY_EDITOR
 
-            currentSelected = EventSystem.current.currentSelectedGameObject;
-            if (currentSelected == null && lastSelected != null && lastSelected.activeSelf) {
-                EventSystem.current.SetSelectedGameObject(lastSelected);
+            if (UnityEngine.Input.GetKeyDown(KeyCode.I)) {
+                DataStorage.StartOnWave++;
+                MetaState.setCoefficients(DataStorage.StartOnWave);
             }
-            lastSelected = EventSystem.current.currentSelectedGameObject;
+            else if (UnityEngine.Input.GetKeyDown(KeyCode.K)) {
+                DataStorage.StartOnWave--;
+                if (DataStorage.StartOnWave < 0) DataStorage.StartOnWave = 0;
+                MetaState.setCoefficients(DataStorage.StartOnWave);
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.J)) { DataStorage.Money -= 100000; }
+            else if (UnityEngine.Input.GetKeyDown(KeyCode.L)) { DataStorage.Money += 100000; }
+
+            #endif
+        }
+
+        void ShouldFocus()
+        {
+            if (input.AnyIsPressed && ignoreFocus) {
+                ignoreFocus = false;
+                ignoreSelectEffectForever = false;
+                SelectTouchDisable.SetButtonHighlight(ignoreFocus);
+            }
+
+            if (ignoreFocus) { return; }
+            ignoreFocus = (UnityEngine.Input.touchCount > 0) ||
+                          UnityEngine.Input.GetMouseButton(0);
+            if (ignoreFocus) { ignoreSelectEffectForever = true; SelectTouchDisable.SetButtonHighlight(ignoreFocus); }
+        }
+
+        void RefocusMenu()
+        {
+            /* when the menu is refocused, to prevent it jumping
+                to the next item we need to clear the input. however this
+                needs to happen over multiple frames because movement is
+                based on IsPressed rather theen WasPressed */
+            if (clearInput > 0) { input.ClearInput(); clearInput--; }
+
+            if (!input.AnyIsPressed) { return; }
+            if (EventSystem.current.currentSelectedGameObject != null) {
+                if (EventSystem.current.currentSelectedGameObject.activeInHierarchy) { return; }
+                if (activePage.refocusSelected == null) { return; }
+                clearInput = 10;
+                input.ClearInput();
+                EventSystem.current.SetSelectedGameObject(activePage.refocusSelected);
+            }
+            else {
+                if (activePage.refocusSelected == null) { return; }
+                clearInput = 10;
+                input.ClearInput();
+                EventSystem.current.SetSelectedGameObject(activePage.refocusSelected);
+            }
+        }
+
+        #region Public
+
+        public void ClosePage() /* attached to onclick context button */
+        {
+            activePage.CancelPressed();
         }
 
         public void SetPage(MenuState pageID)
@@ -72,21 +138,32 @@ namespace Gunhouse.Menu
                 pages[i].Play(HashIDs.menu.Intro);
 
                 activePage = pages[i];
-                currentMenu = pageID;
             }
 
-            if (currentMenu >= MenuState.Title && currentMenu != MenuState.Loading &&
-                !portraits.gameObject.activeSelf) {
+            currentMenu = pageID;
+
+            /* should diplay portrait */
+            if (currentMenu >= MenuState.Title &&
+                currentMenu != MenuState.Pause &&
+                currentMenu != MenuState.EndWave &&
+                currentMenu != MenuState.EndGame &&
+                currentMenu != MenuState.Loading &&
+                !portraits.gameObject.activeInHierarchy && !AppMain.IsPaused) {
                 portraits.gameObject.SetActive(true);
-                portraits.SelectPortrait(Random.Range(0, 4));
+                portraits.SelectPortrait(UnityEngine.Random.Range(0, 4));
             }
         }
 
-        public void SetActiveContextButtons(bool enable, bool selectEnabled = true)
+        public void SetActiveBackButton(bool active) { buttons.SetActiveBackButton(active); }
+        public void SetActiveContextButtons(bool selectEnabled = true, bool cancelEnabled = true)
         {
-            ignore_input = !enable;
-            buttons.gameObject.SetActive(enable);
-            buttons.EnableButtons(selectEnabled);
+            ignore_input = !(selectEnabled || cancelEnabled);
+            buttons.gameObject.SetActive(selectEnabled || cancelEnabled);
+            buttons.EnableButtons(selectEnabled, cancelEnabled);
+            buttons.SetColor(!AppMain.IsPaused && currentMenu != MenuState.EndWave &&
+                             currentMenu != MenuState.Help);
+
+            SelectTouchDisable.SetButtonHighlight(ignoreFocus);
         }
 
         public void QuitGame()
@@ -98,86 +175,20 @@ namespace Gunhouse.Menu
             #endif
         }
 
-        public void DismissSplash()
+        public void SetFocus(GameObject item, bool disableEffect = false)
         {
-            ignore_input = true;
-            activePage.Play(HashIDs.menu.Outtro);
-        }
+            if (ignoreFocus && activePage.pageID != MenuState.Store) { return; }
 
-        public static void SetFocus(GameObject item)
-        {
+            ignoreEffect = item != null && !disableEffect;
+
             EventSystem.current.SetSelectedGameObject(null); /* clear to reset focus */
-            if (item == null) return;
+
+            if (item == null) {
+                lastEffect[1] = null;
+                return;
+            }
+
             EventSystem.current.SetSelectedGameObject(item);
-        }
-
-        void ExitMenu()
-        {
-            if (input.AnyWasPressed && currentMenu == MenuState.Splash) { DismissSplash(); }
-
-            if (!input.Cancel.WasPressed) return;
-
-            ignore_input = true;
-
-            activePage.Play(HashIDs.menu.Outtro);
-            buttons.gameObject.SetActive(false);
-
-            if (currentMenu == MenuState.Title ||
-                currentMenu == MenuState.Pause) {
-                PortraitsHide();
-            }
-        }
-
-        public void PortraitOrder(int index) { portraits.SortOrder = index; }
-        public void PortraitsHide() { portraits.Play(HashIDs.menu.Outtro); }
-    
-        public void FadeInOut(bool fadeIn, float time = 1.0f)
-        {
-            StartCoroutine(FadeInOut(fadeIn ? 1 : 0, fadeIn ? 0 : 1, time));
-        }
-
-        IEnumerator FadeInOut(float from, float to, float time)
-        {
-            fade.gameObject.SetActive(true);
-            Color color = from < 1 ? Color.clear : Color.black;
-            fade.color = color;
-
-            float t = 0.0f;
-            float rate = 1.0f / time;
-
-            while (t < 1.0) {
-                t += Time.deltaTime * rate;
-                color.a = Mathf.Lerp(from, to, t);
-                fade.color = color;
-
-                yield return null;
-            }
-
-            fade.color = color;
-            if (fade.color.a < 0.1f) { fade.gameObject.SetActive(false); }
-        }
-
-        void Cheats()
-        {
-            #if UNITY_EDITOR
-
-            int key = Util.keyRepeat("level select", 0, 20, 5, Input.last_key);
-
-            if (key == (int)KeyCode.I) {
-                DataStorage.StartOnWave++;
-                MetaState.setCoefficients(DataStorage.StartOnWave);
-            }
-
-            if (key == (int)KeyCode.K) {
-                DataStorage.StartOnWave--;
-                if (DataStorage.StartOnWave < 0) DataStorage.StartOnWave = 0;
-                MetaState.setCoefficients(DataStorage.StartOnWave);
-            }
-
-            if (key == (int)KeyCode.J) { DataStorage.Money -= 100000; }
-            if (key == (int)KeyCode.L) { DataStorage.Money += 100000; }
-
-            #endif
         }
 
         public string DayName(int wave)
@@ -216,5 +227,41 @@ namespace Gunhouse.Menu
                 }
             }
         }
+
+        public void Fade(float finish, float time, System.Action onComplete = null)
+        {
+            fade.gameObject.SetActive(true);
+            //fade.alpha = start;
+            LeanTween.cancel(fade.gameObject);
+            LeanTween.alphaCanvas(fade, finish, time).setOnComplete(() => {
+                fade.gameObject.SetActive(!(fade.alpha < 0.1f));
+                if (onComplete != null) { onComplete(); }
+            });
+        }
+
+        public void PlaySelect()
+        {
+            if (ignoreEffect && !ignoreSelectEffectForever) {
+                ignoreEffect = false;
+                return;
+            }
+
+            if (lastEffect[0] == EventSystem.current.currentSelectedGameObject) return;
+            lastEffect[0] = EventSystem.current.currentSelectedGameObject;
+
+            if (ignoreSelectEffectForever) { return; }
+
+            Necrosoft.Choom.PlayEffect(SoundAssets.UIConfirm);
+        }
+
+        public void PlayConfirm()
+        {
+            if (lastEffect[1] != null && lastEffect[1] == EventSystem.current.currentSelectedGameObject) return;
+            lastEffect[1] = EventSystem.current.currentSelectedGameObject;
+
+            Necrosoft.Choom.PlayEffect(SoundAssets.UISelect);
+        }
+
+        #endregion
     }
 }

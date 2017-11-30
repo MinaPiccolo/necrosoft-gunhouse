@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Necrosoft;
 
 namespace Gunhouse.Menu
 {
@@ -22,7 +23,7 @@ namespace Gunhouse.Menu
         protected override void IntroReady()
         {
             StartCoroutine(BeginAutoScroll());
-            menu.SetActiveContextButtons(true, false);
+            menu.SetActiveContextButtons(false, true);
         }
 
         protected override void OuttroFinished()
@@ -30,14 +31,23 @@ namespace Gunhouse.Menu
             StopCoroutine(BeginAutoScroll());
             scroll.verticalNormalizedPosition = 1;
             gameObject.SetActive(false);
+            DisplayEnding = false;
+            transitionID = MenuState.Options;
+            ScrollDelay = 0;
         }
 
-        protected override void OuttroStartNextIntro() { base.OuttroStartNextIntro(); StopAllCoroutines(); }
+        protected override void OuttroStartNextIntro()
+        {
+            if (DisplayEnding) { Choom.Play("Music/title"); }
+            base.OuttroStartNextIntro();
+        }
 
         void OnEnable()
         {
             input = FindObjectOfType<PlayerInput>();
-            for (int i = 0; i < gameEnding.Length; ++i) {gameEnding[i].SetActive(DisplayEnding); }
+            for (int i = 0; i < gameEnding.Length; ++i) { gameEnding[i].SetActive(DisplayEnding); }
+
+            transitionID = DisplayEnding ? MenuState.Title : MenuState.Options;
         }
 
         void Update()
@@ -58,9 +68,8 @@ namespace Gunhouse.Menu
 
             yield return new WaitForSeconds(finishedDelay);
 
-            transitionID = DisplayEnding ? MenuState.Title : MenuState.Options;
             Play(HashIDs.menu.Outtro);
-            menu.SetActiveContextButtons(false);
+            menu.SetActiveContextButtons(false, false);
         }
 
         public void ControllerIncreaseScrollSpeed(bool increase) { speedController = increase; }

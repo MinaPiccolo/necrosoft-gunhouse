@@ -10,15 +10,14 @@ namespace Gunhouse.Menu
 
         protected override void IntroReady()
         {
-            menu.SetActiveContextButtons(true, true);
-            MainMenu.SetFocus(lastSelected);
+            menu.SetActiveContextButtons(false, true);
+            menu.SetFocus(lastSelected);
         }
 
         protected override void OuttroFinished()
         {
             /* record last selected item for if the player returns */
             lastSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            MainMenu.SetFocus(null);
 
             base.OuttroFinished();
         }

@@ -1,75 +1,75 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using Necrosoft.ThirdParty;
 
 namespace Gunhouse.Menu
 {
     public class MenuPickADay : MenuPage
     {
-        [SerializeField] GameObject lastSelected;
+        [SerializeField] RectTransform clockHandle;
         [SerializeField] GameObject[] arrows;
-        [Space(10)] [SerializeField] Image dayImage;
         [SerializeField] TextMeshProUGUI dayText;
 
         PlayerInput input;
         int selected_day;
         int max_day;
+        float[] clock_angles = { -25, 180, 47 };
+
+        int arrow_input;
+        int arrow_input_last;
+        public void ArrowPressed(bool right) { arrow_input = right ? 1 : -1; }
+        public void ArrowReleased() { arrow_input = 0; arrow_input_last = 0; }
+        public void ArrowEnter(bool right) { if (arrow_input_last == (right ? 1 : -1)) { arrow_input = right ? 1 : -1; } }
+        public void ArrowExit() { if (arrow_input == 0) { return; } arrow_input_last = arrow_input; arrow_input = 0; }
 
         protected override void Initalise() { pageID = MenuState.PickADay; transitionID = MenuState.Title; }
         protected override void OuttroStartNextIntro()
         {
             base.OuttroStartNextIntro();
 
-            if (transitionID == MenuState.Loading) {
-                menu.PortraitOrder(2);
-                menu.FadeInOut(false, 0.5f);
-            }
-
             transitionID = MenuState.Title; /* reset it for next time */
         }
     
         protected override void IntroReady()
         {
-            menu.SetActiveContextButtons(true, true);
-            MainMenu.SetFocus(lastSelected);
-        }
-
-        protected override void OuttroFinished()
-        {
-            /* record last selected item for if the player returns */
-            lastSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            MainMenu.SetFocus(null);
-
-            base.OuttroFinished();
+            menu.SetActiveContextButtons();
+            menu.SetActiveBackButton(true);
+            menu.SetFocus(refocusSelected, true);
         }
 
         void OnEnable()
         {
             input = FindObjectOfType<PlayerInput>();
 
+            arrow_input = 0;
+            arrow_input_last = 0;
             max_day = DataStorage.StartOnWave;
             selected_day = max_day;
 
             SetArrows(selected_day != 0, selected_day != max_day);
-            UpdateWaveInfo();
+            dayText.text = menu.DayName(selected_day);
+            clockHandle.eulerAngles = Vector3.forward * clock_angles[selected_day % 3];
         }
 
         void Update()
         {
             if (menu.ignore_input) return;
 
-            if (input.Left.WasPressed) { ChangeWave(false); }
-            else if (input.Right.WasPressed) { ChangeWave(true);}
+            int horitzonal = Util.keyRepeat("arrow_directional", 0, 30, 10,
+                                            arrow_input == 0 ? (int)input.Move.x : arrow_input);
+            switch (horitzonal) { case -1: ChangeWave(false); break; case 1: ChangeWave(true); break; }
         }
 
-        public void ChangeWave(bool right)
+        void ChangeWave(bool right)
         {
             int new_index = Mathf.Clamp(right ? selected_day + 1 : selected_day - 1, 0, max_day); 
             if (new_index == selected_day) return;
             selected_day = new_index;
 
+            Necrosoft.Choom.PlayEffect(SoundAssets.UIConfirm);
             SetArrows(selected_day != 0, selected_day != max_day);
-            UpdateWaveInfo();
+            dayText.text = menu.DayName(selected_day);
+            clockHandle.eulerAngles = Vector3.forward * clock_angles[selected_day % 3];
         }
 
         void SetArrows(bool left, bool right)
@@ -78,16 +78,11 @@ namespace Gunhouse.Menu
             arrows[1].SetActive(right);
         }
 
-        void UpdateWaveInfo()
-        {
-            dayText.text = menu.DayName(selected_day);
-        }
-
         public void StartPlay()
         {
             transitionID = MenuState.Loading;
             Play(HashIDs.menu.Outtro);
-            menu.SetActiveContextButtons(false);
+            menu.SetActiveContextButtons(false, false);
 
             menu.SelectedWave = selected_day;
             MetaState.hardcore_mode = false;

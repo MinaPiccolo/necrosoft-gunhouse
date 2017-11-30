@@ -19,8 +19,8 @@ namespace Gunhouse
 
             Input.Pad = GameObject.FindObjectOfType<PlayerInput>();
 
+            AppMain.MatchBonus = GameObject.FindObjectOfType<MatchBonus>();
             AppMain.MainMenu = GameObject.FindObjectOfType<Menu.MainMenu>();
-            AppMain.menuOverlay = GameObject.FindObjectOfType<MenuOverlay>();
             AppMain.tutorial = GameObject.FindObjectOfType<MenuTutorial>();
             AppMain.menuAchievements = GameObject.FindObjectOfType<MenuAchievements>();
 

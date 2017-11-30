@@ -97,7 +97,7 @@ namespace Gunhouse
         #region Field Properties
 
         public Atlas arrow;
-        public Atlas ui, hud, house, housebits, elements;
+        public Atlas hud, house, housebits, elements;
         public Atlas door, pickups;
 
         public Atlas minion, orphan, circle, explosion, gunpoof, block, block_logo, cracks;
@@ -546,9 +546,6 @@ namespace Gunhouse
 
             counter_money = new Atlas("counter-money-numbers.png", new Vector2(16, 20), z_order++);
             counter_money.texture.hud = true;
-
-            ui = new Atlas("ui.png", "ui.txa.txt", z_order++);
-            ui.texture.hud = true;
 
             arrow = new Atlas("arrow.png", z_order++);
             arrow.texture.hud = true;
