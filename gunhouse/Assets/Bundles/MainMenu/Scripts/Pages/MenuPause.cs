@@ -30,6 +30,9 @@ namespace Gunhouse.Menu
             /* record last selected item for if the player returns */
             lastSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
 
+            if (transitionID == MenuState.Title || 
+                transitionID == MenuState.None) { lastSelected = refocusSelected; }
+
             if (transitionID == MenuState.None) {
                 Choom.Pause(false);
 
@@ -39,7 +42,7 @@ namespace Gunhouse.Menu
 
                 menu.SetActiveDayName(true);
                 AppMain.tutorial.Pause(false);
-                lastSelected = null;
+                lastSelected = refocusSelected;
             }
 
             transitionID = MenuState.None; /* reset it for next time */
@@ -124,7 +127,6 @@ namespace Gunhouse.Menu
                 AppMain.IsPaused = false;
             } break;
             }
-
             CancelPressed();
         }
     }

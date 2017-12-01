@@ -8,8 +8,10 @@ namespace Gunhouse.Menu
     {
         [SerializeField] GameObject[] arrows;
         [SerializeField] TextMeshProUGUI title;
+        [SerializeField] GameObject[] teachers;
         [SerializeField] TextMeshProUGUI bubbleText;
         [SerializeField] Image[] blocks;
+        [SerializeField] HorizontalLayoutGroup blockLayout;
         [SerializeField] GameObject[] houses;
 
         int page_index;
@@ -33,15 +35,19 @@ namespace Gunhouse.Menu
 
         public override void CancelPressed()
         {
+            for (int i = 0; i < blocks.Length; ++i) { blocks[i].gameObject.SetActive(false); }
+            blocks[0].transform.parent.gameObject.SetActive(false);
+            for (int i = 0; i < houses.Length; ++i) { houses[i].SetActive(false); }
+            houses[0].transform.parent.gameObject.SetActive(false);
+
             transitionID = AppMain.IsPaused ? MenuState.Pause : MenuState.Options;
-            menu.Fade(0, 0.25f);
+
             base.CancelPressed();
         }
 
         void OnEnable()
         {
             menu.PortraitsHide();
-            menu.Fade(0.9f, 0.25f);
 
             input = FindObjectOfType<PlayerInput>();
 
@@ -50,6 +56,10 @@ namespace Gunhouse.Menu
             page_index = 0;
             page_count = GText.help.Length;
 
+            teachers[0].SetActive(true);
+            teachers[1].SetActive(false);
+
+            blocks[0].transform.parent.gameObject.SetActive(false);
             for (int i = 0; i < blocks.Length; ++i) {
                 blocks[i].color = Color.white;
                 blocks[i].gameObject.SetActive(false);
@@ -94,6 +104,14 @@ namespace Gunhouse.Menu
                 title.text = GText.help_titles[0];
             }
 
+            switch (page_index)
+            {
+            case (int)HelpOrder.PUZZLE_TIP_0:
+            case (int)HelpOrder.TOWER_DEFENSE_TIP_0:
+            case (int)HelpOrder.HARDCORE_1: { teachers[0].SetActive(false); teachers[1].SetActive(true); } break;
+            default: { teachers[0].SetActive(true); teachers[1].SetActive(false);} break;
+            }
+
             bubbleText.text = GText.help[page_index];
 
             #region Block Displaying
@@ -105,6 +123,9 @@ namespace Gunhouse.Menu
             if (page_index == (int)HelpOrder.PUZZLE_TIP_2) { item_highlighted++; }
             if (page_index == (int)HelpOrder.PUZZLE_TIP_6) { item_highlighted = blocks.Length + 2; }
 
+            if (item_enabled < 0) { blocks[0].transform.parent.gameObject.SetActive(false); }
+            else { blocks[0].transform.parent.gameObject.SetActive(true); }
+
             for (int i = 0; i < blocks.Length; ++i) {
                 if (i > item_enabled) { blocks[i].gameObject.SetActive(false); }
                 else {
@@ -113,6 +134,8 @@ namespace Gunhouse.Menu
                 }
             }
 
+            blockLayout.padding.right = blockLayout.padding.left = page_index == (int)HelpOrder.PUZZLE_TIP_1 ? 100 : 50;
+
             #endregion
 
             #region House Displaying
@@ -120,16 +143,21 @@ namespace Gunhouse.Menu
             switch (page_index)
             {
             case (int)HelpOrder.TOWER_DEFENSE_TIP_1: {
+                houses[0].transform.parent.gameObject.SetActive(true);
                 houses[0].SetActive(true);
                 houses[1].SetActive(true);
                 houses[2].SetActive(false);
             } break;
             case (int)HelpOrder.TOWER_DEFENSE_TIP_2: {
+                houses[0].transform.parent.gameObject.SetActive(true);
                 houses[0].SetActive(false);
                 houses[1].SetActive(false);
                 houses[2].SetActive(true);
             } break;
-            default: { for (int i = 0; i < houses.Length; ++i) { houses[i].SetActive(false); } } break;
+            default: {
+                for (int i = 0; i < houses.Length; ++i) { houses[i].SetActive(false); }
+                houses[0].transform.parent.gameObject.SetActive(false);
+            } break;
             }
 
             #endregion

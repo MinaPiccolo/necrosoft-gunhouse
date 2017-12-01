@@ -20,19 +20,17 @@ namespace Gunhouse.Menu
         {
             base.OuttroStartNextIntro();
 
-            if (transitionID == MenuState.Loading) { /* only for hardcore */
-                MetaState.hardcore_mode = true;
-            }
-
-            transitionID = MenuState.Splash; /* reset it for next time */
-        }
-
-        protected override void OuttroFinished()
-        {
             /* record last selected item for if the player returns */
             lastSelected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
 
-            base.OuttroFinished();
+            if (transitionID == MenuState.Loading) { /* only for hardcore */
+                MetaState.hardcore_mode = true;
+            }
+            else if (transitionID == MenuState.Splash) {
+                lastSelected = refocusSelected;
+            }
+
+            transitionID = MenuState.Splash; /* reset it for next time */
         }
 
         public override void CancelPressed()

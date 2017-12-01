@@ -299,7 +299,7 @@ namespace Gunhouse
             } break;
             }
 
-            if (displaySlow) TextBlock.Display(tasks[i], stringBuilder.ToString());
+            if (displaySlow && tasks[i].gameObject.activeInHierarchy) TextBlock.Display(tasks[i], stringBuilder.ToString());
             else tasks[i].text = stringBuilder.ToString();
         }
     }

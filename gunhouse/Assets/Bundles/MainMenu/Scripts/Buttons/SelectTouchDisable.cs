@@ -8,12 +8,11 @@ public class SelectTouchDisable : MonoBehaviour, IPointerClickHandler,
                                   IPointerDownHandler, IPointerUpHandler,
                                   IPointerEnterHandler, IDeselectHandler
 {
+    [SerializeField] bool enableButton;
     static Button[] selectables;
-    static Color highlightColor = new Color(1, 0.9f, 0.24f);
-    static Color pressedColor = new Color(1, 0.9f, 0.62f);
 
     void OnEnable() { selectables = transform.parent.GetComponentsInChildren<Button>(); SetActiveButton(true); }
-    public void OnPointerClick(PointerEventData eventData) { SetActiveButton(false); }
+    public void OnPointerClick(PointerEventData eventData) { if (enableButton) { return; } SetActiveButton(false); }
     public void OnPointerDown(PointerEventData eventData) { SetActiveButton(false); }
     public void OnPointerUp(PointerEventData eventData) { SetActiveButton(true); }
     public void OnDeselect(BaseEventData eventData) { GetComponent<Selectable>().OnPointerExit(null); }
@@ -21,7 +20,6 @@ public class SelectTouchDisable : MonoBehaviour, IPointerClickHandler,
     public void OnPointerEnter(PointerEventData eventData)
     {
         MainMenu.ignoreFocus = true;
-        SetButtonHighlight(true);
 
         if (!EventSystem.current.alreadySelecting) EventSystem.current.SetSelectedGameObject(gameObject);
     }
@@ -32,16 +30,5 @@ public class SelectTouchDisable : MonoBehaviour, IPointerClickHandler,
             if (selectables[i].gameObject == gameObject) continue;
             selectables[i].interactable = active;
         }
-    }
-
-    public static void SetButtonHighlight(bool white)
-    {
-        if (selectables == null || selectables.Length == 0) { return; }
-
-        ColorBlock colors = selectables[0].colors;
-        colors.highlightedColor = white ? Color.white : highlightColor;
-        colors.pressedColor = white ? highlightColor : pressedColor;
-
-        for (int i = 0; i < selectables.Length; ++i) { selectables[i].colors = colors; }
     }
 }

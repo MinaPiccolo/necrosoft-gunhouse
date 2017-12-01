@@ -19,8 +19,8 @@ namespace Gunhouse
         public PlayerAction Cancel { get { return actions.Cancel; } }
         public PlayerAction Escape { get { return actions.Escape; } }
 
-        public bool AnyWasPressed { get { return actions.AnyWasPressed(); } }
-        public bool AnyIsPressed { get { return actions.AnyIsPressed(); } }
+        public bool AnyWasPressed { get { return actions.AnyWasPressed() || InputManager.ActiveDevice.AnyButtonWasPressed; } }
+        public bool AnyIsPressed { get { return actions.AnyIsPressed() || InputManager.ActiveDevice.AnyButtonIsPressed; } }
         public Vector2 Move = Vector2.zero;
 
         void OnEnable()
@@ -71,16 +71,20 @@ namespace Gunhouse
         public PlayerAction Cancel;
         public PlayerAction Escape;
 
+        public PlayerAction AnyOther;
+
         public bool AnyWasPressed()
         {
             return Up.WasPressed || Down.WasPressed || Left.WasPressed ||
-                   Right.WasPressed || Submit.WasPressed || Cancel.WasPressed;
+                   Right.WasPressed || Submit.WasPressed || Cancel.WasPressed ||
+                   Start.WasPressed || Escape.WasPressed || AnyOther.WasPressed;
         }
 
         public bool AnyIsPressed()
         {
             return Up.IsPressed || Down.IsPressed || Left.IsPressed ||
-                   Right.IsPressed || Submit.IsPressed || Cancel.IsPressed;
+                   Right.IsPressed || Submit.IsPressed || Cancel.IsPressed ||
+                   Start.IsPressed || Escape.IsPressed || AnyOther.IsPressed;
         }
 
         public PlayerActions()
@@ -95,6 +99,8 @@ namespace Gunhouse
             Cancel = CreatePlayerAction("Cancel");
             Start = CreatePlayerAction("Start");
             Escape = CreatePlayerAction("Escape");
+
+            AnyOther = CreatePlayerAction("AnyOther");
         }
 
         public static PlayerActions CreateBindings()
@@ -118,6 +124,11 @@ namespace Gunhouse
 
             actions.Start.AddDefaultBinding(InputControlType.Start);
             actions.Start.AddDefaultBinding(InputControlType.Command);
+
+            actions.AnyOther.AddDefaultBinding(InputControlType.LeftBumper);
+            actions.AnyOther.AddDefaultBinding(InputControlType.RightBumper);
+            actions.AnyOther.AddDefaultBinding(InputControlType.LeftTrigger);
+            actions.AnyOther.AddDefaultBinding(InputControlType.RightTrigger);
 
             #if UNITY_SWITCH
             actions.Start.AddDefaultBinding(InputControlType.Plus);

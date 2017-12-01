@@ -89,13 +89,12 @@ namespace Gunhouse.Menu
             if (input.AnyIsPressed && ignoreFocus) {
                 ignoreFocus = false;
                 ignoreSelectEffectForever = false;
-                SelectTouchDisable.SetButtonHighlight(ignoreFocus);
             }
 
             if (ignoreFocus) { return; }
             ignoreFocus = (UnityEngine.Input.touchCount > 0) ||
                           UnityEngine.Input.GetMouseButton(0);
-            if (ignoreFocus) { ignoreSelectEffectForever = true; SelectTouchDisable.SetButtonHighlight(ignoreFocus); }
+            if (ignoreFocus) { ignoreSelectEffectForever = true; }
         }
 
         void RefocusMenu()
@@ -160,10 +159,7 @@ namespace Gunhouse.Menu
             ignore_input = !(selectEnabled || cancelEnabled);
             buttons.gameObject.SetActive(selectEnabled || cancelEnabled);
             buttons.EnableButtons(selectEnabled, cancelEnabled);
-            buttons.SetColor(!AppMain.IsPaused && currentMenu != MenuState.EndWave &&
-                             currentMenu != MenuState.Help);
-
-            SelectTouchDisable.SetButtonHighlight(ignoreFocus);
+            buttons.SetColor(!AppMain.IsPaused && currentMenu != MenuState.EndWave);
         }
 
         public void QuitGame()
