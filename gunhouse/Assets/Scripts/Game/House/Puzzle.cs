@@ -425,7 +425,6 @@ namespace Gunhouse
                 }
 
                 if (Input.Pad.Start.WasPressed) {
-                    AppMain.IsPaused = true;
                     AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
                 }
             }

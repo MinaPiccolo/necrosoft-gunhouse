@@ -210,6 +210,8 @@ namespace Gunhouse.Menu
 
         public void SetActiveDayName(bool active, bool cancel = false)
         {
+            if (!canvasDay.gameObject.activeInHierarchy) { return; }
+
             if (active) {
                 LeanTween.resume(dayTween.id);
             }

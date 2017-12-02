@@ -65,8 +65,11 @@ namespace Gunhouse
 
         void OnApplicationPause()
         {
-            #if UNITY_ANDROID || UNITY_IOS
-            if (AppMain.top_state is Game) { AppMain.top_state = new PauseState(AppMain.top_state); }
+            #if UNITY_ANDROID || UNITY_IOS || UNITY_SWITCH
+            if (AppMain.top_state is Game) {
+                AppMain.IsPaused = true;
+                AppMain.top_state = new MenuState(Menu.MenuState.Pause, AppMain.top_state);
+            }
             #endif
 
             Platform.SavePlayerData();

@@ -9,7 +9,14 @@ namespace Gunhouse
     {
         static void OnNotificationMessage(UnityEngine.Switch.Notification.Message message)
         {
-            Gunhouse.Game.HidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
+            if (Gunhouse.Game.instance != null) {
+                Gunhouse.Game.HidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
+            }
+
+            if (message == UnityEngine.Switch.Notification.Message.Resume && AppMain.top_state is Game) {
+                AppMain.IsPaused = true;
+                AppMain.top_state = new MenuState(Menu.MenuState.Pause, AppMain.top_state);
+            }
         }
 
         [RuntimeInitializeOnLoadMethod]
