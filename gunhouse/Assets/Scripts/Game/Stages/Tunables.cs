@@ -575,8 +575,8 @@ namespace Gunhouse
         public const float aim_error = 0.01f;
         public const int damage = 5;
         public const int damage_upgrade = 1;
-        public const float size = 35.0f;
-        public const float size_upgrade = 5.0f;
+        public const float size = 18;//35.0f;
+        public const float size_upgrade = 3;//5.0f;
         public const float freeze_time = 2.0f;
         public const float freeze_time_upgrade = 1.0f;
         public const float explosion_size = 32.0f;
@@ -588,13 +588,13 @@ namespace Gunhouse
         public const float special_penguin_freeze_time_upgrade = 0.75f;
         public const int special_penguin_count = 15;
         public const int special_penguin_count_upgrade = 5;
-        public const float special_penguin_size = 45.0f;
-        public const float special_penguin_size_upgrade = 5.0f;
+        public const float special_penguin_size = 25;//45.0f;
+        public const float special_penguin_size_upgrade = 3;//5.0f;
         public const float special_penguin_speed = 15.0f;
         public const float special_penguin_rate = 8.0f;
         public const float special_penguin_rate_upgrade = 0.5f;
-        public const float special_explosion_size = 64.0f;
-        public const float special_explosion_size_upgrade = 32.0f;
+        public const float special_explosion_size = 32;//64.0f;
+        public const float special_explosion_size_upgrade = 16;//32.0f;
     }
 
     public class VegetableGun

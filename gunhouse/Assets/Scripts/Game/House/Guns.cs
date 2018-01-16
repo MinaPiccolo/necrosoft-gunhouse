@@ -1244,12 +1244,13 @@ namespace Gunhouse
             dest_y = position.y + 550;
 
             int s = (int)(IglooGun.special_penguin_size + IglooGun.special_penguin_size_upgrade * upgrade);
-            size = new Vector2 (s, s) / 100;
+            size = new Vector2(s, s) / 100;
         }
 
         public override void draw()
         {
-            AppMain.textures.penguinbullet.draw((int)frame, position, size, Util.angle(velocity), Vector4.one);
+            AppMain.textures.gun_penguin.draw((int)frame, position, size, Util.angle(velocity), Vector4.one);
+            //AppMain.textures.penguinbullet.draw((int)frame, position, size, Util.angle(velocity), Vector4.one);
         }
 
         public override void tick()
@@ -1300,7 +1301,7 @@ namespace Gunhouse
             DataStorage.ShotsFired++;
             //Util.trace(DataStorage.ShotsFired);
 
-            Particle pb = new Particle(AppMain.textures.penguinbullet);
+            Particle pb = new Particle(AppMain.textures.gun_penguin);
             pb.frame_speed = 0.15f;
             pb.loop_start = 0;
             pb.loop_end = 2;
@@ -1315,7 +1316,7 @@ namespace Gunhouse
             float s = special ? IglooGun.special_penguin_size + IglooGun.special_penguin_size_upgrade * upgrade :
                                 IglooGun.size + IglooGun.size_upgrade * upgrade;
 
-            pb.scale = new Vector2 (s, s) / 100.0f;
+            pb.scale = new Vector2(s, s) / 100.0f;
             pb.collide_behavior = (ref Particle p, Entity e) => {
                 p.remove = true;
 
@@ -1334,7 +1335,7 @@ namespace Gunhouse
                     (e as Target).damage(damage, Gun.Ammo.IGLOO);
                 }
 
-                Particle eb = new Particle(AppMain.textures.penguinbullet);
+                Particle eb = new Particle(AppMain.textures.gun_penguin);
                 eb.frame = 2;
                 eb.frame_speed = 0.15f;
                 eb.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
@@ -1744,17 +1745,10 @@ namespace Gunhouse
                     AppMain.textures.gun_fork.touch();
                     AppMain.textures.forkspecial.touch();
                     break;
-                case Gun.Ammo.IGLOO:
-                    AppMain.textures.gun_penguin.touch();
-
-                    AppMain.textures.penguinbullet.touch();
-                    break;
-                case Gun.Ammo.LIGHTNING:
-                    AppMain.textures.lightning_strike.touch();
-                    break;
+                case Gun.Ammo.IGLOO: AppMain.textures.gun_penguin.touch(); break;
+                case Gun.Ammo.LIGHTNING: AppMain.textures.lightning_strike.touch(); break;
                 case Gun.Ammo.SIN:
                     AppMain.textures.gun_sin.touch();
-
                     AppMain.textures.laserspecial.touch();
                     break;
                 case Gun.Ammo.SKULL:
