@@ -15,6 +15,7 @@ namespace Gunhouse
         [SerializeField] RectTransform textBorder;
         [SerializeField] TextMeshProUGUI tutorialText;
         [SerializeField] Animator skulls;
+        [SerializeField] Button button;
 
         [Space(10)] [SerializeField] Canvas switchMenu;
 
@@ -60,17 +61,13 @@ namespace Gunhouse
             }
             #endif
 
-            if (lessonIndex >= Lesson.DONE || isPaused) { return; }
-
             if (frameDelay) {
-                if (frameCounter++ > 10) {
+                if (frameCounter++ > 60) {
                     frameDelay = !frameDelay;
                     frameCounter = 0;
                 }
                 return;
             }
-
-            if (Input.Pad.Submit.WasPressed) { UpdateLesson(); }
         }
 
         void UpdateTextBox(bool displaySkull = true)
@@ -106,6 +103,7 @@ namespace Gunhouse
 
         public void UpdateLesson()
         {
+            if (frameDelay) { return; }
             if (lessonIndex >= Lesson.DONE || lessonIndex == Lesson.START || isPaused) { return; }
 
             /* NOTE(shane): this is to stop a bug being caused by clicking the gun and button in the same frame. */
@@ -179,6 +177,10 @@ namespace Gunhouse
             UpdateTextBox(displaySkull);
 
             previousTextIndex = textIndex;
+
+            if (button.gameObject.activeInHierarchy) {
+                UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(button.gameObject);
+            }
         }
 
         public void SetLesson(Lesson lesson)
@@ -262,6 +264,10 @@ namespace Gunhouse
             tutorialText.text = GText.tutorial[((int)lessonIndex - 1)][textIndex];
             UpdateTextBox();
             previousTextIndex = textIndex;
+
+            if (button.gameObject.activeInHierarchy) {
+                UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(button.gameObject);
+            }
         }
 
         public void Pause(bool pausing)

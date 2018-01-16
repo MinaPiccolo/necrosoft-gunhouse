@@ -24,6 +24,7 @@ namespace Gunhouse
 
         public static string bgmfilename;
 
+        public static Material spriteMaterial;
         public static Shader shader;
         public static int frame = 0;
         public static GameObject sfx;

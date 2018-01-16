@@ -55,7 +55,7 @@ namespace Gunhouse.Menu
             case StoreOption.StoreOptionRefundHeart: { builder.AppendFormat("{0} ${1}", GText.refund_heart, buttons[index].Money); } break;
             case StoreOption.StoreOptionRefundHealing: { builder.AppendFormat("{0} ${1}", GText.refund_healing, buttons[index].Money); } break;
             case StoreOption.StoreOptionRefundArmor: { builder.AppendFormat("{0} ${1}", GText.refund_armor, buttons[index].Money); } break;
-            case StoreOption.StoreOptionSlot: { builder.AppendFormat("{0} ${1}", GText.slot, index + 1); } break;
+            case StoreOption.StoreOptionSlot: { builder.AppendFormat("{0} {1}", GText.slot, index + 1); } break;
             }
 
             buttons[index].Text = builder.ToString();

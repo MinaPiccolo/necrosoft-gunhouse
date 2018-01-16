@@ -28,14 +28,22 @@ namespace Gunhouse
             });
 
             LeanTween.delayedCall(2, () =>{
-                if (!tasks[index].gameObject.activeInHierarchy) { return; }
-                TextBlock.Wipe(tasks[index],
-                    ()=> {
+                /* objectives can be deactivate earlier then the animation
+                    at certain points. TextBlock.Wipe requested an active gameobject */
+                if (tasks[index].gameObject.activeInHierarchy) {
+                    TextBlock.Wipe(tasks[index], ()=> {
+                        ticks[index].enabled = false;
+                        cash[index].transform.TranslateY(-50);
+                        cash[index].enabled = false;
+                        LeanTween.delayedCall(0.5f, () => { RequestTask(index); });
+                    });
+                }
+                else {
                     ticks[index].enabled = false;
                     cash[index].transform.TranslateY(-50);
                     cash[index].enabled = false;
-                    LeanTween.delayedCall(0.5f, () => { RequestTask(index); });
-                });
+                    RequestTask(index);
+                }
             });
         }
     }

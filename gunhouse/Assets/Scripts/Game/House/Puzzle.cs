@@ -82,10 +82,11 @@ namespace Gunhouse
                                                     1.0f, selected);
 
                 float square_size = System.Math.Min(size.x, size.y);
-                AppMain.textures.block_logo.draw(Puzzle.ammoToLogoSprite(type), pos,
-                                                 new Vector2(-1, 1) * square_size / 64 / 4,
-                                                 new Vector4(0.5f, 0.5f, 0.5f, 0.5f),
-                                                 1.0f);
+
+                AppMain.textures.block_logo.draw(Puzzle.AmmoToLogoSprite(type), pos,
+                        new Vector2(-1, 1) * square_size / 64 / 4,
+                        new Vector4(0.5f, 0.5f, 0.5f, 0.5f),
+                        1.0f);
             }
         }
     }
@@ -324,6 +325,8 @@ namespace Gunhouse
 
             #if UNITY_SWITCH
             hidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
+            #elif UNITY_PS4
+            hidePauseButton = true;
             #endif
         }
 
@@ -398,8 +401,9 @@ namespace Gunhouse
 
             if (AppMain.top_state == this) {
                 if (!hidePauseButton) {
-                    AppMain.textures.hud.draw((int)hud.Sprites.pause, new Vector2(AppMain.vscreen.x - 47, 47),
-                                              new Vector2(-1, 1) * 64 / 97, Vector4.one);
+                    AppMain.textures.ui_game.draw((int)ui_game.Sprites.button_pause,
+                                                  new Vector2(AppMain.vscreen.x - 47, 47),
+                                                  new Vector2(-0.5f, 0.5f) * 64 / 97, Vector4.one);
                 }
 
                 if (time > startWaveTimer) {
@@ -440,7 +444,12 @@ namespace Gunhouse
             #region Value Resets
 
             if (house.door_position < 1.0f) {
-                if (!MetaState.end_game) {
+                if (MetaState.end_game) {
+                    /* peter is allowed attack while in puzzle mode. */
+                    enemy_group.tickrate = 1;
+                    enemy_bullet_group.tickrate = 1;
+                }
+                else {
                     enemy_group.tickrate = 0;
                     enemy_bullet_group.tickrate = 0;
                 }
@@ -1500,67 +1509,74 @@ namespace Gunhouse
 
         public static Vector4 ammoColor(Gun.Ammo type)
         {
-            if (type == Gun.Ammo.DRAGON) { return new Vector4 (1.0f, 0.7f, 0.1f, 1); }
-            if (type == Gun.Ammo.IGLOO) { return new Vector4 (0.1f, 0.5f, 1.0f, 1); }
-            if (type == Gun.Ammo.SKULL) { return new Vector4 (0.8f, 0.2f, 0.7f, 1); }
-            if (type == Gun.Ammo.VEGETABLE) { return new Vector4 (0.4f, 0.8f, 0.3f, 1); }
-            if (type == Gun.Ammo.LIGHTNING) { return new Vector4 (1.0f, 0.3f, 0.3f, 1); }
-            if (type == Gun.Ammo.FLAME) { return new Vector4 (1.0f, 0.7f, 0.1f, 1); }
-            if (type == Gun.Ammo.FORK) { return new Vector4 (0.1f, 0.5f, 1.0f, 1); }
-            if (type == Gun.Ammo.BOUNCE) { return new Vector4 (0.8f, 0.2f, 0.7f, 1); }
-            if (type == Gun.Ammo.BOOMERANG) { return new Vector4 (0.4f, 0.8f, 0.3f, 1); }
-            if (type == Gun.Ammo.SIN) { return new Vector4 (1.0f, 0.3f, 0.3f, 1); }
+            switch (type)
+            {
+            case Gun.Ammo.DRAGON: return new Vector4 (1.0f, 0.7f, 0.1f, 1);
+            case Gun.Ammo.FLAME: return new Vector4 (1.0f, 0.7f, 0.1f, 1);
+            case Gun.Ammo.FORK: return new Vector4 (0.1f, 0.5f, 1.0f, 1);
+            case Gun.Ammo.IGLOO: return new Vector4 (0.1f, 0.5f, 1.0f, 1);
+            case Gun.Ammo.LIGHTNING: return new Vector4 (1.0f, 0.3f, 0.3f, 1);
+            case Gun.Ammo.SIN: return new Vector4 (1.0f, 0.3f, 0.3f, 1);
+            case Gun.Ammo.SKULL: return new Vector4 (0.8f, 0.2f, 0.7f, 1);
+            case Gun.Ammo.BOUNCE: return new Vector4 (0.8f, 0.2f, 0.7f, 1);
+            case Gun.Ammo.VEGETABLE: return new Vector4 (0.4f, 0.8f, 0.3f, 1);
+            case Gun.Ammo.BOOMERANG: return new Vector4 (0.4f, 0.8f, 0.3f, 1);
+            }
             return Vector4.one;
         }
 
-        public static int ammoElementToSprite(Gun.Ammo a)
+        public static int AmmoToSprite(Gun.Ammo type)
         {
-            if (a == Gun.Ammo.DRAGON) { return 0; }
-            if (a == Gun.Ammo.IGLOO) { return 1; }
-            if (a == Gun.Ammo.SKULL) { return 2; }
-            if (a == Gun.Ammo.VEGETABLE) { return 3; }
-            if (a == Gun.Ammo.LIGHTNING) { return 4; }
-            if (a == Gun.Ammo.FLAME) { return 5; }
-            if (a == Gun.Ammo.FORK) { return 6; }
-            if (a == Gun.Ammo.BOUNCE) { return 7; }
-            if (a == Gun.Ammo.BOOMERANG) { return 8; }
-            if (a == Gun.Ammo.SIN) { return 9; }
-            return -1;
-        }
-
-        public static int ammoToBlockSprite(Gun.Ammo a)
-        {
-            switch (a)
+            switch (type)
             {
-                case Gun.Ammo.DRAGON:
-                case Gun.Ammo.FLAME: return (int)block.Sprites.orange;
-                case Gun.Ammo.FORK:
-                case Gun.Ammo.IGLOO: return (int)block.Sprites.blue;
-                case Gun.Ammo.LIGHTNING:
-                case Gun.Ammo.SIN: return (int)block.Sprites.red;
-                case Gun.Ammo.SKULL:
-                case Gun.Ammo.BOUNCE: return (int)block.Sprites.purple;
-                case Gun.Ammo.VEGETABLE:
-                case Gun.Ammo.BOOMERANG: return (int)block.Sprites.green;
+            case Gun.Ammo.DRAGON: return (int)puzzle.Sprites.element_dragon;
+            case Gun.Ammo.FLAME: return (int)puzzle.Sprites.element_flame;
+            case Gun.Ammo.FORK: return (int)puzzle.Sprites.element_fork;
+            case Gun.Ammo.IGLOO: return (int)puzzle.Sprites.element_ice;
+            case Gun.Ammo.LIGHTNING: return (int)puzzle.Sprites.element_lightning;
+            case Gun.Ammo.SIN: return (int)puzzle.Sprites.element_wave;
+            case Gun.Ammo.SKULL: return (int)puzzle.Sprites.element_skull;
+            case Gun.Ammo.BOUNCE: return (int)puzzle.Sprites.element_ball;
+            case Gun.Ammo.VEGETABLE: return (int)puzzle.Sprites.element_vegetable;
+            case Gun.Ammo.BOOMERANG: return (int)puzzle.Sprites.element_boomerang;
             }
 
             return -1;
         }
 
-        public static int ammoToLogoSprite(Gun.Ammo a)
+        public static int ammoToBlockSprite(Gun.Ammo type)
         {
-            switch (a)
+            switch (type)
             {
-                case Gun.Ammo.DRAGON: return (int)block_logo.Sprites.dragon;
-                case Gun.Ammo.FLAME: return (int)block_logo.Sprites.crown;
-                case Gun.Ammo.FORK: return (int)block_logo.Sprites.forks;
-                case Gun.Ammo.IGLOO: return (int)block_logo.Sprites.igloo;
-                case Gun.Ammo.LIGHTNING: return (int)block_logo.Sprites.lightning;
-                case Gun.Ammo.SIN: return (int)block_logo.Sprites.sign;
-                case Gun.Ammo.SKULL: return (int)block_logo.Sprites.skull;
-                case Gun.Ammo.BOUNCE: return (int)block_logo.Sprites.ball;
-                case Gun.Ammo.VEGETABLE: return (int)block_logo.Sprites.carrot;
-                case Gun.Ammo.BOOMERANG: return (int)block_logo.Sprites.boomerang;
+            case Gun.Ammo.DRAGON:
+            case Gun.Ammo.FLAME: return (int)block.Sprites.orange;
+            case Gun.Ammo.FORK:
+            case Gun.Ammo.IGLOO: return (int)block.Sprites.blue;
+            case Gun.Ammo.LIGHTNING:
+            case Gun.Ammo.SIN: return (int)block.Sprites.red;
+            case Gun.Ammo.SKULL:
+            case Gun.Ammo.BOUNCE: return (int)block.Sprites.purple;
+            case Gun.Ammo.VEGETABLE:
+            case Gun.Ammo.BOOMERANG: return (int)block.Sprites.green;
+            }
+
+            return -1;
+        }
+
+        public static int AmmoToLogoSprite(Gun.Ammo type)
+        {
+            switch (type)
+            {
+            case Gun.Ammo.DRAGON: return (int)block_logo.Sprites.dragon;
+            case Gun.Ammo.FLAME: return (int)block_logo.Sprites.crown;
+            case Gun.Ammo.FORK: return (int)block_logo.Sprites.forks;
+            case Gun.Ammo.IGLOO: return (int)block_logo.Sprites.igloo;
+            case Gun.Ammo.LIGHTNING: return (int)block_logo.Sprites.lightning;
+            case Gun.Ammo.SIN: return (int)block_logo.Sprites.sin;
+            case Gun.Ammo.SKULL: return (int)block_logo.Sprites.skull;
+            case Gun.Ammo.BOUNCE: return (int)block_logo.Sprites.ball;
+            case Gun.Ammo.VEGETABLE: return (int)block_logo.Sprites.carrot;
+            case Gun.Ammo.BOOMERANG: return (int)block_logo.Sprites.boomerang;
             }
 
             return -1;

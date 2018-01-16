@@ -172,9 +172,6 @@ namespace Gunhouse
                     currentFreeTask = GText.Objectives.disconcerting_tasks[DataStorage.DisconcertingObjectivesSeen++];
                     if (DataStorage.DisconcertingObjectivesSeen >= 20) {
                         Tracker.AchievementUnlocked("door_alt");
-                        AppMain.textures.door = new Atlas("atlases/door_alt.png",
-                                                          new Vector2(192, 382),
-                                                          AppMain.textures.door.texture.z_order);
                     }
                 }
                 else {

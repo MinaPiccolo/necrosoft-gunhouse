@@ -6,9 +6,9 @@ namespace stage_drdog_night
       cloud_0,
       cloud_1,
       cloud_2,
-      floor,
-      platform,
+      ground,
       sun,
+      platform,
     };
 }
 

@@ -6,13 +6,12 @@ namespace Gunhouse
 {
     public class SpaceBackground : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.05f, 1.05f);
-        Vector2 scaleOne = new Vector2(1.05f, 1.05f);
-        float scaleSize = 1.03f;
+        Vector2 scaleAmount = new Vector2(-0.525f, 0.525f);
+        Vector2 scaleReverse = new Vector2(0.525f, 0.525f);
 
         public int time = 0;
-        Vector2 backgroundPosition = AppMain.vscreen * .5f;
-        Vector2 groundPosition = AppMain.vscreen * .5f;
+        Vector2 backgroundPosition = (AppMain.vscreen * 0.5f) + new Vector2(0, -40);
+        Vector2 groundPosition = (AppMain.vscreen * 0.5f) + new Vector2(0, -20);
 
         public SpaceBackground()
         {
@@ -49,7 +48,7 @@ namespace Gunhouse
             int frame = (time % 60) / 20;
 
             a.draw((int)stage_space.Sprites.animation_0 + frame, dragon_pos,
-                   new Vector2(dragon_facing ? scaleSize : -scaleSize, scaleSize), Vector4.one);
+                   new Vector2(dragon_facing ? -scaleAmount.x : scaleAmount.x, -scaleAmount.x), Vector4.one);
 
             a.draw((int)stage_space.Sprites.planet_0,
                    new Vector2(960 - positionFromTime(110, 0.0025f, -400, AppMain.vscreen.x + 400), 370), scaleAmount, Vector4.one);
@@ -79,7 +78,7 @@ namespace Gunhouse
 
             if (facing) {
                 a.draw((int)stage_space.Sprites.object_2, ship_pos, scaleAmount, Vector4.one);
-                a.draw((int)stage_space.Sprites.object_1, dog_pos, scaleOne, Vector4.one);
+                a.draw((int)stage_space.Sprites.object_1, dog_pos, scaleReverse, Vector4.one);
             }
             else {
                 a.draw((int)stage_space.Sprites.object_1, dog_pos, scaleAmount, Vector4.one);
@@ -263,8 +262,7 @@ namespace Gunhouse
             if (state == State.SHOOT) {
                 if (frame >= 390 && !mouth_fired) {
                     mouth_fired = true;
-                    Game.instance.enemy_bullet_group.add(
-                      new PeterBossBullet(pos + new Vector2(-140, -215)));
+                    Game.instance.enemy_bullet_group.add(new PeterBossBullet(pos + new Vector2(-140, -215)));
                 }
                 if (frame >= 700) {
                     frame = 0;

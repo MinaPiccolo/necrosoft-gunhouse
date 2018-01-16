@@ -192,10 +192,8 @@ namespace Gunhouse
 
         public virtual void tick()
         {
-            for (int i = entities.Count - 1; i >= 0; --i)
-            {
+            for (int i = entities.Count - 1; i >= 0; --i){
                 if (entities[i].remove) { continue; }
-
                 entities[i].tick();
             }
 
@@ -655,10 +653,13 @@ namespace Gunhouse
             Vector4 color = Vector4.one;
 
             Vector2 offset = new Vector2(0, (time % 20 < 10) ? 0 : 2);
-            AppMain.textures.money_guy.draw((int)moneyguy.Sprites.money_register, position + offset,
-                                            new Vector2(facing_left ? 1 : -1, 1), color);
-            AppMain.textures.money_guy.draw((int)moneyguy.Sprites.counter_money,
-                                             position + new Vector2(0, -38 + sign_y), Vector2.one, color);
+
+            AppMain.textures.ui_game.draw((int)ui_game.Sprites.money_guy, position + offset,
+                                          new Vector2(facing_left ? 0.5f : -0.5f, 0.5f), color);
+            AppMain.textures.ui_game.draw((int)ui_game.Sprites.money_counter,
+                                          position + new Vector2(1, -38 + sign_y),
+                                          new Vector2(-0.5f, 0.5f), color);
+
             AppMain.textures.shadowblob2.draw(0, new Vector2(position.x, 530),
                                               Vector2.one / 5, new Vector4(1, 1, 1, 0.5f));
 
@@ -739,20 +740,20 @@ namespace Gunhouse
             Vector2 offset = Vector2.zero;
 
             if (money > 150) {
-                sprite = (int)pickups.Sprites.money1_large;
+                sprite = (int)ui_game.Sprites.cash_large;
             }
             else if (money > 75) {
                 offset.y = 5;
-                sprite = (int)pickups.Sprites.money1_small;
+                sprite = (int)ui_game.Sprites.cash_small;
                 shadow_size = Vector2.one / 6;
             }
             else if (money > 0) {
                 offset.y = 5;
-                sprite = (int)pickups.Sprites.money2_small;
+                sprite = (int)ui_game.Sprites.coin_small;
                 shadow_size = Vector2.one / 6;
             }
             else {
-                sprite = (int)pickups.Sprites.heart;
+                sprite = (int)ui_game.Sprites.heart;
                 scale /= 2;
             }
 
@@ -762,7 +763,10 @@ namespace Gunhouse
                 shadow_size *= distance / 100;
             }
 
-            AppMain.textures.pickups.draw(sprite, position + offset, scale, Vector4.one);
+            scale *= 0.5f;
+
+            AppMain.textures.ui_game.draw(sprite, position + offset, scale, Vector4.one);
+
             AppMain.textures.shadowblob.draw(0, new Vector2(position.x, 520),
                                                             shadow_size / (1.5f + (float)Math.Abs(position.y - 520) / 60),
                                              new Vector4 (1, 1, 1, 0.5f));

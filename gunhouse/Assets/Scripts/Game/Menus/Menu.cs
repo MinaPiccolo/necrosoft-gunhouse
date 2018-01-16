@@ -37,5 +37,16 @@ namespace Gunhouse
             default: Necrosoft.Choom.Play("Music/title"); break;
             }
         }
+
+
+        public override void draw()
+        {
+            base.draw();
+        }
+
+        public override void tick()
+        {
+            base.tick();
+        }
     }
 }

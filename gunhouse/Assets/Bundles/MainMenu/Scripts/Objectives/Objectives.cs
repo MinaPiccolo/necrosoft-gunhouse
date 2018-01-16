@@ -37,9 +37,26 @@ namespace Gunhouse
         {
             #if UNITY_EDITOR
 
-            if (UnityEngine.Input.GetKeyDown(KeyCode.W)) for (int i = 0; i < activeTasks.Length; ++i) RequestTask(i);
-            if (UnityEngine.Input.GetKeyDown(KeyCode.S)) for (int i = 0; i < activeTasks.Length; ++i) SetTaskComplete(i);
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Q)) CheckComplete();
+            if (UnityEngine.Input.GetKeyDown(KeyCode.A)) { Play(Menu.HashIDs.menu.Outtro); }
+            if (UnityEngine.Input.GetKeyDown(KeyCode.D)) { Play(Menu.HashIDs.menu.Intro); }
+            if (UnityEngine.Input.GetKeyDown(KeyCode.E)) { gameObject.transform.GetChild(0).gameObject.SetActive(false); }
+            if (UnityEngine.Input.GetKeyDown(KeyCode.D)) { gameObject.transform.GetChild(0).gameObject.SetActive(true); }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.W)) {
+                for (int i = 0; i < activeTasks.Length; ++i) {
+                    RequestTask(i);
+                }
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.S)) {
+                for (int i = 0; i < activeTasks.Length; ++i) {
+                    SetTaskComplete(i);
+                }
+            }
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Q)) {
+                CheckComplete();
+            }
 
             #endif
         }

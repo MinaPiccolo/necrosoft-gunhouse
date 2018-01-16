@@ -226,8 +226,8 @@ namespace Gunhouse
         public override void draw()
         {
             Vector2 size = new Vector2(1.0f, 1.0f) * 3 / 4;
-            if (is_destroyed)
-            {
+
+            if (is_destroyed) {
                 AppMain.textures.gunpoof.draw((int)7 - Mathf.FloorToInt(destroy / 5.0f),
                                               position + new Vector2(50.0f, 0), size * .5f, angle,
                                               Vector4.one);
@@ -246,20 +246,30 @@ namespace Gunhouse
             var color = Vector4.one;// Gun.color(selected);
 
             if (selected && fireableExists() && AppMain.game_pad_active) {
-                AppMain.textures.arrow.draw(0, position - new Vector2(40 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0),
-                                            Vector2.one, 0, Vector4.one);
+                AppMain.textures.ui_game.draw((int)ui_game.Sprites.arrow,
+                                              position - new Vector2(40 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0),
+                                              Vector2.one, 0, Vector4.one);
             }
 
-            if (ammo == Ammo.VEGETABLE) AppMain.textures.carrotgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.IGLOO) AppMain.textures.penguingun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.DRAGON) AppMain.textures.dragongun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.SKULL) AppMain.textures.skullgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.LIGHTNING) AppMain.textures.lightninggun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.SIN) AppMain.textures.lasergun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.FORK) AppMain.textures.gun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.BOUNCE) AppMain.textures.beachballgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.BOOMERANG) AppMain.textures.boomeranggun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.FLAME) AppMain.textures.flamegun.draw(0, position, size, angle, color);
+            int gun_id = -1;
+
+            switch (ammo)
+            {
+            case Ammo.VEGETABLE: gun_id = (int)guns.Sprites.vegetable; break;
+            case Ammo.IGLOO: gun_id = (int)guns.Sprites.ice; break;
+            case Ammo.DRAGON: gun_id = (int)guns.Sprites.dragon; break;
+            case Ammo.SKULL: gun_id = (int)guns.Sprites.skull; break;
+            case Ammo.LIGHTNING: gun_id = (int)guns.Sprites.lightning; break;
+            case Ammo.SIN: gun_id = (int)guns.Sprites.laser; break;
+            case Ammo.FORK: gun_id = (int)guns.Sprites.gumball; break;
+            case Ammo.BOUNCE: gun_id = (int)guns.Sprites.beachball; break;
+            case Ammo.BOOMERANG: gun_id = (int)guns.Sprites.boomerang; break;
+            case Ammo.FLAME: gun_id = (int)guns.Sprites.flame; break;
+            }
+
+            if (gun_id != -1) {
+                AppMain.textures.house_guns.draw(gun_id, position, size, angle, color);
+            }
 
             position -= vibrate;
         }
@@ -598,33 +608,31 @@ namespace Gunhouse
         public float offset = 0;
         public float phase = 0;
         public float offset_cap = 0.0f;
+        Vector2 scale = new Vector2(-0.5f, 0.5f);
 
         public SinBullet (Vector2 position_, Vector2 velocity_, EntityGroup targets_,
-                          Target target_, int upgrade_)
-            : base (position_, velocity_, targets_, target_)
+                          Target target_, int upgrade_) : base (position_, velocity_, targets_, target_)
         {
             position = position_;
             velocity = velocity_;
             upgrade = upgrade_;
             int s = SinGun.size + upgrade * SinGun.size_upgrade;
             size = new Vector2 (s, s);
-            //Console.WriteLine("Height: {0}", SinGun.vertical_range+upgrade*SinGun.vertical_range_upgrade);
         }
 
-        public override void tick ()
+        public override void tick()
         {
             base.tick ();
             position.y -= offset;
             position += velocity;
             float last_offset = offset;
 
-            offset = (float)Math.Sin (position.x / SinGun.wavelength + phase) *
+            offset = (float)Math.Sin(position.x / SinGun.wavelength + phase) *
             (SinGun.vertical_range + upgrade * SinGun.vertical_range_upgrade) *
             offset_cap;
-            angle = Util.angle (new Vector2 (velocity.x, offset) - new Vector2 (0, last_offset));
+            angle = Util.angle(new Vector2 (velocity.x, offset) - new Vector2(0, last_offset));
             position.y += offset;
-            if (position.x > 1000)
-                remove = true;
+            if (position.x > 1000) remove = true;
 
             offset_cap = 0.05f + 0.95f * offset_cap;
         }
@@ -632,15 +640,17 @@ namespace Gunhouse
         public override void hit (Target t)
         {
             if (t != null) {
-                t.damage (SinGun.damage + SinGun.damage_upgrade * upgrade, Gun.Ammo.SIN);
+                t.damage(SinGun.damage + SinGun.damage_upgrade * upgrade, Gun.Ammo.SIN);
                 //remove = true;
             }
         }
 
         public override void draw ()
         {
-            AppMain.textures.laserbullet.draw (0,
-                position, new Vector2 (-1, 1) * size.x / 20, angle, Vector4.one);
+            AppMain.textures.gun_sin.draw((int)gun_sin.Sprites.bullet,
+                                          position, scale * size.x / 20, angle, Vector4.one);
+
+            //AppMain.textures.laserbullet.draw(0, position, new Vector2(-1, 1) * size.x / 20, angle, Vector4.one);
         }
     }
 
@@ -924,33 +934,34 @@ namespace Gunhouse
 
     public class Forker
     {
-        public static void bullet (Vector2 position, int upgrade)
+        public static void bullet(Vector2 position, int upgrade)
         {
             for (int a = -1; a <= 1; a += 2) {
                 DataStorage.ShotsFired+=2;
                 //Util.trace(DataStorage.ShotsFired);
 
-                Particle gb = new Particle (AppMain.textures.gumballs);
-                gb.frame = Util.rng.Next (5);
-                gb.position = position + new Vector2 (0, a * 5);
+                Particle gb = new Particle(AppMain.textures.gumballs);
+                gb.frame = Util.rng.Next(5);
+                gb.position = position + new Vector2(0, a * 5);
                 gb.angle = ForkGun.angle / 180 * (float)Math.PI * a;
-                gb.velocity = Util.fromPolar (gb.angle, ForkGun.velocity);
+                gb.velocity = Util.fromPolar(gb.angle, ForkGun.velocity);
                 gb.collides_with = Game.instance.enemy_group.entities;
                 gb.scale = Vector2.one / 40 * (ForkGun.size + ForkGun.size_upgrade * upgrade);
                 gb.ground_at = 480;
                 gb.collide_behavior = (ref Particle p, Entity e) => {
                     p.remove = true;
-                    if (e != null)
-                        (e as Target).damage (ForkGun.damage + ForkGun.damage_upgrade * upgrade, Gun.Ammo.FORK);
-                    Particle splat = new Particle (AppMain.textures.gumballs);
+                    if (e != null) {
+                        (e as Target).damage(ForkGun.damage + ForkGun.damage_upgrade * upgrade, Gun.Ammo.FORK);
+                    }
+                    Particle splat = new Particle(AppMain.textures.gumballs);
                     splat.frame = 5;
                     splat.frame_speed = 0.2f;
                     splat.position = p.position;
-                    splat.velocity = e != null ? new Vector2 (e.velocity.x, 0) : Vector2.zero;
+                    splat.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
                     splat.scale = p.scale;
-                    Game.instance.particle_manager.add (splat);
+                    Game.instance.particle_manager.add(splat);
                 };
-                Game.instance.bullet_manager.add (gb);
+                Game.instance.bullet_manager.add(gb);
             }
         }
     }
@@ -1449,14 +1460,12 @@ namespace Gunhouse
 
         public override void tick()
         {
-            if (frame >= 7)
-            {
+            if (frame >= 7) {
                 frame += 0.15f;
                 position = new Vector2(360, 490) + new Vector2(35 * size.y, 0);
                 if (frame >= 11) { remove = true; }
             }
-            else
-            {
+            else {
                 frame -= 0.15f;
                 position = new Vector2(360, 490) - new Vector2(0, 35 * size.y);
                 origin = new Vector2(0.5f, 1.0f - 15 * size.y / AppMain.textures.veggie_special.sprites [(int)frame].size.y);
@@ -1468,8 +1477,7 @@ namespace Gunhouse
                 spin += acceleration;
                 angle += spin;
 
-                if (angle > Math.PI / 2)
-                {
+                if (angle > Math.PI / 2) {
                     int damage = VegetableGun.special_damage + VegetableGun.special_damage_upgrade * upgrade;
                     damage = (int)(damage * Gun.UpgradeMultiplier(Gun.Ammo.VEGETABLE));
 
@@ -1573,33 +1581,25 @@ namespace Gunhouse
             int right = ForkGun.shield_right;
             int left = ForkGun.shield_left;
 
-            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i)
-            {
+            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                 if (Game.instance.enemy_group.entities[i].position.x < right &&
-                    Game.instance.enemy_group.entities[i].position.x > left)
-                {
-                    if (Game.instance.enemy_group.entities[i].position.x < (left + right) / 2)
-                    {
+                    Game.instance.enemy_group.entities[i].position.x > left) {
+                    if (Game.instance.enemy_group.entities[i].position.x < (left + right) / 2) {
                         Game.instance.enemy_group.entities[i].position.x = left;
                     }
-                    else
-                    {
+                    else {
                         Game.instance.enemy_group.entities[i].position.x = right;
                     }
                 }
             }
 
-            for (int i = 0; i < Game.instance.enemy_bullet_group.entities.Count; ++i)
-            {
+            for (int i = 0; i < Game.instance.enemy_bullet_group.entities.Count; ++i) {
                 if (Game.instance.enemy_bullet_group.entities[i].position.x < right &&
-                    Game.instance.enemy_bullet_group.entities[i].position.x > left)
-                {
-                    if (Game.instance.enemy_bullet_group.entities[i] is EnemyBullet)
-                    {
+                    Game.instance.enemy_bullet_group.entities[i].position.x > left) {
+                    if (Game.instance.enemy_bullet_group.entities[i] is EnemyBullet) {
                         ((EnemyBullet)Game.instance.enemy_bullet_group.entities[i]).kill();
                     }
-                    else
-                    {
+                    else {
                         Game.instance.enemy_bullet_group.entities[i].remove = true;
                         Bullet.explosion(Game.instance.enemy_bullet_group.entities[i].position,
                                          Gun.Ammo.NONE, Vector2.zero, 15, 0, null);
@@ -1616,6 +1616,7 @@ namespace Gunhouse
             AppMain.textures.forkspecial.draw("fork-special-spawn", frame,
                 new Vector2((ForkGun.shield_left + ForkGun.shield_right) / 2, 544 / 2 - 30),
                 new Vector2(-1, 1), 0, Vector4.one);
+            
             if (frame >= 250) {
                 AppMain.textures.forkspecial.atlas.draw (6,
                     new Vector2((ForkGun.shield_left + ForkGun.shield_right) / 2 + 15, 544 / 2 - 90),
@@ -1719,52 +1720,54 @@ namespace Gunhouse
                 {
                 case Gun.Ammo.BOOMERANG:
                     AppMain.textures.boomerang.touch();
-                    AppMain.textures.boomeranggun.touch();
                     break;
                 case Gun.Ammo.BOUNCE:
+                    AppMain.textures.gun_beachball.touch();
+
                     AppMain.textures.beachball.touch();
-                    AppMain.textures.beachballgun.touch();
                     break;
                 case Gun.Ammo.DRAGON:
-                    AppMain.textures.dragongun.touch();
+                    AppMain.textures.gun_dragon.touch();
+
                     AppMain.textures.dragonbullet.touch();
                     AppMain.textures.dragon_special_angry.touch();
                     AppMain.textures.dragon_special_derp.touch();
                     break;
-                case Gun.Ammo.FLAME:
-                    AppMain.textures.flamegun.touch();
-                    AppMain.textures.flames.touch();
-                    break;
+                case Gun.Ammo.FLAME: AppMain.textures.flames.touch(); break;
                 case Gun.Ammo.FORK:
-                    AppMain.textures.gun.touch();
+                    AppMain.textures.gun_fork.touch();
+
                     AppMain.textures.gumballs.touch();
                     AppMain.textures.forkspecial.touch();
                     break;
                 case Gun.Ammo.IGLOO:
-                    AppMain.textures.penguingun.touch();
+                    AppMain.textures.gun_penguin.touch();
+
                     AppMain.textures.penguinbullet.touch();
                     break;
                 case Gun.Ammo.LIGHTNING:
-                    AppMain.textures.lightninggun.touch();
                     AppMain.textures.lightning_strike.touch();
                     break;
                 case Gun.Ammo.SIN:
-                    AppMain.textures.laserbullet.touch();
-                    AppMain.textures.lasergun.touch();
+                    AppMain.textures.gun_sin.touch();
+
                     AppMain.textures.laserspecial.touch();
                     break;
                 case Gun.Ammo.SKULL:
+                    AppMain.textures.gun_skull.touch();
+
                     AppMain.textures.skullbullet.touch();
-                    AppMain.textures.skullgun.touch();
                     break;
                 case Gun.Ammo.VEGETABLE:
-                    AppMain.textures.carrotgun.touch();
+                    AppMain.textures.gun_vegetable.touch();
+
                     AppMain.textures.veggies.touch();
                     AppMain.textures.veggie_special.touch();
                     break;
                 }
 
-                AppMain.textures.pickups.touch();
+                AppMain.textures.house_guns.touch();
+                AppMain.textures.ui_game.touch();
                 AppMain.textures.gunpoof.touch();
                 AppMain.textures.skeletonkingprojectile.touch();
                 AppMain.textures.lightning_match.touch();
@@ -1859,58 +1862,81 @@ namespace Gunhouse
 
         public override void draw()
         {
-            #region Specials
+            Vector2 scale = new Vector2(0.5f, 0.5f);
+            Vector2 scaleInvertX = new Vector2(-0.5f, 0.5f);
 
-            for (int i = 0; i < special_attacks.Length; ++i)
-            {
-                Vector2 vibrate = Vector2.zero;
+            #region Orphan Meter Health
 
-                bool selected = Game.instance.house.isDoorClosed &&
-                                    Game.instance.puzzle.selected_weapon == new Vector2(0, i);
-                var pos = new Vector2(Puzzle.grid_left - 40,
-                                      Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
-
-                //#if !UNITY_IOS
-                if (selected && Gun.fireableExists() && AppMain.game_pad_active) {
-                    AppMain.textures.arrow.draw(0, pos + new Vector2(64 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0), new Vector2(-1, 1), 0, Vector4.one);
-                }
-                //#endif
-
-                if (special_attacks[i].Item1 != Gun.Ammo.NONE)
-                {
-                    Vector2 pulse = new Vector2(-1, 1);
-                    if (door_position == 1.0f)
-                    {
-                        pulse *= ((float)Math.Sin (i + time / 20.0f) / 10.0f + 1.05f);
-                    }
-
-                    vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2),
-                                             Util.rng.NextFloat(0, special_attacks[i].Item2)) / 4;
-
-                    AppMain.textures.elements.draw(Puzzle.ammoElementToSprite(special_attacks[i].Item1) + 10,
-                                                   pos + vibrate, pulse, Vector4.one);
-                }
-
-                AppMain.textures.elements.draw((int)elements.Sprites.house_tanks,
-                                               new Vector2(Puzzle.grid_left - 40,
-                                                           Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size + 8) + vibrate,
-                                               new Vector2(-1, 1), Vector4.one);
+            float shake = 0;
+            float meter_val = health / max_health;
+            if (meter_val > health_complain_threshold) {
+                complained_about_health = false;
             }
+
+            if (meter_val < health_complain_threshold) {
+                if (!complained_about_health) {
+                    Choom.PlayEffect(SoundAssets.HealthLow);
+                    complained_about_health = true;
+                    shake = (1 - meter_val) * 5;
+                }
+            }
+
+            // smart resize if the screen is too small
+            float part_size = (AppMain.vscreen.x - 72.0f - (Puzzle.grid_left + Puzzle.piece_size * 3.0f + 200.0f + 32.0f)) / 6.0f;
+            var heart_pos = new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 200 + 32, 42) +
+                Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.Next((int)shake));
+
+            float shown = 0;
+            for (int i = 0; i < MetaState.hearts; ++i) {
+                float size = 0;
+                if (shown + House.health_per_heart < health) {
+                    size = 1;
+                }
+                else if (shown < health) {
+                    size = (health - shown) / House.health_per_heart;
+                }
+
+                AppMain.textures.puzzle.draw((int)puzzle.Sprites.heart_outline,
+                                             heart_pos, scale / 96 * 58, Vector4.one);
+                AppMain.textures.puzzle.draw((int)puzzle.Sprites.heart,
+                                             heart_pos + new Vector2(2, 2), scale * size / 96 * 58, Vector4.one);
+
+                heart_pos.x += part_size;
+                shown += House.health_per_heart;
+            }
+
+            #endregion
+
+            #region Weaknesses
+
+            AppMain.textures.puzzle.draw((int)puzzle.Sprites.match_bonus_background,
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 105, 40),
+                                         new Vector2(-185.0f / 368, 115.0f / 250), Vector4.one);
+
+            AppMain.textures.puzzle.draw(Puzzle.AmmoToSprite(Game.instance.next_bonuses[1]),
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140, 42.5f),
+                                         scaleInvertX * next_transition, Vector4.one);
+
+            if (door_position != 1.0f) {
+                scaleInvertX *= (float)(Math.Sin(time / 10.0f) / 6 + 1);
+            }
+            AppMain.textures.puzzle.draw(Puzzle.AmmoToSprite(Game.instance.next_bonuses[0]),
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140 - 70 * next_transition, 42.5f),
+                                         scaleInvertX, Vector4.one);
 
             #endregion
 
             #region Door Timer
 
-            // draw time until door close
-            AppMain.textures.housebits.draw((int)housebits.Sprites.counter_time_base_yellow,
-                                            new Vector2(Puzzle.grid_left + 110, Puzzle.grid_top - 45),
-                                            new Vector2(-1, 1) * 3 / 4, Vector4.one);
+            AppMain.textures.puzzle.draw((int)puzzle.Sprites.house_counter,
+                                         new Vector2(Puzzle.grid_left + 112, Puzzle.grid_top - 45),
+                                         new Vector2(-0.5f, 0.5f) * 3 / 4, Vector4.one);
 
             if (!AppMain.tutorial.hasFocus && AppMain.tutorial.Countdown &&
                 door_target_position != 1.0f) {
                 string open_time = string.Format("{0:00.0}", (1.0f - door_position) / door_velocity / 60.0f);
 
-                Vector2 time_pos = new Vector2(Puzzle.grid_left + 110, Puzzle.grid_top - 45) + new Vector2(32, -1);
+                Vector2 time_pos = new Vector2(Puzzle.grid_left + 110, Puzzle.grid_top - 45) + new Vector2(31.8f, -1);
 
                 for (int i = 0; i < open_time.Length; ++i) {
                     int n = open_time[i] - '0' - 1;
@@ -1928,107 +1954,74 @@ namespace Gunhouse
 
             #endregion
 
-            #region Weaknesses
-
-            AppMain.textures.hud.draw((int)hud.Sprites.frame, new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 105, 40),
-                                      new Vector2(-185.0f / 181, 115.0f / 123), Vector4.one);
-
-            Vector2 scale = new Vector2(-1, 1);
-
-            AppMain.textures.elements.draw(Puzzle.ammoElementToSprite(Game.instance.next_bonuses[1]),
-                                           new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140, 42.5f),
-                                           scale * next_transition, Vector4.one);
-
-            if (door_position != 1.0f)
-            {
-                scale *= (float)(Math.Sin(time / 10.0f) / 6 + 1);
-            }
-
-            AppMain.textures.elements.draw(Puzzle.ammoElementToSprite(Game.instance.next_bonuses[0]),
-                                           new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140 - 70 * next_transition, 42.5f),
-                                           scale, Vector4.one);
-
-            #endregion
-
             #region House
 
-            AppMain.textures.house.draw (0, new Vector2(Puzzle.grid_left + 95, Puzzle.grid_top + 144), Vector2.one, Vector4.one);
+            AppMain.textures.house.draw(0, new Vector2(Puzzle.grid_left + 95, Puzzle.grid_top + 146), scale, Vector4.one);
 
-            AppMain.textures.housebits.draw((int)housebits.Sprites.house_gun_base,
-                                            new Vector2(Puzzle.grid_left + Puzzle.piece_size * 1.8f, Puzzle.grid_top + Puzzle.piece_size * 3),
-                                            new Vector2(-1, 1), Vector4.one);
-
-            float shake = 0;
-            float meter_val = health / max_health;
-            if (meter_val > health_complain_threshold) {
-                complained_about_health = false;
-            }
-
-            if (meter_val < health_complain_threshold) {
-                if (!complained_about_health) {
-                    Choom.PlayEffect(SoundAssets.HealthLow);
-                    complained_about_health = true;
-                    shake = (1 - meter_val) * 5;
-                }
-            }
-
-            #endregion
-
-            #region Orphan Meter
-
-            // smart resize if the screen is too small
-            float part_size = (AppMain.vscreen.x - 72.0f - (Puzzle.grid_left + Puzzle.piece_size * 3.0f + 200.0f + 32.0f)) / 6.0f;
-            var heart_pos = new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 200 + 32, 42) +
-                Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.Next((int)shake));
-
-            float shown = 0;
-            for (int i = 0; i < MetaState.hearts; ++i)
-            {
-                float size = 0;
-                if (shown + House.health_per_heart < health)
-                {
-                    size = 1;
-                }
-                else if (shown < health)
-                {
-                    size = (health - shown) / House.health_per_heart;
-                }
-
-                AppMain.textures.hud.draw((int)hud.Sprites.heart_frame, heart_pos, Vector2.one / 96 * 58, Vector4.one);
-                AppMain.textures.hud.draw((int)hud.Sprites.heart, heart_pos + new Vector2(3, 3),
-                                          Vector2.one * size / 96 * 58, Vector4.one);
-
-                heart_pos.x += part_size;
-                shown += House.health_per_heart;
-            }
-
-            #endregion
-
-            #region Door
+            /* ================================================== */
+            /* DOOR */
 
             float amount_open = visibleDoorPosition();
 
-            if (amount_open != 0)
-            {
-                float doorcrop = (1.0f - amount_open) *
-                    (AppMain.textures.door.sprites[0].bounds.Point00.y -
-                                  AppMain.textures.door.sprites[0].bounds.Point11.y);
+            if (amount_open != 0) {
+                AtlasSprite door = AppMain.textures.puzzle.sprites[DataStorage.DisconcertingObjectivesSeen >= 20 ?
+                                                                   (int)puzzle.Sprites.house_door_alt :
+                                                                   (int)puzzle.Sprites.house_door];
 
-                AppMain.renderer.addSprite(AppMain.textures.door.texture,
+                float doorcrop = (1.0f - amount_open) * (door.bounds.Point00.y - door.bounds.Point11.y);
+
+                AppMain.renderer.addSprite(AppMain.textures.puzzle.texture,
                                            new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3, Puzzle.grid_top),
                                            new Vector2(Puzzle.grid_left, Puzzle.grid_top),
                                            new Vector2(Puzzle.grid_left, Puzzle.grid_top + visibleDoorPosition() *
-                                                       Puzzle.piece_size * 6),
+                                Puzzle.piece_size * 6),
                                            new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3,
-                                                       Puzzle.grid_top + visibleDoorPosition() *
-                                                       Puzzle.piece_size * 6),
+                                Puzzle.grid_top + visibleDoorPosition() *
+                                Puzzle.piece_size * 6),
                                            new Necrosofty.Math.Bounds2(
-                                               new Vector2(AppMain.textures.door.sprites[0].bounds.Point00.x,
-                                                            AppMain.textures.door.sprites[0].bounds.Point00.y - doorcrop),
-                                               new Vector2(AppMain.textures.door.sprites[0].bounds.Point11.x,
-                                                            AppMain.textures.door.sprites[0].bounds.Point11.y)
-                                              ),
+                                               new Vector2(door.bounds.Point00.x, door.bounds.Point00.y - doorcrop),
+                                               new Vector2(door.bounds.Point11.x, door.bounds.Point11.y)),
                                            Vector4.one);
+            }
+
+            AppMain.textures.puzzle.draw((int)puzzle.Sprites.house_border,
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 1.8f, Puzzle.grid_top + Puzzle.piece_size * 3),
+                                         new Vector2(-0.5f, 0.5f), Vector4.one);
+
+            #endregion
+
+            #region Specials
+
+            for (int i = 0; i < special_attacks.Length; ++i) {
+                Vector2 vibrate = Vector2.zero;
+                var pos = new Vector2(Puzzle.grid_left - 40,
+                                      Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
+
+                if (special_attacks[i].Item1 != Gun.Ammo.NONE) {
+                    Vector2 pulse = new Vector2(-0.5f, 0.5f);
+                    if (door_position == 1.0f) {
+                        pulse *= ((float)Math.Sin (i + time / 20.0f) / 10.0f + 1.05f);
+                    }
+
+                    vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2),
+                                             Util.rng.NextFloat(0, special_attacks[i].Item2)) / 4;
+
+                    AppMain.textures.puzzle.draw(Puzzle.AmmoToSprite(special_attacks[i].Item1),
+                                                 pos + vibrate, pulse, Vector4.one);
+                }
+
+                AppMain.textures.puzzle.draw((int)puzzle.Sprites.house_tank,
+                                             new Vector2(Puzzle.grid_left - 40,
+                                                         Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size + 8) + vibrate,
+                                             new Vector2(-0.5f, 0.5f), Vector4.one);
+
+                bool selected = Game.instance.house.isDoorClosed &&
+                                    Game.instance.puzzle.selected_weapon == new Vector2(0, i);
+
+                if (selected && Gun.fireableExists() && AppMain.game_pad_active) {
+                    AppMain.textures.ui_game.draw((int)ui_game.Sprites.arrow,
+                                                  pos + new Vector2(64 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0), new Vector2(-1, 1), 0, Vector4.one);
+                }
             }
 
             #endregion

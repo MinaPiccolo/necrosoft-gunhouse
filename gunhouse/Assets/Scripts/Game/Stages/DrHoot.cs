@@ -6,7 +6,7 @@ namespace Gunhouse
 {
     public class ForestBackgroundDay : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.02f, 1.02f);
+        Vector2 scaleAmount = new Vector2(-0.525f, 0.525f);
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
@@ -50,10 +50,10 @@ namespace Gunhouse
                                                            scaleAmount, Vector4.one);
             }
             atlas().draw((int)stage_drhoot_noon.Sprites.background,
-                         new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y * 0.5f), scaleAmount, Vector4.one);
+                         (AppMain.vscreen * 0.5f) + new Vector2(0, -103), scaleAmount, Vector4.one);
 
-            atlas().draw((int)stage_drhoot_noon.Sprites.platform, new Vector2(715, 410), scaleAmount, Vector4.one);
-            atlas().draw((int)stage_drhoot_noon.Sprites.floor, groundPosition, scaleAmount, Vector4.one);
+            atlas().draw((int)stage_drhoot_noon.Sprites.platform, new Vector2(715, 360), scaleAmount, Vector4.one);
+            atlas().draw((int)stage_drhoot_noon.Sprites.ground, groundPosition, scaleAmount, Vector4.one);
         }
     }
 
