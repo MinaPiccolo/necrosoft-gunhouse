@@ -112,7 +112,7 @@ namespace Gunhouse
         public SpriterSet lightning_match;
 
         public Atlas veggies, veggie_special, penguinbullet, skullbullet, gumballs;
-        public Atlas beachball;
+
         public SpriterSet forkspecial, lightning_strike, boomerang, flames;
         public Atlas laserspecial;
 
@@ -468,7 +468,7 @@ namespace Gunhouse
             laserspecial = new Atlas("laser-special.png", "laser-special.txa.txt", z_order++);
             veggie_special = new Atlas("veggie-special.png", "veggie-special.txa.txt", z_order++);
             skullbullet = new Atlas("skull-bullet.png", "skull-bullet.txa.txt", z_order++);
-            beachball = new Atlas("beachball.png", "beachball.txa.txt", z_order++);
+            //beachball = new Atlas("beachball.png", "beachball.txa.txt", z_order++);
 
 
             boomerang = new SpriterSet("boomerang.ssb.txt", new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));

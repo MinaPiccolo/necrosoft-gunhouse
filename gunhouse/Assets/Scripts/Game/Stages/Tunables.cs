@@ -457,8 +457,8 @@ namespace Gunhouse
     {
         public const float ammo = 5;
         public const float ammo_upgrade = 1.0f;
-        public const int size = 33;
-        public const int size_upgrade = 5;
+        public const int size = 15;//33;
+        public const int size_upgrade = 3;//5;
         public const int damage = 20;
         public const int damage_upgrade = 5;
         public const float gravity = 0.1f;

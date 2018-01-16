@@ -521,6 +521,8 @@ namespace Gunhouse
         public Target[] hit_targets = new Target[10];
         public int next_hit_index = 0;
         public int ticks_since_last_hit = 0;
+        Vector2 scale = new Vector2(0.5f, 0.5f);
+        Vector2 scaleInvertX = new Vector2(-0.5f, 0.5f);
 
         public BeachBall(Vector2 position_, Vector2 velocity_, EntityGroup targets_, Target target_, int upgrade_)
                         : base (position_, velocity_, targets_, target_)
@@ -551,13 +553,11 @@ namespace Gunhouse
             if (t == null) { return; }
 
             bool skip_hit = false;
-            for (int i = 0; i < 10; i++)
-            {
+            for (int i = 0; i < 10; i++) {
                 if (t == hit_targets[i]) { skip_hit = true; }
             }
 
-            if (!skip_hit)
-            {
+            if (!skip_hit) {
                 ticks_since_last_hit = 0;
                 hit_targets[next_hit_index] = t;
                 next_hit_index = Util.clamp(next_hit_index + 1, 0, 9);
@@ -588,18 +588,24 @@ namespace Gunhouse
 
             angle += spin;
             ticks_since_last_hit++;
-            if (ticks_since_last_hit > 60)
-            {
+            if (ticks_since_last_hit > 60) {
                 for (int i = 0; i < 10; i++) { hit_targets [i] = null; }
             }
         }
 
         public override void draw()
         {
-            AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet1 + sprite,
-                                            position, Vector2.one / 56 * size.x, angle, Vector4.one);
-            AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet_highlite,
-                                            position, new Vector2 (-1, 1) / 56 * size.x, 0, Vector4.one);
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.bullet_blue + sprite,
+                position, scale / 56 * size.x, angle, Vector4.one);
+
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.bullet_shine,
+                position, scaleInvertX / 56 * size.x, 0, Vector4.one);
+
+            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet1 + sprite,
+            //                                position, Vector2.one / 56 * size.x, angle, Vector4.one);
+            
+            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet_highlite,
+                                            //position, new Vector2 (-1, 1) / 56 * size.x, 0, Vector4.one);
         }
     }
 
@@ -1511,6 +1517,7 @@ namespace Gunhouse
         public float radius;
         public int upgrade;
         public int sprite;
+        Vector2 scaleInvertX = new Vector2(-0.5f, 0.5f);
 
         public BigBounce(int size)
         {
@@ -1518,7 +1525,7 @@ namespace Gunhouse
             upgrade = size;
             radius = BeachBallGun.special_radius + size * BeachBallGun.special_radius_upgrade;
             position = new Vector2 (-radius, 500 - radius);
-            sprite = Util.rng.Next (4);
+            sprite = Util.rng.Next(3);
         }
 
         public override void tick()
@@ -1533,10 +1540,8 @@ namespace Gunhouse
                 remove = true;
             }
 
-            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i)
-            {
-                if ((Game.instance.enemy_group.entities[i].position - position).sqrMagnitude < radius * radius)
-                {
+            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
+                if ((Game.instance.enemy_group.entities[i].position - position).sqrMagnitude < radius * radius) {
                     AppMain.screenShake(upgrade * 7, 5);
                     ((Target)Game.instance.enemy_group.entities[i]).damage((int)(BeachBallGun.special_damage +
                                                     BeachBallGun.special_damage_upgrade * upgrade), Gun.Ammo.BOUNCE);
@@ -1544,12 +1549,17 @@ namespace Gunhouse
             }
         }
 
-        public override void draw ()
+        public override void draw()
         {
-            AppMain.textures.beachball.draw ((int)beachball.Sprites.gun_beachball_special_1 + sprite,
-                position, new Vector2 (-1, 1) / 233 * radius, angle, Vector4.one);
-            AppMain.textures.beachball.draw ((int)beachball.Sprites.gun_beachball_special_highlite,
-                position + new Vector2 (-7, -7) / 233 * radius, new Vector2 (-1, 1) / 233 * radius, 0, Vector4.one);
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.special_blue + sprite,
+                                                position, scaleInvertX / 233 * radius, angle, Vector4.one);
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.special_shine,
+                position + new Vector2(-7, -7) / 233 * radius, scaleInvertX / 233 * radius, 0, Vector4.one);
+
+            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_special_1 + sprite,
+            //    position, new Vector2 (-1, 1) / 233 * radius, angle, Vector4.one);
+            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_special_highlite,
+                //position + new Vector2 (-7, -7) / 233 * radius, new Vector2 (-1, 1) / 233 * radius, 0, Vector4.one);
         }
     }
 
@@ -1724,14 +1734,8 @@ namespace Gunhouse
             for (int i = 0; i < ammo_available.Count; ++i) {
                 switch (ammo_available[i])
                 {
-                case Gun.Ammo.BOOMERANG:
-                    AppMain.textures.boomerang.touch();
-                    break;
-                case Gun.Ammo.BOUNCE:
-                    AppMain.textures.gun_beachball.touch();
-
-                    AppMain.textures.beachball.touch();
-                    break;
+                case Gun.Ammo.BOOMERANG: AppMain.textures.boomerang.touch(); break;
+                case Gun.Ammo.BOUNCE: AppMain.textures.gun_beachball.touch(); break;
                 case Gun.Ammo.DRAGON: AppMain.textures.gun_dragon.touch(); break;
                 case Gun.Ammo.FLAME: AppMain.textures.flames.touch(); break;
                 case Gun.Ammo.FORK:
