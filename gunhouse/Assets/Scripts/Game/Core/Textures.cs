@@ -111,10 +111,9 @@ namespace Gunhouse
 
         public SpriterSet lightning_match;
 
-        public Atlas veggies, veggie_special, penguinbullet, dragonbullet, skullbullet, gumballs;
+        public Atlas veggies, veggie_special, penguinbullet, skullbullet, gumballs;
         public Atlas beachball;
         public SpriterSet forkspecial, lightning_strike, boomerang, flames;
-        public Atlas dragon_special_derp, dragon_special_angry;
         public Atlas laserspecial;
 
         public Atlas stage_oakland_noon, stage_oakland_dusk, stage_oakland_night;
@@ -461,37 +460,32 @@ namespace Gunhouse
                                                 new Atlas("icecream-tank-bullet.png",
                                                           "icecream-tank-bullet.txa.txt", z_order++));
 
+
+
             penguinbullet = new Atlas("penguin-bullet.png", "penguin-bullet.txa.txt", z_order++);
-            dragonbullet = new Atlas("dragon-bullet.png", "dragon-bullet.txa.txt", z_order++);
             gumballs = new Atlas("gumballs.png", "gumballs.txa.txt", z_order++);
             veggies = new Atlas("veggies.png", "veggies.txa.txt", z_order++);
-            //laserbullet = new Atlas("laser-bullet.png", new Vector2(40, 20), z_order++);
-
-            boomerang = new SpriterSet("boomerang.ssb.txt",
-                                       new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
-            flames = new SpriterSet("flame.ssb.txt",
-                                    new Atlas("flame.png", "flame.txa.txt", z_order++));
-
             laserspecial = new Atlas("laser-special.png", "laser-special.txa.txt", z_order++);
-
-            dragon_special_derp = new Atlas("special-dragon.png", new Vector2(482, 410), z_order++);
-            dragon_special_angry = new Atlas("special-dragon-2.png", new Vector2(380, 358), z_order++);
             veggie_special = new Atlas("veggie-special.png", "veggie-special.txa.txt", z_order++);
+            skullbullet = new Atlas("skull-bullet.png", "skull-bullet.txa.txt", z_order++);
+            beachball = new Atlas("beachball.png", "beachball.txa.txt", z_order++);
+
+
+            boomerang = new SpriterSet("boomerang.ssb.txt", new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
+            flames = new SpriterSet("flame.ssb.txt", new Atlas("flame.png", "flame.txa.txt", z_order++));
+
+            gun_fork = new Atlas("gun_fork.png", "gun_fork.txa.txt", z_order++);
+            gun_penguin = new Atlas("gun_penguin.png", "gun_penguin.txa.txt", z_order++);
+            gun_sin = new Atlas("gun_sin.png", "gun_sin.txa.txt", z_order++);
+            gun_dragon = new Atlas("gun_dragon.png", "gun_dragon.txa.txt", z_order++);
+            gun_vegetable = new Atlas("gun_vegetable.png", "gun_vegetable.txa.txt", z_order++);
+            gun_skull = new Atlas("gun_skull.png", "gun_skull.txa.txt", z_order++);
+            gun_beachball = new Atlas("gun_beachball.png", "gun_beachball.txa.txt", z_order++);
 
             lightning_strike = new SpriterSet("lightning-strike.ssb.txt",
                                               new Atlas("lightning-strike.png",
                                                         "lightning-strike.txa.txt", z_order++));
 
-            skullbullet = new Atlas("skull-bullet.png", "skull-bullet.txa.txt", z_order++);
-            beachball = new Atlas("beachball.png", "beachball.txa.txt", z_order++);
-
-            gun_beachball = new Atlas("gun_beachball.png", "gun_beachball.txa.txt", z_order++);
-            gun_dragon = new Atlas("gun_dragon.png", "gun_dragon.txa.txt", z_order++);
-            gun_fork = new Atlas("gun_fork.png", "gun_fork.txa.txt", z_order++);
-            gun_penguin = new Atlas("gun_penguin.png", "gun_penguin.txa.txt", z_order++);
-            gun_sin = new Atlas("gun_sin.png", "gun_sin.txa.txt", z_order++);
-            gun_skull = new Atlas("gun_skull.png", "gun_skull.txa.txt", z_order++);
-            gun_vegetable = new Atlas("gun_vegetable.png", "gun_vegetable.txa.txt", z_order++);
 
             explosion = new Atlas("explosion.png", "explosion.txa.txt", z_order++);
 

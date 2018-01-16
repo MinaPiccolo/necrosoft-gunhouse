@@ -539,8 +539,8 @@ namespace Gunhouse
         public const int ammo_upgrade = 2;
         public const int damage = 12;
         public const int damage_upgrade = 3;
-        public const int explosion_size = 25;
-        public const int explosion_size_upgrade = 10;
+        public const int explosion_size = 5;//25;
+        public const int explosion_size_upgrade = 5;//10;
         public const float aim_lead = 0.00035f;
         public const float aim_error = 0.025f;
 

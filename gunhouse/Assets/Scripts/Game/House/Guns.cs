@@ -477,13 +477,14 @@ namespace Gunhouse
             if (hidden) { return; }
 
             if (type == Gun.Ammo.DRAGON) {
-                Particle db = new Particle(AppMain.textures.dragonbullet);
+                Particle db = new Particle(AppMain.textures.gun_dragon);
                 db.frame = 1;
                 db.frame_speed = 0.15f;
                 db.position = position;
                 db.velocity = velocity;
                 db.scale = new Vector2(size, size) / 96;
                 db.origin = new Vector2(1.0f / 2, 3.0f / 4);
+                db.loop_end = (int)gun_dragon.Sprites.special_0;
                 Game.instance.bullet_manager.add(db);
             }
             else if (type == Gun.Ammo.SKULL) {
@@ -1132,6 +1133,7 @@ namespace Gunhouse
         public int rate, timeout, upgrade;
         public Vector2 vel;
         public bool derpy = false;
+        Vector2 scale = new Vector2(-1, 1);
 
         public DragonGun(int upgrade_)
         {
@@ -1148,13 +1150,10 @@ namespace Gunhouse
         public static void fireBullet(Vector2 position, Vector2 vector, int upgrade, List<Entity> target_list,
                                       bool special = false, bool derpy = false)
         {
-            Particle db = new Particle(AppMain.textures.dragonbullet);
-
             DataStorage.ShotsFired++;
-            //Util.trace(DataStorage.ShotsFired);
-
             Choom.PlayEffect(SoundAssets.DragonShot);
 
+            Particle db = new Particle(AppMain.textures.gun_dragon);
             db.position = position + vector.normalized * 100 * 1.5f;
 
             if (special) {
@@ -1164,16 +1163,23 @@ namespace Gunhouse
             }
 
             db.gravity = new Vector2(0, DragonGun.gravity);
-            if (special) db.velocity = vector;
-            else db.velocity = vector * DragonGun.bullet_velocity;
+
+            if (special) {
+                db.velocity = vector;
+            }
+            else {
+                db.velocity = vector * DragonGun.bullet_velocity;
+            }
+
             db.collides_with = target_list;
             db.spin = 0.2f;
             db.angle = Util.rng.NextFloat(0, (float)Math.PI * 2);
 
             var size = DragonGun.bullet_size + DragonGun.bullet_size_upgrade * upgrade;
-            db.scale = new Vector2 (size / 6.0f, size / 6.0f);
+            db.scale = new Vector2(size / 12.0f, size / 12.0f);
             db.ground_at = 440;
             db.origin = new Vector2 (1.0f / 3, 2.0f / 5);
+
             db.collide_behavior = (ref Particle p, Entity e) => {
                 p.remove = true;
                 Choom.PlayEffect(SoundAssets.Explosion[Util.rng.Next(SoundAssets.Explosion.Length)]);
@@ -1190,19 +1196,19 @@ namespace Gunhouse
             Game.instance.bullet_manager.add(db);
         }
 
-        public override void draw ()
+        public override void draw()
         {
             if (derpy) {
-                AppMain.textures.dragon_special_derp.draw(0, position + new Vector2(-80, -70), new Vector2(-1, 1),
-                                                          special_fire_angle, Vector4.one);
+                AppMain.textures.gun_dragon.draw((int)gun_dragon.Sprites.special_1,
+                        position + new Vector2(-80, -70), scale, special_fire_angle, Vector4.one);
             }
             else {
-                AppMain.textures.dragon_special_angry.draw(0, position + new Vector2(-10, -10), new Vector2(-1, 1),
-                                                           special_fire_angle, Vector4.one);
+                AppMain.textures.gun_dragon.draw((int)gun_dragon.Sprites.special_0,
+                        position + new Vector2(-10, -10), scale, special_fire_angle, Vector4.one);
             }
         }
 
-        public override void tick ()
+        public override void tick()
         {
             vel.y = (position.y * 0.95f - position.y);
             position += vel;
@@ -1726,13 +1732,7 @@ namespace Gunhouse
 
                     AppMain.textures.beachball.touch();
                     break;
-                case Gun.Ammo.DRAGON:
-                    AppMain.textures.gun_dragon.touch();
-
-                    AppMain.textures.dragonbullet.touch();
-                    AppMain.textures.dragon_special_angry.touch();
-                    AppMain.textures.dragon_special_derp.touch();
-                    break;
+                case Gun.Ammo.DRAGON: AppMain.textures.gun_dragon.touch(); break;
                 case Gun.Ammo.FLAME: AppMain.textures.flames.touch(); break;
                 case Gun.Ammo.FORK:
                     AppMain.textures.gun_fork.touch();
