@@ -941,27 +941,29 @@ namespace Gunhouse
 
     public class Forker
     {
+        static Vector2 scale = new Vector2(0.5f, 0.5f);
+
         public static void bullet(Vector2 position, int upgrade)
         {
             for (int a = -1; a <= 1; a += 2) {
-                DataStorage.ShotsFired+=2;
-                //Util.trace(DataStorage.ShotsFired);
+                DataStorage.ShotsFired += 2;
 
-                Particle gb = new Particle(AppMain.textures.gumballs);
-                gb.frame = Util.rng.Next(5);
+                Particle gb = new Particle(AppMain.textures.gun_fork);
+                gb.frame = Util.rng.Next((int)gun_fork.Sprites.splat_0);
                 gb.position = position + new Vector2(0, a * 5);
                 gb.angle = ForkGun.angle / 180 * (float)Math.PI * a;
                 gb.velocity = Util.fromPolar(gb.angle, ForkGun.velocity);
                 gb.collides_with = Game.instance.enemy_group.entities;
-                gb.scale = Vector2.one / 40 * (ForkGun.size + ForkGun.size_upgrade * upgrade);
+                gb.scale = scale / 40 * (ForkGun.size + ForkGun.size_upgrade * upgrade);
                 gb.ground_at = 480;
                 gb.collide_behavior = (ref Particle p, Entity e) => {
                     p.remove = true;
                     if (e != null) {
                         (e as Target).damage(ForkGun.damage + ForkGun.damage_upgrade * upgrade, Gun.Ammo.FORK);
                     }
-                    Particle splat = new Particle(AppMain.textures.gumballs);
-                    splat.frame = 5;
+                    Particle splat = new Particle(AppMain.textures.gun_fork);
+                    splat.frame = (int)gun_fork.Sprites.splat_0;
+                    //splat.loop_end = (int)gun_fork.Sprites.splat_1 + 1;
                     splat.frame_speed = 0.2f;
                     splat.position = p.position;
                     splat.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
@@ -1740,8 +1742,6 @@ namespace Gunhouse
                 case Gun.Ammo.FLAME: AppMain.textures.flames.touch(); break;
                 case Gun.Ammo.FORK:
                     AppMain.textures.gun_fork.touch();
-
-                    AppMain.textures.gumballs.touch();
                     AppMain.textures.forkspecial.touch();
                     break;
                 case Gun.Ammo.IGLOO:

@@ -111,7 +111,7 @@ namespace Gunhouse
 
         public SpriterSet lightning_match;
 
-        public Atlas veggies, veggie_special, penguinbullet, skullbullet, gumballs;
+        public Atlas veggies, veggie_special, penguinbullet, skullbullet;
 
         public SpriterSet forkspecial, lightning_strike, boomerang, flames;
         public Atlas laserspecial;
@@ -372,9 +372,7 @@ namespace Gunhouse
             counter_time = new Atlas("counter-time-numbers-yellow.png", new Vector2(32, 40), z_order++);
             counter_time.texture.hud = true;
 
-            lightning_match = new SpriterSet("lightning-match.ssb.txt",
-                                             new Atlas("lightning-match.png",
-                                                       "lightning-match.txa.txt", z_order++));
+            lightning_match = new SpriterSet("lightning-match.ssb.txt", new Atlas("lightning-match.png", "lightning-match.txa.txt", z_order++));
             lightning_match.atlas.texture.hud = true;
 
             stage_skeleton_anchors = new Atlas("stage_skeleton_anchors.png", "stage_skeleton_anchors.txa.txt", z_order++);
@@ -393,9 +391,7 @@ namespace Gunhouse
             cloudpuff = new Atlas("cloudpuff.png", "cloudpuff.txa.txt", z_order++);
             gunpoof = new Atlas("gunpoof.png", "gunpoof.txa.txt", z_order++);
 
-            peterbossbullet = new SpriterSet("peter_boss_bullet.ssb.txt",
-                                             new Atlas("peter_boss_bullet.png",
-                                                       "peter_boss_bullet.txa.txt", z_order++));
+            peterbossbullet = new SpriterSet("peter_boss_bullet.ssb.txt", new Atlas("peter_boss_bullet.png", "peter_boss_bullet.txa.txt", z_order++));
 
             icecreambossbullet = new SpriterSet("icecream-boss-bullet.ssb.txt",
                                                 new Atlas("icecream-boss-bullet.png",
@@ -463,19 +459,16 @@ namespace Gunhouse
 
 
             penguinbullet = new Atlas("penguin-bullet.png", "penguin-bullet.txa.txt", z_order++);
-            gumballs = new Atlas("gumballs.png", "gumballs.txa.txt", z_order++);
             veggies = new Atlas("veggies.png", "veggies.txa.txt", z_order++);
             laserspecial = new Atlas("laser-special.png", "laser-special.txa.txt", z_order++);
             veggie_special = new Atlas("veggie-special.png", "veggie-special.txa.txt", z_order++);
             skullbullet = new Atlas("skull-bullet.png", "skull-bullet.txa.txt", z_order++);
-            //beachball = new Atlas("beachball.png", "beachball.txa.txt", z_order++);
-
 
             boomerang = new SpriterSet("boomerang.ssb.txt", new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
             flames = new SpriterSet("flame.ssb.txt", new Atlas("flame.png", "flame.txa.txt", z_order++));
 
-            gun_fork = new Atlas("gun_fork.png", "gun_fork.txa.txt", z_order++);
             gun_penguin = new Atlas("gun_penguin.png", "gun_penguin.txa.txt", z_order++);
+            gun_fork = new Atlas("gun_fork.png", "gun_fork.txa.txt", z_order++);
             gun_sin = new Atlas("gun_sin.png", "gun_sin.txa.txt", z_order++);
             gun_dragon = new Atlas("gun_dragon.png", "gun_dragon.txa.txt", z_order++);
             gun_vegetable = new Atlas("gun_vegetable.png", "gun_vegetable.txa.txt", z_order++);
