@@ -442,8 +442,8 @@ namespace Gunhouse
         public const int damage = 5;
         public const int damage_upgrade = 2;
 
-        public const float special_spike_size = 200;
-        public const float special_spike_size_upgrade = 30;
+        public const float special_spike_size = 100;//200;
+        public const float special_spike_size_upgrade = 15;//30;
         public const float special_spike_lifetime = 2.0f;
         public const float special_spike_lifetime_upgrade = 0.25f;
         public const int special_spike_count = 3;

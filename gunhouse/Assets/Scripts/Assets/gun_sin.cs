@@ -8,6 +8,12 @@ namespace gun_sin
       special_2,
       special_3,
       special_4,
+      shard_0,
+      shard_1,
+      shard_2,
+      shard_3,
+      shard_4,
+      shard_5
     };
 }
 

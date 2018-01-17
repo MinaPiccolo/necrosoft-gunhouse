@@ -970,17 +970,17 @@ namespace Gunhouse
     public class Spike : Entity
     {
         public int upgrade, timeout;
-        public float frame = 0;
+        public float frame = (int)gun_sin.Sprites.special_0;
+        static Vector2 scale = new Vector2(0.5f, 0.5f);
 
         public Spike(int pos_x, int upgrade_)
         {
             upgrade = upgrade_;
             int s = (int)(SinGun.special_spike_size + SinGun.special_spike_size_upgrade * upgrade);
-            size = new Vector2 (s, s);
+            size = new Vector2(s, s);
             angle = Util.rng.NextFloat(-0.4f, 0.4f);
             position = new Vector2(pos_x, 500);
-            timeout = (int)(60 * (SinGun.special_spike_lifetime + SinGun.special_spike_lifetime_upgrade * upgrade)) +
-                           Util.rng.Next (-20, 40);
+            timeout = (int)(60 * (SinGun.special_spike_lifetime + SinGun.special_spike_lifetime_upgrade * upgrade)) + Util.rng.Next(-20, 40);
 
             for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                 Target t = (Target)Game.instance.enemy_group.entities[i];
@@ -996,15 +996,15 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int y_size = (int)(AppMain.textures.laserspecial.sprites [(int)frame].size.y * size.y / 500);
+            int y_size = (int)(AppMain.textures.gun_sin.sprites[(int)frame].size.y * size.y / 500);
             Vector2 rot = new Vector2((float)Math.Cos(angle),
                                       (float)Math.Sin(angle - (Math.PI / 2))) * ((y_size - 30) / 2);
-            AppMain.textures.laserspecial.draw((int)frame, position + rot, size / 500.0f, angle, Vector4.one);
+            AppMain.textures.gun_sin.draw((int)frame, position + rot, size / 500.0f, angle, Vector4.one);
         }
 
         public override void tick()
         {
-            if (frame < 4.0) { frame += 0.15f; }
+            if (frame < (int)gun_sin.Sprites.special_4) { frame += 0.15f; }
 
             if (--timeout <= 0) {
                 remove = true;
@@ -1022,19 +1022,19 @@ namespace Gunhouse
                 Choom.PlayEffect(SoundAssets.SpikeBreak);
                 AppMain.screenShake(upgrade * 5, 30);
 
-                for (int i = 0; i < 5; i++) {
-                    Particle p = new Particle (AppMain.textures.laserspecial);
-                    p.frame = Util.rng.Next (5, 11);
-                    Vector2 rot = new Vector2((float)Math.Cos (angle),
-                                              (float)Math.Sin (angle - (Math.PI / 2))) * (size.y * i / 5);
-                    p.position = position + rot;
-                    p.velocity = new Vector2(Util.rng.NextFloat(-2, 2), Util.rng.NextFloat(0, 2));
-                    p.scale = Vector2.one;
-                    p.gravity = new Vector2(0, 0.25f);
-                    p.angle = 0;
-                    p.spin = Util.rng.NextFloat(-0.05f, 0.05f);
-                    Game.instance.particle_manager.add(p);
-                }
+                //for (int i = 0; i < 5; i++) {
+                //    Particle p = new Particle(AppMain.textures.gun_sin);
+                //    p.frame = Util.rng.Next((int)gun_sin.Sprites.shard_0, (int)gun_sin.Sprites.shard_5);
+                //    Vector2 rot = new Vector2((float)Math.Cos(angle),
+                //                              (float)Math.Sin(angle - (Math.PI / 2))) * (size.y * i / 5);
+                //    p.position = position + rot;
+                //    p.velocity = new Vector2(Util.rng.NextFloat(-2, 2), Util.rng.NextFloat(0, 2));
+                //    p.scale = scale;//Vector2.one;
+                //    p.gravity = new Vector2(0, 0.25f);
+                //    p.angle = 0;
+                //    p.spin = Util.rng.NextFloat(-0.05f, 0.05f);
+                //    Game.instance.particle_manager.add(p);
+                //}
             }
         }
     }
@@ -1731,10 +1731,7 @@ namespace Gunhouse
                     break;
                 case Gun.Ammo.IGLOO: AppMain.textures.gun_penguin.touch(); break;
                 case Gun.Ammo.LIGHTNING: AppMain.textures.lightning_strike.touch(); break;
-                case Gun.Ammo.SIN:
-                    AppMain.textures.gun_sin.touch();
-                    AppMain.textures.laserspecial.touch();
-                    break;
+                case Gun.Ammo.SIN: AppMain.textures.gun_sin.touch(); break;
                 case Gun.Ammo.SKULL: AppMain.textures.gun_skull.touch(); break;
                 case Gun.Ammo.VEGETABLE: AppMain.textures.gun_vegetable.touch(); break;
                 }

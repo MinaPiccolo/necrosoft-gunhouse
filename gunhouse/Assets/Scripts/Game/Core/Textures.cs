@@ -111,7 +111,6 @@ namespace Gunhouse
 
         public SpriterSet lightning_match;
         public SpriterSet forkspecial, lightning_strike, boomerang, flames;
-        public Atlas laserspecial;
 
         public Atlas stage_oakland_noon, stage_oakland_dusk, stage_oakland_night;
         public Atlas stage_skeleton_noon, stage_skeleton_dusk, stage_skeleton_night;
@@ -453,24 +452,18 @@ namespace Gunhouse
                                                 new Atlas("icecream-tank-bullet.png",
                                                           "icecream-tank-bullet.txa.txt", z_order++));
 
-
-
-            laserspecial = new Atlas("laser-special.png", "laser-special.txa.txt", z_order++);
             boomerang = new SpriterSet("boomerang.ssb.txt", new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
             flames = new SpriterSet("flame.ssb.txt", new Atlas("flame.png", "flame.txa.txt", z_order++));
 
+            gun_sin = new Atlas("gun_sin.png", "gun_sin.txa.txt", z_order++);
             gun_penguin = new Atlas("gun_penguin.png", "gun_penguin.txa.txt", z_order++);
             gun_fork = new Atlas("gun_fork.png", "gun_fork.txa.txt", z_order++);
-            gun_sin = new Atlas("gun_sin.png", "gun_sin.txa.txt", z_order++);
             gun_dragon = new Atlas("gun_dragon.png", "gun_dragon.txa.txt", z_order++);
             gun_vegetable = new Atlas("gun_vegetable.png", "gun_vegetable.txa.txt", z_order++);
             gun_skull = new Atlas("gun_skull.png", "gun_skull.txa.txt", z_order++);
             gun_beachball = new Atlas("gun_beachball.png", "gun_beachball.txa.txt", z_order++);
 
-            lightning_strike = new SpriterSet("lightning-strike.ssb.txt",
-                                              new Atlas("lightning-strike.png",
-                                                        "lightning-strike.txa.txt", z_order++));
-
+            lightning_strike = new SpriterSet("lightning-strike.ssb.txt", new Atlas("lightning-strike.png", "lightning-strike.txa.txt", z_order++));
 
             explosion = new Atlas("explosion.png", "explosion.txa.txt", z_order++);
 

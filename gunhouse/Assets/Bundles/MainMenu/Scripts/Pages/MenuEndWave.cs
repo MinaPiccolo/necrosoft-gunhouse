@@ -12,6 +12,8 @@ namespace Gunhouse.Menu
         [SerializeField] Objectives objectives;
         [SerializeField] OnClickItem waveResponse;
 
+        [Space(10)] [SerializeField] GameObject[] buttons;
+
         protected override void Initalise() { pageID = MenuState.EndWave; transitionID = MenuState.None; }
 
         protected override void IntroReady()
@@ -75,15 +77,22 @@ namespace Gunhouse.Menu
             titles[0].SetActive(AppMain.HasWon);
             titles[1].SetActive(!AppMain.HasWon);
 
-            waveResponse.item = AppMain.HasWon ? MenuItem.NextWave : MenuItem.RetryWave;
-            waveResponse.GetComponent<TextMeshProUGUI>().text = AppMain.HasWon ? "Next Wave" : "Retry Wave";
+            for (int i = 0; i < buttons.Length; ++i) { buttons[i].SetActive(true); }
+            refocusSelected = buttons[0].gameObject;
 
             menu.builder.Length = 0;
             if (MetaState.hardcore_mode && AppMain.HasWon) {
                 menu.builder.AppendFormat("Hardcore mode score so far: {0}", MoneyGuy.me.printed_score);
+                buttons[0].SetActive(true);
+                buttons[1].SetActive(false);
+                buttons[2].SetActive(true);
             }
             else if (MetaState.hardcore_mode && !AppMain.HasWon) {
                 menu.builder.AppendFormat("Final hardcore mode score: {0}", MoneyGuy.me.printed_score);
+                refocusSelected = buttons[2].gameObject;
+                buttons[0].SetActive(false);
+                buttons[1].SetActive(false);
+                buttons[2].SetActive(true);
             }
             else if (AppMain.HasWon && MetaState.wave_number < GText.Story.story.Length) {
                 menu.builder.Append(GText.Story.story[MetaState.wave_number]);
@@ -91,6 +100,9 @@ namespace Gunhouse.Menu
             else {
                 menu.builder.Append(GText.Story.tips[Random.Range(0, GText.Story.tips.Length)]);
             }
+
+            waveResponse.item = AppMain.HasWon ? MenuItem.NextWave : MenuItem.RetryWave;
+            waveResponse.GetComponent<TextMeshProUGUI>().text = AppMain.HasWon ? "Next Wave" : "Retry Wave";
 
             topLeftText.text = menu.builder.ToString();
 
