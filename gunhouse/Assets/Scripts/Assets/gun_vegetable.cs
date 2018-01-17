@@ -25,7 +25,6 @@ namespace gun_vegetable
       special_8,
       special_9,
       special_10,
-      special_11,
     };
 }
 

@@ -612,8 +612,8 @@ namespace Gunhouse
 
         public const int special_damage = 60;
         public const int special_damage_upgrade = 20;
-        public const float special_size = 0.5f;
-        public const float special_size_upgrade = 0.15f;
+        public const float special_size = 0.25f;//0.5f;
+        public const float special_size_upgrade = 0.075f;//0.15f;
     }
 
     public partial class Puzzle

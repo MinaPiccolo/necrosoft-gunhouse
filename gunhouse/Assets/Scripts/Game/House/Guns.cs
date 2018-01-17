@@ -1022,19 +1022,22 @@ namespace Gunhouse
                 Choom.PlayEffect(SoundAssets.SpikeBreak);
                 AppMain.screenShake(upgrade * 5, 30);
 
-                //for (int i = 0; i < 5; i++) {
-                //    Particle p = new Particle(AppMain.textures.gun_sin);
-                //    p.frame = Util.rng.Next((int)gun_sin.Sprites.shard_0, (int)gun_sin.Sprites.shard_5);
-                //    Vector2 rot = new Vector2((float)Math.Cos(angle),
-                //                              (float)Math.Sin(angle - (Math.PI / 2))) * (size.y * i / 5);
-                //    p.position = position + rot;
-                //    p.velocity = new Vector2(Util.rng.NextFloat(-2, 2), Util.rng.NextFloat(0, 2));
-                //    p.scale = scale;//Vector2.one;
-                //    p.gravity = new Vector2(0, 0.25f);
-                //    p.angle = 0;
-                //    p.spin = Util.rng.NextFloat(-0.05f, 0.05f);
-                //    Game.instance.particle_manager.add(p);
-                //}
+                for (int i = 0; i < 5; i++) {
+                    Particle p = new Particle(AppMain.textures.gun_sin);
+                    p.frame = Util.rng.Next((int)gun_sin.Sprites.special_shard_0, (int)gun_sin.Sprites.special_shard_5);
+                    Vector2 rot = new Vector2((float)Math.Cos(angle),
+                                              (float)Math.Sin(angle - (Math.PI / 2))) * (size.y * i / 5);
+                    p.position = position + rot;
+                    p.position.x += Util.rng.NextFloat(-20, 20);
+                    p.position.y += Util.rng.NextFloat(-75, -20);
+
+                    p.velocity = new Vector2(Util.rng.NextFloat(-2, 2), Util.rng.NextFloat(0, 2));
+                    p.scale = scale;
+                    p.gravity = new Vector2(0, 0.25f);
+                    p.angle = 0;
+                    p.spin = Util.rng.NextFloat(-0.05f, 0.05f);
+                    Game.instance.particle_manager.add(p);
+                }
             }
         }
     }
@@ -1470,7 +1473,7 @@ namespace Gunhouse
             if (frame >= (int)gun_vegetable.Sprites.special_7) {
                 frame += 0.15f;
                 position = new Vector2(360, 490) + new Vector2(35 * size.y, 0);
-                if (frame >= (int)gun_vegetable.Sprites.special_11) { remove = true; }
+                if (frame >= (int)gun_vegetable.Sprites.special_10) { remove = true; }
             }
             else if (frame > (int)gun_vegetable.Sprites.special_6) {
                 acceleration += 0.00005f;
