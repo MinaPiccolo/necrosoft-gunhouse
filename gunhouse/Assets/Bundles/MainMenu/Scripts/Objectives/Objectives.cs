@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Necrosoft.ThirdParty;
 using TMPro;
 
 namespace Gunhouse
@@ -15,22 +14,11 @@ namespace Gunhouse
 
         public static bool AnyComplete;
         Animator animator;
+        bool loadOnce;
 
         void OnEnable()
         {
             animator = GetComponent<Animator>();
-
-            bool firstTime = activeTasks[0] == 0 && activeTasks[1] == 0;
-
-            for (int i = 0; i < activeTasks.Length; ++i) {
-                if (firstTime) {
-                    activeTasks[i] = FreshRandom(0, taskRange[0]);
-                    previousTasks.Add(activeTasks[i]);
-                }
-
-                UpdateRequestHistory(i);
-                SetTaskText(i, false);
-            }
         }
 
         void Update()
@@ -59,6 +47,19 @@ namespace Gunhouse
             }
 
             #endif
+        }
+
+        public void AnimationEventCheck()
+        {
+            bool firstTime = activeTasks[0] == 0 && activeTasks[1] == 0;
+            for (int i = 0; i < activeTasks.Length; ++i) {
+                if (firstTime) {
+                    CreateTask(i, FreshRandom(0, taskRange[0]));
+                }
+
+                UpdateRequestHistory(i);
+                SetTaskText(i, false);
+            }
         }
 
         public void Play(int hash) { animator.Play(hash); }

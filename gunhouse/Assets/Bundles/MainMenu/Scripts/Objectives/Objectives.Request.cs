@@ -38,17 +38,11 @@ namespace Gunhouse
             int number = Random.Range(min, max);
 
             while (previousTasks.Contains(number) || taskHistory.Contains(number) ||
-                   (possibleTasks[number] == TaskType.FREE && CheckForTask(previousTasks, TaskType.FREE))) {
+                   (possibleTasks[number] == TaskType.FREE && previousTasks.Contains((int)TaskType.FREE))) {
                 number = Random.Range(min, max);
             }
 
             return number;
-        }
-
-        bool CheckForTask(List<int> list, TaskType task)
-        {
-            for (int i = 0; i < list.Count; i++) if (possibleTasks[list[i]] == task) return true;
-            return false;
         }
 
         void CreateTask(int i, int taskIndex)

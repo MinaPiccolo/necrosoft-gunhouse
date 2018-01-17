@@ -1248,21 +1248,20 @@ namespace Gunhouse
                 Vector2 gridsize = t.both_groups[i].GridSize();
                 t.both_groups[i].SetGridPosition(pos);
 
-                if (pos.x+(gridsize.x-1) >= columns || pos.x < 0) {
+                if (pos.x + (gridsize.x - 1) >= columns || pos.x < 0) {
                     int grid_y = (int)t.both_groups[i].GridPosition().y;
-
-                    if (pos.x >= columns) {
-                        loading_specials = false;
-                        Objectives.LoadGun(gridsize.x, gridsize.y);
-                    }
-
-                    if (pos.x < 0) {
-                        loading_specials = true;
-                        Objectives.LoadSpecial(gridsize.x, gridsize.y);
-                    }
 
                     // only support blocks of 2x2 or higher
                     if (gridsize.y >= 2) {
+                        if (pos.x < 0) {
+                            loading_specials = true;
+                            Objectives.LoadSpecial(gridsize.x, gridsize.y);
+                        }
+                        else {
+                            loading_specials = false;
+                            Objectives.LoadGun(gridsize.x, gridsize.y);
+                        }
+
                         for (int y = 0; y < gridsize.y; ++y) {
                             gun_feed_amt[(y + grid_y) / 2] += (int)gridsize.x;
                         }
