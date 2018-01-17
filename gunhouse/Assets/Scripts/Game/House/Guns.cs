@@ -175,10 +175,9 @@ namespace Gunhouse
                     Choom.PlayEffect(SoundAssets.VegShot);
 
                     DataStorage.ShotsFired++;
-                    //Util.trace(DataStorage.ShotsFired);
 
-                    int type = Util.rng.Next(6);
-                    Particle vb = new Particle(AppMain.textures.veggies);
+                    int type = Util.rng.Next((int)gun_vegetable.Sprites.hit_orange_0);
+                    Particle vb = new Particle(AppMain.textures.gun_vegetable);
                     vb.frame = type;
                     vb.position = position + noisy_aim * 105 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 5;
                     vb.velocity = noisy_aim * VegetableGun.velocity;
@@ -196,8 +195,8 @@ namespace Gunhouse
                                                  Gun.Ammo.VEGETABLE);
                         }
 
-                        Particle splat = new Particle (AppMain.textures.veggies);
-                        splat.frame = type / 2 * 4 + 8;
+                        Particle splat = new Particle (AppMain.textures.gun_vegetable);
+                        splat.frame = (type % 2 == 0) ? type + 6 : type + 5;
                         splat.frame_speed = 0.1f;
                         splat.loop_end = (int)splat.frame + 2;
                         splat.loop = false;
@@ -309,8 +308,7 @@ namespace Gunhouse
 
         PuzzlePiece choosePiece()
         {
-            for (;;)
-            {
+            for (;;) {
                 PuzzlePiece p = Game.instance.puzzle.pieceAt(new Vector2(Util.rng.Next(3), gun_index * 2 + Util.rng.Next(1)));
 
                 if (p != null) { return p; }
@@ -371,8 +369,9 @@ namespace Gunhouse
                 if (g.upgrade > 0) return true;
             }
 
-            foreach(var s in Game.instance.house.special_attacks)
+            foreach(var s in Game.instance.house.special_attacks) {
                 if (s.Item2 > 0) return true;
+            }
             
             return false;
         }
@@ -488,8 +487,8 @@ namespace Gunhouse
                 Game.instance.bullet_manager.add(db);
             }
             else if (type == Gun.Ammo.SKULL) {
-                Particle db = new Particle(AppMain.textures.skullbullet);
-                db.frame = 4;
+                Particle db = new Particle(AppMain.textures.gun_skull);
+                db.frame = (int)gun_skull.Sprites.explosion_0;
                 db.frame_speed = 0.15f;
                 db.position = position;
                 db.velocity = velocity;
@@ -600,12 +599,6 @@ namespace Gunhouse
 
             AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.bullet_shine,
                 position, scaleInvertX / 56 * size.x, 0, Vector4.one);
-
-            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet1 + sprite,
-            //                                position, Vector2.one / 56 * size.x, angle, Vector4.one);
-            
-            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet_highlite,
-                                            //position, new Vector2 (-1, 1) / 56 * size.x, 0, Vector4.one);
         }
     }
 
@@ -656,8 +649,6 @@ namespace Gunhouse
         {
             AppMain.textures.gun_sin.draw((int)gun_sin.Sprites.bullet,
                                           position, scale * size.x / 20, angle, Vector4.one);
-
-            //AppMain.textures.laserbullet.draw(0, position, new Vector2(-1, 1) * size.x / 20, angle, Vector4.one);
         }
     }
 
@@ -668,6 +659,7 @@ namespace Gunhouse
         public int upgrade = 0;
         public float frame = 0;
         public bool special = false;
+        static Vector2 scale = new Vector2(0.5f, 0.5f);
 
         public SkullBullet (bool special_, Vector2 position, Vector2 velocity_, int upgrade_, EntityGroup targets_, Target target_ = null)
                             : base (position, velocity_, targets_, target_)
@@ -748,8 +740,8 @@ namespace Gunhouse
 
         public override void draw()
         {
-            AppMain.textures.skullbullet.draw((int)frame + (attached_to != null ? 2 : 0),
-                                              position, Vector2.one * size.x / 40, angle, Vector4.one);
+            AppMain.textures.gun_skull.draw((int)frame + (attached_to != null ? 2 : 0),
+                                            position, scale * size.x / 40, angle, Vector4.one);
         }
     }
 
@@ -1461,7 +1453,7 @@ namespace Gunhouse
         public Vector2 origin;
         public int upgrade;
         public float spin = 0, acceleration = 0;
-        public float frame = 6.99f;
+        public float frame = (int)gun_vegetable.Sprites.special_0;
 
         public BigVegetable(int upgrade_)
         {
@@ -1475,19 +1467,12 @@ namespace Gunhouse
 
         public override void tick()
         {
-            if (frame >= 7) {
+            if (frame >= (int)gun_vegetable.Sprites.special_7) {
                 frame += 0.15f;
                 position = new Vector2(360, 490) + new Vector2(35 * size.y, 0);
-                if (frame >= 11) { remove = true; }
+                if (frame >= (int)gun_vegetable.Sprites.special_11) { remove = true; }
             }
-            else {
-                frame -= 0.15f;
-                position = new Vector2(360, 490) - new Vector2(0, 35 * size.y);
-                origin = new Vector2(0.5f, 1.0f - 15 * size.y / AppMain.textures.veggie_special.sprites [(int)frame].size.y);
-            }
-
-            if (frame < 0) {
-                frame = 0;
+            else if (frame > (int)gun_vegetable.Sprites.special_6) {
                 acceleration += 0.00005f;
                 spin += acceleration;
                 angle += spin;
@@ -1501,17 +1486,21 @@ namespace Gunhouse
                     for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                         ((Target)Game.instance.enemy_group.entities[i]).damage(damage, Gun.Ammo.VEGETABLE);
                     }
-
-                    frame = 7.0f;
+                    frame = (int)gun_vegetable.Sprites.special_7;
                     origin = new Vector2 (1 - origin.y, origin.x);
                     angle = 0;
                 }
+            }
+            else {
+                frame += 0.15f;
+                position = new Vector2(360, 490) - new Vector2(0, 35 * size.y);
+                origin = new Vector2(0.5f, 1.0f - 15 * size.y / AppMain.textures.gun_vegetable.sprites[(int)frame].size.y);
             }
         }
 
         public override void draw()
         {
-            AppMain.textures.veggie_special.draw((int)frame, position, origin, size, angle, Vector4.one);
+            AppMain.textures.gun_vegetable.draw((int)frame, position, origin, size, angle, Vector4.one);
         }
     }
 
@@ -1558,11 +1547,6 @@ namespace Gunhouse
                                                 position, scaleInvertX / 233 * radius, angle, Vector4.one);
             AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.special_shine,
                 position + new Vector2(-7, -7) / 233 * radius, scaleInvertX / 233 * radius, 0, Vector4.one);
-
-            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_special_1 + sprite,
-            //    position, new Vector2 (-1, 1) / 233 * radius, angle, Vector4.one);
-            //AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_special_highlite,
-                //position + new Vector2 (-7, -7) / 233 * radius, new Vector2 (-1, 1) / 233 * radius, 0, Vector4.one);
         }
     }
 
@@ -1751,17 +1735,8 @@ namespace Gunhouse
                     AppMain.textures.gun_sin.touch();
                     AppMain.textures.laserspecial.touch();
                     break;
-                case Gun.Ammo.SKULL:
-                    AppMain.textures.gun_skull.touch();
-
-                    AppMain.textures.skullbullet.touch();
-                    break;
-                case Gun.Ammo.VEGETABLE:
-                    AppMain.textures.gun_vegetable.touch();
-
-                    AppMain.textures.veggies.touch();
-                    AppMain.textures.veggie_special.touch();
-                    break;
+                case Gun.Ammo.SKULL: AppMain.textures.gun_skull.touch(); break;
+                case Gun.Ammo.VEGETABLE: AppMain.textures.gun_vegetable.touch(); break;
                 }
 
                 AppMain.textures.house_guns.touch();

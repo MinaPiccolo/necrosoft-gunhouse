@@ -412,8 +412,8 @@ namespace Gunhouse
         public const int size_upgrade = 3;
         public const float velocity = 5.0f;
         public const float explosion_delay = 2.0f;
-        public const int explosion_size = 20;
-        public const int explosion_size_upgrade = 5;
+        public const int explosion_size = 10;//20;
+        public const int explosion_size_upgrade = 3;//5;
         public const float aim_error = 0.025f;
         public const float turn_speed = 0.3f;
         public const int ammo = 4;
@@ -604,8 +604,8 @@ namespace Gunhouse
         public const float turn_speed = 0.02f;
         public const int ammo = 20;
         public const int ammo_upgrade = 5;
-        public const float size = 2.5f;
-        public const float size_upgrade = 0.5f;
+        public const float size = 2f;//2.5f;
+        public const float size_upgrade = 0.25f;//0.5f;
         public const float damage = 12;
         public const float damage_upgrade = 0.5f;
         public const float aim_error = 0.05f;

@@ -110,9 +110,6 @@ namespace Gunhouse
         public Atlas counter_money, counter_time;
 
         public SpriterSet lightning_match;
-
-        public Atlas veggies, veggie_special, skullbullet;
-
         public SpriterSet forkspecial, lightning_strike, boomerang, flames;
         public Atlas laserspecial;
 
@@ -458,11 +455,7 @@ namespace Gunhouse
 
 
 
-            veggies = new Atlas("veggies.png", "veggies.txa.txt", z_order++);
             laserspecial = new Atlas("laser-special.png", "laser-special.txa.txt", z_order++);
-            veggie_special = new Atlas("veggie-special.png", "veggie-special.txa.txt", z_order++);
-            skullbullet = new Atlas("skull-bullet.png", "skull-bullet.txa.txt", z_order++);
-
             boomerang = new SpriterSet("boomerang.ssb.txt", new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
             flames = new SpriterSet("flame.ssb.txt", new Atlas("flame.png", "flame.txa.txt", z_order++));
 
