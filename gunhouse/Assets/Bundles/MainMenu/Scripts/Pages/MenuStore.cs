@@ -50,6 +50,7 @@ namespace Gunhouse.Menu
             SetEquips();
             SetItemStatus();
             optionsBoard.gameObject.SetActive(false);
+            selector.gameObject.SetActive(false);
         }
 
         protected override void Initalise() { pageID = MenuState.Store; transitionID = MenuState.Title; }

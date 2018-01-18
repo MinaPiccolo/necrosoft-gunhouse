@@ -101,7 +101,8 @@ namespace Gunhouse
         public Atlas puzzle, house_guns;
         public Atlas gun_beachball, gun_dragon, gun_fork, gun_penguin, gun_sin, gun_skull, gun_vegetable;
 
-        public Atlas minion, orphan, circle, explosion, gunpoof, block, block_logo, cracks;
+        public Atlas explosion; /* only used on peterboss and penguinpirate. */
+        public Atlas minion, orphan, circle, gunpoof, block, block_logo, cracks;
         public Atlas taptobegin;
         public Atlas clouds, cloudpuff;
         public Atlas bullets, dot, highlight;

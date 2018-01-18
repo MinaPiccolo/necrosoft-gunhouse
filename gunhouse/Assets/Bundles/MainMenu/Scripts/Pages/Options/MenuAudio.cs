@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using Necrosoft;
@@ -23,6 +22,7 @@ namespace Gunhouse.Menu
 
         public override void CancelPressed()
         {
+            for (int i = 0; i < texts.Length; ++i) { texts[i].color = Color.white; }
             transitionID = AppMain.IsPaused ? MenuState.Pause : MenuState.Options;
             base.CancelPressed();
         }

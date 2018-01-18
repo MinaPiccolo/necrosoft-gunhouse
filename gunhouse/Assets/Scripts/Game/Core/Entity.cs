@@ -292,14 +292,11 @@ namespace Gunhouse
 
         public override void tick()
         {
-            if (frame == 0)
-            {
-                for (int i = 0; i < target_group.entities.Count; ++i)
-                {
+            if (frame == 0) {
+                for (int i = 0; i < target_group.entities.Count; ++i) {
                     Target t = (Target)target_group.entities[i];
 
-                    if ((t.position - position).magnitude < radius + t.size.magnitude)
-                    {
+                    if ((t.position - position).magnitude < radius + t.size.magnitude) {
                         t.damage(damage, type);
                     }
                 }
