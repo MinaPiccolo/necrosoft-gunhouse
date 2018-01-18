@@ -24,6 +24,7 @@ namespace Gunhouse
         public int upgrade = 0;
         public bool is_destroyed = false;
         public int destroy = 0;
+        public bool ammo_exhausted = false;
 
         public List<Entity> reticle_targets;
         public int time = 0;
@@ -62,7 +63,7 @@ namespace Gunhouse
 
             // remove dead targets from aim list
             for (int i = 0; i < reticle_targets.Count; i++) {
-                if (reticle_targets [i].remove || (reticle_targets [i] as Target).hp <= 0) {
+                if (reticle_targets[i].remove || (reticle_targets[i] as Target).hp <= 0) {
                     reticle_targets.RemoveAt(i--);
                 }
             }
@@ -72,7 +73,7 @@ namespace Gunhouse
                 current_target = (Target)reticle_targets[0];
             }
             else {
-                current_target = targets.findClosest (position, ammo, 100);
+                current_target = targets.findClosest(position, ammo, 100);
             }
 
             if (current_target != null) {
@@ -103,7 +104,7 @@ namespace Gunhouse
             }
 
             /* fire at current angle */
-            angle = Math.Abs (angle - desired_angle) < turn_speed ? desired_angle : angle;
+            angle = Math.Abs(angle - desired_angle) < turn_speed ? desired_angle : angle;
             angle += angle < desired_angle ? turn_speed : 0;
             angle -= angle > desired_angle ? turn_speed : 0;
 
@@ -150,8 +151,9 @@ namespace Gunhouse
                 if (ammo == Ammo.SKULL) {
                     float aim_angle = Util.angle (noisy_aim);
                     float half_arc = SkullGun.fire_arc / 2.0f;
-                    for (float a = aim_angle - half_arc; a <= aim_angle + half_arc; a +=
-                         SkullGun.fire_arc / SkullGun.skulls_per_shot) {
+                    for (float a = aim_angle - half_arc; a <= aim_angle + half_arc;
+                         a += SkullGun.fire_arc / SkullGun.skulls_per_shot) {
+                        
                         Skuller.addBullet(position + noisy_aim * 100 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * -30,
                                           Util.fromPolar(a, 1), boosted_upgrade, Game.instance.enemy_group,
                                           reticle_targets.Count > 0 ? reticle_targets [0] as Target : null);
@@ -195,13 +197,13 @@ namespace Gunhouse
                                                  Gun.Ammo.VEGETABLE);
                         }
 
-                        Particle splat = new Particle (AppMain.textures.gun_vegetable);
+                        Particle splat = new Particle(AppMain.textures.gun_vegetable);
                         splat.frame = (type % 2 == 0) ? type + 6 : type + 5;
                         splat.frame_speed = 0.1f;
                         splat.loop_end = (int)splat.frame + 2;
                         splat.loop = false;
                         splat.position = p.position;
-                        splat.velocity = e != null ? new Vector2 (e.velocity.x, 0) : Vector2.zero;
+                        splat.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
                         splat.angle = p.angle;
                         splat.scale = p.scale / 2;
                         Game.instance.bullet_manager.add(splat);
@@ -302,6 +304,7 @@ namespace Gunhouse
 
         public void destroyGun()
         {
+            ammo_exhausted = true;
             is_destroyed = true;
             destroy = 39;
         }
@@ -317,6 +320,21 @@ namespace Gunhouse
 
         public void feed(Ammo type, int amt)
         {
+            /* @bug(shane): when some guns have finished firing the door
+                opens too early (while the exit smoke is still animating).
+                the gun type isn't cleared until after this animation
+                so it causes the slot to block any new ammo loaded into
+                it until the animation is finished when the door closes again.
+                to correct this we have a flag to clear the exhausted gun. */
+            if (ammo_exhausted) {
+                upgrade = -1;
+                ammo_ct = 0;
+                ammo = Ammo.GATLING;
+                is_destroyed = false;
+                firing = false;
+                ammo_exhausted = false;
+            }
+
             if (ammo == type) { upgrade += amt - 1; }
             else { upgrade = amt - 1; }
 
@@ -329,36 +347,34 @@ namespace Gunhouse
             ammo = type;
             angle = 0;
 
-            if (ammo == Ammo.GATLING) { ammo_ct = 0; }
-
-            if (ammo == Ammo.SKULL)
-            {
+            switch (ammo) {
+            case Ammo.GATLING: { ammo_ct = 0; } break;
+            case Ammo.FLAME: { turn_speed = FlameGun.turn_speed; } break;
+            case Ammo.SKULL: {
                 fire_rate = SkullGun.fire_rate;
                 turn_speed = SkullGun.turn_speed;
                 aim_error = SkullGun.aim_error;
-            }
-            if (ammo == Ammo.FLAME)
-                turn_speed = FlameGun.turn_speed;
-            if (ammo == Ammo.DRAGON)
-            {
+            } break;
+            case Ammo.DRAGON: {
                 fire_rate = DragonGun.fire_rate;
                 turn_speed = DragonGun.turn_speed;
                 aim_error = DragonGun.aim_error;
-            }
-            if (ammo == Ammo.IGLOO)
-            {
+            } break;
+            case Ammo.IGLOO: {
                 fire_rate = IglooGun.fire_rate;
                 turn_speed = IglooGun.turn_speed;
                 aim_error = IglooGun.aim_error;
-            }
-            if (ammo == Ammo.VEGETABLE)
-            {
+            } break;
+            case Ammo.VEGETABLE: {
                 fire_rate = VegetableGun.fire_rate;
                 turn_speed = VegetableGun.turn_speed;
                 aim_error = VegetableGun.aim_error;
+            } break;
             }
 
-            if (ammo_ct != 0) fire_rate = Math.Max(fire_rate, ammo_ct / Puzzle.attack_round_length);
+            if (ammo_ct != 0) {
+                fire_rate = Math.Max(fire_rate, ammo_ct / Puzzle.attack_round_length);
+            }
         }
 
         public static bool fireableExists()
@@ -1778,6 +1794,8 @@ namespace Gunhouse
             ready_to_open = (puzzle_release_timeout <= 0) && Game.instance.win_timer <= 0 &&
                             (Game.instance.bullet_manager.particle_count + Game.instance.bullet_group.entities.Count) == 1 &&
                             AppMain.top_state == Game.instance;
+
+            // only after smoke
 
             for (int i = 0; i < Game.instance.gun_group.entities.Count; ++i) {
                 if (((Gun)Game.instance.gun_group.entities[i]).firing &&
