@@ -2486,7 +2486,7 @@ MonoBehaviour:
   textBorder: {fileID: 1718298500}
   tutorialText: {fileID: 878844639}
   skulls: {fileID: 342346175}
-  button: {fileID: 0}
+  button: {fileID: 22416523}
   switchMenu: {fileID: 6246521}
 --- !u!4 &135286353
 Transform:
