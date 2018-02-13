@@ -10,7 +10,7 @@ namespace block_logo
       forks,
       igloo,
       lightning,
-      sign,
+      sin,
       skull,
     };
 }

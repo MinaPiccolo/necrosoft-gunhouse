@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR && (UNITY_4_6 || UNITY_4_7 || UNITY_5)
+﻿#if UNITY_EDITOR && (UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_2017_1_OR_NEWER)
 namespace InControl
 {
 	using UnityEditor;
@@ -60,3 +60,4 @@ namespace InControl
 	}
 }
 #endif
+

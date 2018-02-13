@@ -236,7 +236,7 @@ namespace InControl
 			{
 				var joystickDevice = new UnityInputDevice( unityJoystickId, unityJoystickName );
 				AttachDevice( joystickDevice );
-				//Debug.Log( "[InControl] Joystick " + unityJoystickId + ": \"" + unityJoystickName + "\"" );
+				Debug.Log( "[InControl] Joystick " + unityJoystickId + ": \"" + unityJoystickName + "\"" );
 				Logger.LogWarning( "Device " + unityJoystickId + " with name \"" + unityJoystickName + "\" does not match any supported profiles and will be considered an unknown controller." );
 				return;
 			}

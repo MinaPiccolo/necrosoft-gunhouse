@@ -6,7 +6,7 @@ namespace Gunhouse
 {
     public class DrDogBackgroundDay : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.05f, 1.05f);
+        Vector2 scaleAmount = new Vector2(-0.525f, 0.525f);
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
@@ -37,15 +37,18 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int sprite = (int)stage_drdog_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_drdog_dusk) { sprite = (int)stage_drdog_anchors.Sprites.dusk_anchor; }
-            if (atlas() == AppMain.textures.stage_drdog_night) { sprite = (int)stage_drdog_anchors.Sprites.night_anchor; }
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_drdog_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_drdog_dusk) { sprite = (int)stage_drdog_anchors.Sprites.dusk_anchor; }
+                if (atlas() == AppMain.textures.stage_drdog_night) { sprite = (int)stage_drdog_anchors.Sprites.night_anchor; }
 
-            AppMain.textures.stage_drdog_anchors.draw(sprite,
-                                                         new Vector2(340 * 0.5f, AppMain.vscreen.y - 70 * 0.5f),
-                                                         scaleAmount, Vector4.one);
+                AppMain.textures.stage_drdog_anchors.draw(sprite,
+                                                             new Vector2(340 * 0.5f, AppMain.vscreen.y - 70 * 0.5f),
+                                                             scaleAmount, Vector4.one);
+            }
 
-            atlas().draw((int)stage_drdog_noon.Sprites.background, AppMain.vscreen * 0.5f, scaleAmount, Vector4.one);
+            atlas().draw((int)stage_drdog_noon.Sprites.background, (AppMain.vscreen * 0.5f) + new Vector2(0, -115),
+                         scaleAmount, Vector4.one);
             atlas().draw((int)stage_drdog_noon.Sprites.sun, new Vector2(850, 100), scaleAmount, Vector4.one);
 
             for (int i = 0; i < n_clouds; ++i) {
@@ -53,15 +56,9 @@ namespace Gunhouse
             }
 
             atlas().draw((int)stage_drdog_noon.Sprites.platform,
-                         new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 396 * 0.5f - 10), scaleAmount, Vector4.one);
-
-            #if FIXED_16X9
-            atlas().draw((int)stage_drdog_noon.Sprites.ground,
-                         new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 80), scaleAmount, Vector4.one);
-            #else
+                         (AppMain.vscreen * 0.5f) + new Vector2(0, 10), scaleAmount, Vector4.one);
             atlas().draw((int)stage_drdog_noon.Sprites.ground,
                          new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 45), scaleAmount, Vector4.one);
-            #endif
         }
     }
 
@@ -472,16 +469,7 @@ namespace Gunhouse
     {
         public State state, next_state;
 
-        public enum State
-        {
-            JUMPING,
-            WAITING,
-            PUNCHING,
-            DYING,
-            EATING,
-            MISSILES}
-
-        ;
+        public enum State { JUMPING, WAITING, PUNCHING, DYING, EATING, MISSILES };
 
         public float frame = 0;
         public int timeout = 0;
@@ -531,8 +519,7 @@ namespace Gunhouse
 
             if (animation == "eat") frame += punch_speed;
             else if (animation == "backmissiles launch no hatch") frame += 4;
-            else if (animation == "dead")
-                frame += die_speed;
+            else if (animation == "dead") frame += die_speed;
             else frame += 500 / 60.0f;
 
             if (frame >= ss.animations[animation].length) {
@@ -939,13 +926,6 @@ namespace Gunhouse
             AppMain.textures.minion.draw(frame, position, facingScale() / 2, angle,
                                    flashColor());
             drawSubBullets();
-            /*bb.Add(new BitmapDrawCall(AppMain.textures.drdog.atlas.texture,
-        position+origin,
-        AppMain.textures.drdog.atlas.sprite_bounds[1], flashColor(), facingScale(),
-        AppMain.textures.drdog.atlas.centers[1], 0));*/
-            //scale.x = -scale.x;
-            //AppMain.textures.drdog.draw("stance", 0, position, scale,
-            //  angle, flashColor());
         }
     }
 }

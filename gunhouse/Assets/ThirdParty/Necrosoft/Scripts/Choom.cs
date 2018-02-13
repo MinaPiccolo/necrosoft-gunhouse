@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Gunhouse;
+using Necrosoft.ThirdParty;
 
 namespace Necrosoft
 {
@@ -163,13 +164,15 @@ namespace Necrosoft
 
         public static void Pause(bool pause = true)
         {
-            if (pause)
-            {
-                musicLayer.volume = musicVolume * pauseVolume;
+            LeanTween.cancel(gameObject);
+
+            if (pause) {
+                LeanTween.value(gameObject, (float val) => { musicLayer.volume = val; },
+                                musicLayer.volume, musicVolume * pauseVolume, 0.5f);
+
                 for (int i = 0; i < MAX_EFFECT_LAYERS; ++i) effectLayers[i].Pause();
             }
-            else
-            {
+            else {
                 MusicVolume = musicVolume;
                 for (int i = 0; i < MAX_EFFECT_LAYERS; ++i) effectLayers[i].UnPause();
             }

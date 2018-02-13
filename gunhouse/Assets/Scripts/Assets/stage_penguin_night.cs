@@ -6,8 +6,8 @@ namespace stage_penguin_night
       cloud_0,
       cloud_1,
       cloud_2,
-      foreground,
       ground,
+      wave,
     };
 }
 

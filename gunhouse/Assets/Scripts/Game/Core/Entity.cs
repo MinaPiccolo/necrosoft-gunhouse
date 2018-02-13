@@ -192,10 +192,8 @@ namespace Gunhouse
 
         public virtual void tick()
         {
-            for (int i = entities.Count - 1; i >= 0; --i)
-            {
+            for (int i = entities.Count - 1; i >= 0; --i){
                 if (entities[i].remove) { continue; }
-
                 entities[i].tick();
             }
 
@@ -294,14 +292,11 @@ namespace Gunhouse
 
         public override void tick()
         {
-            if (frame == 0)
-            {
-                for (int i = 0; i < target_group.entities.Count; ++i)
-                {
+            if (frame == 0) {
+                for (int i = 0; i < target_group.entities.Count; ++i) {
                     Target t = (Target)target_group.entities[i];
 
-                    if ((t.position - position).magnitude < radius + t.size.magnitude)
-                    {
+                    if ((t.position - position).magnitude < radius + t.size.magnitude) {
                         t.damage(damage, type);
                     }
                 }
@@ -337,7 +332,6 @@ namespace Gunhouse
         public int timeout;
 
         public Atlas atlas;
-        public string text;
         public float frame;
         public float frame_speed;
         public bool loop;
@@ -354,10 +348,9 @@ namespace Gunhouse
 
         public List<Entity> collides_with;
 
-        public void Dispose ()
+        public void Dispose()
         {
             atlas = null;
-            text = null;
             collides_with = null;
             collide_behavior = null;
             tick_behavior = null;
@@ -385,7 +378,6 @@ namespace Gunhouse
             loop_start = 0;
             loop_end = a.n_sprites;
             remove = false;
-            text = null;
             ground_at = 600;
             time = 0;
             collide_behavior = null;
@@ -495,11 +487,10 @@ namespace Gunhouse
         public override void draw()
         {
             for (int i = 0; i < particle_count; i++) {
-                Particle p = particles [i];
+                Particle p = particles[i];
                 if (p.remove) continue;
 
-                if (p.text == null) p.atlas.draw((int)p.frame, p.position, p.origin, p.scale, p.angle, p.color);
-                else Text.Draw(p.position, p.text, p.scale, p.color);
+                p.atlas.draw((int)p.frame, p.position, p.origin, p.scale, p.angle, p.color);
             }
         }
     }
@@ -659,15 +650,15 @@ namespace Gunhouse
             Vector4 color = Vector4.one;
 
             Vector2 offset = new Vector2(0, (time % 20 < 10) ? 0 : 2);
-            AppMain.textures.money_guy.draw((int)moneyguy.Sprites.money_register, position + offset,
-                                            new Vector2(facing_left ? 1 : -1, 1), color);
-            AppMain.textures.money_guy.draw((int)moneyguy.Sprites.counter_money,
-                                             position + new Vector2(0, -38 + sign_y), Vector2.one, color);
+
+            AppMain.textures.ui_game.draw((int)ui_game.Sprites.money_guy, position + offset,
+                                          new Vector2(facing_left ? 0.5f : -0.5f, 0.5f), color);
+            AppMain.textures.ui_game.draw((int)ui_game.Sprites.money_counter,
+                                          position + new Vector2(1, -38 + sign_y),
+                                          new Vector2(-0.5f, 0.5f), color);
+
             AppMain.textures.shadowblob2.draw(0, new Vector2(position.x, 530),
                                               Vector2.one / 5, new Vector4(1, 1, 1, 0.5f));
-
-            color.w = AppMain.background_fade;
-            if (AppMain.top_state is EndWaveState) { color.w = 1; }
 
             Vector2 money_pos = position + new Vector2(-56, -38 + sign_y) + new Vector2(printed_score.Length * 16, 0);
 
@@ -746,20 +737,20 @@ namespace Gunhouse
             Vector2 offset = Vector2.zero;
 
             if (money > 150) {
-                sprite = (int)pickups.Sprites.money1_large;
+                sprite = (int)ui_game.Sprites.cash_large;
             }
             else if (money > 75) {
                 offset.y = 5;
-                sprite = (int)pickups.Sprites.money1_small;
+                sprite = (int)ui_game.Sprites.cash_small;
                 shadow_size = Vector2.one / 6;
             }
             else if (money > 0) {
                 offset.y = 5;
-                sprite = (int)pickups.Sprites.money2_small;
+                sprite = (int)ui_game.Sprites.coin_small;
                 shadow_size = Vector2.one / 6;
             }
             else {
-                sprite = (int)pickups.Sprites.heart;
+                sprite = (int)ui_game.Sprites.heart;
                 scale /= 2;
             }
 
@@ -769,7 +760,10 @@ namespace Gunhouse
                 shadow_size *= distance / 100;
             }
 
-            AppMain.textures.pickups.draw(sprite, position + offset, scale, Vector4.one);
+            scale *= 0.5f;
+
+            AppMain.textures.ui_game.draw(sprite, position + offset, scale, Vector4.one);
+
             AppMain.textures.shadowblob.draw(0, new Vector2(position.x, 520),
                                                             shadow_size / (1.5f + (float)Math.Abs(position.y - 520) / 60),
                                              new Vector4 (1, 1, 1, 0.5f));
@@ -821,7 +815,7 @@ namespace Gunhouse
 
             max_hp = max_hp == 0 ? hp : max_hp;
 
-            float amt = (by * GunUpgrade.upgradeMultiplier(type));
+            float amt = (by * Gun.UpgradeMultiplier(type));
 
             if (!Target.damages.ContainsKey(type)) {
                 Target.damages[type] = 0;

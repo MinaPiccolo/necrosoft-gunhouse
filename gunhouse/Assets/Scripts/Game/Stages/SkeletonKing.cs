@@ -6,12 +6,11 @@ namespace Gunhouse
 {
     public class SkeletonKingBackgroundDay : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.05f, 1.05f);
-        Vector2 scaleOne = new Vector2(1.05f, 1.05f);
+        Vector2 scaleAmount = new Vector2(0.525f, 0.525f);
 
         public const int n_clouds = 4;
         public Vector4[] clouds = new Vector4[n_clouds];
-        Vector2 groundPosition = AppMain.vscreen * 0.5f;
+        Vector2 groundPosition = (AppMain.vscreen * 0.5f) + new Vector2(0, 10); 
 
         public SkeletonKingBackgroundDay()
         {
@@ -43,22 +42,22 @@ namespace Gunhouse
         public override void draw()
         {
             atlas().draw((int)stage_skeleton_noon.Sprites.background,
-                         new Vector2(AppMain.vscreen.x * 0.5f, 394 * 0.5f), scaleOne, Vector4.one);
+                         (AppMain.vscreen * 0.5f) + new Vector2(0, -135), scaleAmount, Vector4.one);
 
-            int sprite = (int)stage_skeleton_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_skeleton_dusk)
-                sprite = (int)stage_skeleton_anchors.Sprites.dusk_anchor;
-            if (atlas() == AppMain.textures.stage_skeleton_night)
-                sprite = (int)stage_skeleton_anchors.Sprites.night_anchor;
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_skeleton_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_skeleton_dusk) sprite = (int)stage_skeleton_anchors.Sprites.dusk_anchor;
+                if (atlas() == AppMain.textures.stage_skeleton_night) sprite = (int)stage_skeleton_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_skeleton_anchors.draw(sprite, new Vector2(290 * 0.5f, 514),
-                                                         scaleAmount, Vector4.one);
-
-            for (int i = 0; i < n_clouds; i++) {
-                atlas().draw((int)stage_skeleton_noon.Sprites.cloud_0 + i, (Vector2)clouds[i], scaleOne, Vector4.one);
+                AppMain.textures.stage_skeleton_anchors.draw(sprite, new Vector2((290 * 0.5f), 520),
+                                                             scaleAmount, Vector4.one);
             }
 
-            atlas().draw((int)stage_skeleton_noon.Sprites.ground, groundPosition, scaleOne, Vector4.one);
+            for (int i = 0; i < n_clouds; i++) {
+                atlas().draw((int)stage_skeleton_noon.Sprites.cloud_0 + i, (Vector2)clouds[i], scaleAmount, Vector4.one);
+            }
+
+            atlas().draw((int)stage_skeleton_noon.Sprites.ground, groundPosition, scaleAmount, Vector4.one);
         }
     }
 

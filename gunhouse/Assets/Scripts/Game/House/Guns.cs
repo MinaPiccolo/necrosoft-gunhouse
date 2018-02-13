@@ -8,7 +8,7 @@ namespace Gunhouse
     public class Gun : Entity
     {
         /* NOTE(shane): unfortunately the order of this enum matters because of how the store upgrades work */
-        public enum Ammo { DRAGON, IGLOO, SKULL, VEGETABLE, LIGHTNING, FLAME, FORK, BOUNCE, BOOMERANG, SIN, GATLING, NONE };
+        public enum Ammo { DRAGON = 0, IGLOO, SKULL, VEGETABLE, LIGHTNING, FLAME, FORK, BOUNCE, BOOMERANG, SIN, GATLING, NONE };
 
         public EntityGroup targets = null, bullets = null;
         public Target current_target = null;
@@ -24,6 +24,7 @@ namespace Gunhouse
         public int upgrade = 0;
         public bool is_destroyed = false;
         public int destroy = 0;
+        public bool ammo_exhausted = false;
 
         public List<Entity> reticle_targets;
         public int time = 0;
@@ -40,6 +41,238 @@ namespace Gunhouse
             bullets = bullets_;
             fire_timeout = 0;
             reticle_targets = new List<Entity>();
+        }
+
+        public override void tick()
+        {
+            // Gatling guns don't shoot!
+            if (ammo == Ammo.GATLING) { return; }
+
+            time++;
+
+            if (is_destroyed) {
+                destroy--;
+                if (destroy < 0) {
+                    is_destroyed = false;
+                    feed(Ammo.GATLING, 0);
+                    firing = false;
+                }
+            }
+
+            reticle_targets.Clear();
+
+            // remove dead targets from aim list
+            for (int i = 0; i < reticle_targets.Count; i++) {
+                if (reticle_targets[i].remove || (reticle_targets[i] as Target).hp <= 0) {
+                    reticle_targets.RemoveAt(i--);
+                }
+            }
+
+            /* find aim vector for current target */
+            if (reticle_targets.Count != 0) {
+                current_target = (Target)reticle_targets[0];
+            }
+            else {
+                current_target = targets.findClosest(position, ammo, 100);
+            }
+
+            if (current_target != null) {
+                aim_at = current_target.position;
+            }
+            else {
+                aim_at = Vector2.zero;
+            }
+
+            if (aim_at == Vector2.zero) {
+                aim_vector = new Vector2 (1, 0);
+                desired_angle = 0;
+            }
+            else {
+                if (ammo == Ammo.SKULL) {
+                    aim_vector = (aim_at - (position + new Vector2 (0, 30)));
+                }
+                else {
+                    aim_vector = (aim_at - position);
+                }
+
+                aim_vector.Normalize();
+                desired_angle = (float)Math.Atan2 (aim_vector.y, aim_vector.x);
+
+                if (ammo == Ammo.DRAGON) {
+                    desired_angle -= DragonGun.aim_lead * (aim_at - position).magnitude;
+                }
+            }
+
+            /* fire at current angle */
+            angle = Math.Abs(angle - desired_angle) < turn_speed ? desired_angle : angle;
+            angle += angle < desired_angle ? turn_speed : 0;
+            angle -= angle > desired_angle ? turn_speed : 0;
+
+            // hard lock angle unless veggie gun
+            if (ammo != Ammo.IGLOO && ammo != Ammo.FLAME) {
+                angle = 0;
+                current_target = null;
+            }
+
+            int boosted_upgrade = upgrade;
+
+            if (--fire_timeout <= 0 && (firing || ammo == Ammo.GATLING)) {
+
+                var noisy_angle = angle + Util.rng.NextFloat(-aim_error, aim_error);
+                var noisy_aim = new Vector2((float)Math.Cos(noisy_angle), (float)Math.Sin(noisy_angle));
+                fire_timeout = (int)(60 / fire_rate);
+
+                if (ammo == Ammo.SIN) {
+                    Choom.PlayEffect(SoundAssets.MathShot);
+                    Game.instance.bullet_group.add(new SinBullet(position + new Vector2(150, 0), new Vector2 (2, 0),
+                                                                 Game.instance.enemy_group, null, boosted_upgrade));
+                }
+
+                if (ammo == Ammo.BOUNCE) {
+                    Choom.PlayEffect(SoundAssets.BeachBallShot);
+                    Game.instance.bullet_group.add(new BeachBall(position + new Vector2 (105, -10), new Vector2 (2, 0),
+                                                                 Game.instance.enemy_group, null, boosted_upgrade));
+                }
+
+                if (ammo == Ammo.FORK) {
+                    Choom.PlayEffect(SoundAssets.ForkShot);
+                    Forker.bullet(position + new Vector2(130, -20), boosted_upgrade);
+                }
+
+                if (ammo == Ammo.BOOMERANG) {
+                    Boomeranger.bullet(position + new Vector2(135, 10), boosted_upgrade, gun_index);
+                }
+
+                if (ammo == Ammo.FLAME) {
+                    Flamer.emitFlame(position + (noisy_aim * 75 + new Vector2(noisy_aim.y, -noisy_aim.x) * -15) * 3 / 2,
+                                     noisy_aim, boosted_upgrade, false);
+                }
+
+                if (ammo == Ammo.SKULL) {
+                    float aim_angle = Util.angle (noisy_aim);
+                    float half_arc = SkullGun.fire_arc / 2.0f;
+                    for (float a = aim_angle - half_arc; a <= aim_angle + half_arc;
+                         a += SkullGun.fire_arc / SkullGun.skulls_per_shot) {
+                        
+                        Skuller.addBullet(position + noisy_aim * 100 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * -30,
+                                          Util.fromPolar(a, 1), boosted_upgrade, Game.instance.enemy_group,
+                                          reticle_targets.Count > 0 ? reticle_targets [0] as Target : null);
+                    }
+
+                    Choom.PlayEffect(SoundAssets.SkullShot);
+                }
+
+                if (ammo == Ammo.IGLOO) {
+                    Penguiner.penguin(position + noisy_aim * 95 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 10,
+                                      noisy_aim * IglooGun.velocity, false, boosted_upgrade, targetList());
+                    Choom.PlayEffect(SoundAssets.IceShot);
+                }
+
+                if (ammo == Ammo.LIGHTNING) {
+                    Choom.PlayEffect(SoundAssets.LightningShot);
+                    Lightning.lightningFrom(this, boosted_upgrade);
+                }
+
+                if (ammo == Ammo.VEGETABLE) {
+                    Choom.PlayEffect(SoundAssets.VegShot);
+
+                    DataStorage.ShotsFired++;
+
+                    int type = Util.rng.Next((int)gun_vegetable.Sprites.hit_orange_0);
+                    Particle vb = new Particle(AppMain.textures.gun_vegetable);
+                    vb.frame = type;
+                    vb.position = position + noisy_aim * 105 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 5;
+                    vb.velocity = noisy_aim * VegetableGun.velocity;
+                    vb.angle = Util.angle(noisy_aim);
+                    vb.collides_with = targetList();
+
+                    var s = VegetableGun.size + boosted_upgrade * VegetableGun.size_upgrade;
+                    vb.scale = new Vector2(s / 8.0f, s / 8.0f);
+                    vb.ground_at = 480;
+                    vb.drawable_size = 100;
+                    vb.collide_behavior = (ref Particle p, Entity e) => {
+                        p.remove = true;
+                        if (e != null) {
+                            (e as Target).damage(VegetableGun.damage + boosted_upgrade * VegetableGun.damage_upgrade,
+                                                 Gun.Ammo.VEGETABLE);
+                        }
+
+                        Particle splat = new Particle(AppMain.textures.gun_vegetable);
+                        splat.frame = (type % 2 == 0) ? type + 6 : type + 5;
+                        splat.frame_speed = 0.1f;
+                        splat.loop_end = (int)splat.frame + 2;
+                        splat.loop = false;
+                        splat.position = p.position;
+                        splat.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
+                        splat.angle = p.angle;
+                        splat.scale = p.scale / 2;
+                        Game.instance.bullet_manager.add(splat);
+                    };
+
+                    Game.instance.bullet_manager.add(vb);
+                }
+
+                if (ammo == Ammo.DRAGON) {
+                    DragonGun.fireBullet(position, noisy_aim, boosted_upgrade, targetList());
+                }
+
+                ammo_ct--;
+                if (ammo_ct <= 0 && ammo != Ammo.GATLING) {
+                    stopFiring();
+                    destroyGun();
+                }
+            }
+        }
+
+        public override void draw()
+        {
+            Vector2 size = new Vector2(1.0f, 1.0f) * 3 / 4;
+
+            if (is_destroyed) {
+                AppMain.textures.gunpoof.draw((int)7 - Mathf.FloorToInt(destroy / 5.0f),
+                                              position + new Vector2(50.0f, 0), size * .5f, angle,
+                                              Vector4.one);
+
+                if (destroy < 30) return;
+            }
+
+            var vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.NextFloat(0, upgrade)) / 4;
+            if (firing) vibrate /= 4;
+
+            position += vibrate;
+
+            bool selected = Game.instance.house.isDoorClosed &&
+                            Game.instance.puzzle.selected_weapon == new Vector2(1, gun_index);
+
+            var color = Vector4.one;// Gun.color(selected);
+
+            if (selected && fireableExists() && AppMain.game_pad_active) {
+                AppMain.textures.ui_game.draw((int)ui_game.Sprites.arrow,
+                                              position - new Vector2(40 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0),
+                                              Vector2.one, 0, Vector4.one);
+            }
+
+            int gun_id = -1;
+
+            switch (ammo)
+            {
+            case Ammo.VEGETABLE: gun_id = (int)guns.Sprites.vegetable; break;
+            case Ammo.IGLOO: gun_id = (int)guns.Sprites.ice; break;
+            case Ammo.DRAGON: gun_id = (int)guns.Sprites.dragon; break;
+            case Ammo.SKULL: gun_id = (int)guns.Sprites.skull; break;
+            case Ammo.LIGHTNING: gun_id = (int)guns.Sprites.lightning; break;
+            case Ammo.SIN: gun_id = (int)guns.Sprites.laser; break;
+            case Ammo.FORK: gun_id = (int)guns.Sprites.gumball; break;
+            case Ammo.BOUNCE: gun_id = (int)guns.Sprites.beachball; break;
+            case Ammo.BOOMERANG: gun_id = (int)guns.Sprites.boomerang; break;
+            case Ammo.FLAME: gun_id = (int)guns.Sprites.flame; break;
+            }
+
+            if (gun_id != -1) {
+                AppMain.textures.house_guns.draw(gun_id, position, size, angle, color);
+            }
+
+            position -= vibrate;
         }
 
         public void startFiring()
@@ -71,14 +304,14 @@ namespace Gunhouse
 
         public void destroyGun()
         {
+            ammo_exhausted = true;
             is_destroyed = true;
             destroy = 39;
         }
 
         PuzzlePiece choosePiece()
         {
-            for (;;)
-            {
+            for (;;) {
                 PuzzlePiece p = Game.instance.puzzle.pieceAt(new Vector2(Util.rng.Next(3), gun_index * 2 + Util.rng.Next(1)));
 
                 if (p != null) { return p; }
@@ -87,6 +320,21 @@ namespace Gunhouse
 
         public void feed(Ammo type, int amt)
         {
+            /* @bug(shane): when some guns have finished firing the door
+                opens too early (while the exit smoke is still animating).
+                the gun type isn't cleared until after this animation
+                so it causes the slot to block any new ammo loaded into
+                it until the animation is finished when the door closes again.
+                to correct this we have a flag to clear the exhausted gun. */
+            if (ammo_exhausted) {
+                upgrade = -1;
+                ammo_ct = 0;
+                ammo = Ammo.GATLING;
+                is_destroyed = false;
+                firing = false;
+                ammo_exhausted = false;
+            }
+
             if (ammo == type) { upgrade += amt - 1; }
             else { upgrade = amt - 1; }
 
@@ -99,77 +347,34 @@ namespace Gunhouse
             ammo = type;
             angle = 0;
 
-            if (ammo == Ammo.GATLING) { ammo_ct = 0; }
-
-            if (ammo == Ammo.SKULL)
-            {
+            switch (ammo) {
+            case Ammo.GATLING: { ammo_ct = 0; } break;
+            case Ammo.FLAME: { turn_speed = FlameGun.turn_speed; } break;
+            case Ammo.SKULL: {
                 fire_rate = SkullGun.fire_rate;
                 turn_speed = SkullGun.turn_speed;
                 aim_error = SkullGun.aim_error;
-            }
-            if (ammo == Ammo.FLAME)
-                turn_speed = FlameGun.turn_speed;
-            if (ammo == Ammo.DRAGON)
-            {
+            } break;
+            case Ammo.DRAGON: {
                 fire_rate = DragonGun.fire_rate;
                 turn_speed = DragonGun.turn_speed;
                 aim_error = DragonGun.aim_error;
-            }
-            if (ammo == Ammo.IGLOO)
-            {
+            } break;
+            case Ammo.IGLOO: {
                 fire_rate = IglooGun.fire_rate;
                 turn_speed = IglooGun.turn_speed;
                 aim_error = IglooGun.aim_error;
-            }
-            if (ammo == Ammo.VEGETABLE)
-            {
+            } break;
+            case Ammo.VEGETABLE: {
                 fire_rate = VegetableGun.fire_rate;
                 turn_speed = VegetableGun.turn_speed;
                 aim_error = VegetableGun.aim_error;
+            } break;
             }
 
-            if (ammo_ct != 0) fire_rate = Math.Max(fire_rate, ammo_ct / Puzzle.attack_round_length);
-        }
-
-        public override void draw()
-        {
-            Vector2 size = new Vector2(1.0f, 1.0f) * 3 / 4;
-            if (is_destroyed)
-            {
-                AppMain.textures.gunpoof.draw((int)7 - Mathf.FloorToInt(destroy / 5.0f),
-                                              position + new Vector2(50.0f, 0), size * .5f, angle,
-                                              Vector4.one);
-
-                if (destroy < 30) return;
+            if (ammo_ct != 0) {
+                fire_rate = Math.Max(fire_rate, ammo_ct / Puzzle.attack_round_length);
             }
-
-            var vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.NextFloat(0, upgrade)) / 4;
-            if (firing) vibrate /= 4;
-
-            position += vibrate;
-
-            bool selected = Game.instance.house.isDoorClosed &&
-                            Game.instance.puzzle.selected_weapon == new Vector2(1, gun_index);
-
-            var color = Vector4.one;// Gun.color(selected);
-
-            if (selected && fireableExists() && AppMain.game_pad_active) {
-                AppMain.textures.arrow.draw(0, position - new Vector2(40 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0),
-                                            Vector2.one, 0, Vector4.one);
-            }
-
-            if (ammo == Ammo.VEGETABLE) AppMain.textures.carrotgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.IGLOO) AppMain.textures.penguingun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.DRAGON) AppMain.textures.dragongun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.SKULL) AppMain.textures.skullgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.LIGHTNING) AppMain.textures.lightninggun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.SIN) AppMain.textures.lasergun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.FORK) AppMain.textures.gun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.BOUNCE) AppMain.textures.beachballgun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.BOOMERANG) AppMain.textures.boomeranggun.draw(0, position, size, angle, color);
-            else if (ammo == Ammo.FLAME) AppMain.textures.flamegun.draw(0, position, size, angle, color);
-
-            position -= vibrate;
         }
 
         public static bool fireableExists()
@@ -180,8 +385,9 @@ namespace Gunhouse
                 if (g.upgrade > 0) return true;
             }
 
-            foreach(var s in Game.instance.house.special_attacks)
+            foreach(var s in Game.instance.house.special_attacks) {
                 if (s.Item2 > 0) return true;
+            }
             
             return false;
         }
@@ -192,185 +398,25 @@ namespace Gunhouse
             return targets.entities;
         }
 
-        public override void tick()
+        public static float UpgradeMultiplier(Gun.Ammo ammo)
         {
-            // Gatling guns don't shoot!
-            if (ammo == Ammo.GATLING) { return; }
-
-            time++;
-
-            if (is_destroyed) {
-                destroy--;
-                if (destroy < 0) {
-                    is_destroyed = false;
-                    feed(Ammo.GATLING, 0);
-                    firing = false;
-                }
+            if (MetaState.hardcore_mode) {
+                return MetaState.logCurve(1,
+                                          Difficulty.gun_upgrade_base,
+                                          Difficulty.gun_upgrade_steepness,
+                                          Difficulty.gun_upgrade_amplification) / MetaState.monster_armor_coefficient;
             }
 
-            reticle_targets.Clear();
+            for (int i = 0; i < (int)Gun.Ammo.NONE; ++i) {
+                if ((Gun.Ammo)i != ammo) { continue; }
 
-            // remove dead targets from aim list
-            for (int i = 0; i < reticle_targets.Count; i++) {
-                if (reticle_targets [i].remove || (reticle_targets [i] as Target).hp <= 0) {
-                    reticle_targets.RemoveAt(i--);
-                }
+                return MetaState.logCurve(DataStorage.GunPower[i],
+                                          Difficulty.gun_upgrade_base,
+                                          Difficulty.gun_upgrade_steepness,
+                                          Difficulty.gun_upgrade_amplification) / MetaState.monster_armor_coefficient;
             }
 
-            /* find aim vector for current target */
-            if (reticle_targets.Count != 0) {
-                current_target = (Target)reticle_targets[0];
-            }
-            else {
-                current_target = targets.findClosest (position, ammo, 100);
-            }
-
-            if (current_target != null) {
-                aim_at = current_target.position;
-            }
-            else {
-                aim_at = Vector2.zero;
-            }
-
-            if (aim_at == Vector2.zero) {
-                aim_vector = new Vector2 (1, 0);
-                desired_angle = 0;
-            }
-            else {
-                if (ammo == Ammo.SKULL) {
-                    aim_vector = (aim_at - (position + new Vector2 (0, 30)));
-                }
-                else {
-                    aim_vector = (aim_at - position);
-                }
-
-                aim_vector.Normalize();
-                desired_angle = (float)Math.Atan2 (aim_vector.y, aim_vector.x);
-
-                if (ammo == Ammo.DRAGON) {
-                    desired_angle -= DragonGun.aim_lead * (aim_at - position).magnitude;
-                }
-            }
-
-            /* fire at current angle */
-            angle = Math.Abs (angle - desired_angle) < turn_speed ? desired_angle : angle;
-            angle += angle < desired_angle ? turn_speed : 0;
-            angle -= angle > desired_angle ? turn_speed : 0;
-
-            // hard lock angle unless veggie gun
-            if (ammo != Ammo.IGLOO && ammo != Ammo.FLAME) {
-                angle = 0;
-                current_target = null;
-            }
-
-            int boosted_upgrade = upgrade;
-
-            if (--fire_timeout <= 0 && (firing || ammo == Ammo.GATLING)) {
-
-                var noisy_angle = angle + Util.rng.NextFloat(-aim_error, aim_error);
-                var noisy_aim = new Vector2((float)Math.Cos(noisy_angle), (float)Math.Sin(noisy_angle));
-                fire_timeout = (int)(60 / fire_rate);
-
-                if (ammo == Ammo.SIN) {
-                    Choom.PlayEffect(SoundAssets.MathShot);
-                    Game.instance.bullet_group.add(new SinBullet(position + new Vector2(150, 0), new Vector2 (2, 0),
-                                                   Game.instance.enemy_group, null, boosted_upgrade));
-                }
-
-                if (ammo == Ammo.BOUNCE) {
-                    Choom.PlayEffect(SoundAssets.BeachBallShot);
-                    Game.instance.bullet_group.add(new BeachBall(position + new Vector2 (105, -10), new Vector2 (2, 0),
-                                                    Game.instance.enemy_group, null, boosted_upgrade));
-                }
-
-                if (ammo == Ammo.FORK) {
-                    Choom.PlayEffect(SoundAssets.ForkShot);
-                    Forker.bullet(position + new Vector2(130, -20), boosted_upgrade);
-                }
-
-                if (ammo == Ammo.BOOMERANG) {
-                    Boomeranger.bullet(position + new Vector2(135, 10), boosted_upgrade, gun_index);
-                }
-
-                if (ammo == Ammo.FLAME) {
-                    Flamer.emitFlame(position + (noisy_aim * 75 + new Vector2(noisy_aim.y, -noisy_aim.x) * -15) * 3 / 2,
-                                     noisy_aim, boosted_upgrade, false);
-                }
-
-                if (ammo == Ammo.SKULL) {
-                    float aim_angle = Util.angle (noisy_aim);
-                    float half_arc = SkullGun.fire_arc / 2.0f;
-                    for (float a = aim_angle - half_arc; a <= aim_angle + half_arc; a +=
-                         SkullGun.fire_arc / SkullGun.skulls_per_shot) {
-                        Skuller.addBullet(position + noisy_aim * 100 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * -30,
-                                          Util.fromPolar(a, 1), boosted_upgrade, Game.instance.enemy_group,
-                                          reticle_targets.Count > 0 ? reticle_targets [0] as Target : null);
-                    }
-
-                    Choom.PlayEffect(SoundAssets.SkullShot);
-                }
-
-                if (ammo == Ammo.IGLOO) {
-                    Penguiner.penguin(position + noisy_aim * 95 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 10,
-                                      noisy_aim * IglooGun.velocity, false, boosted_upgrade, targetList());
-                    Choom.PlayEffect(SoundAssets.IceShot);
-                }
-
-                if (ammo == Ammo.LIGHTNING) {
-                    Choom.PlayEffect(SoundAssets.LightningShot);
-                    Lightning.lightningFrom(this, boosted_upgrade);
-                }
-
-                if (ammo == Ammo.VEGETABLE) {
-                    Choom.PlayEffect(SoundAssets.VegShot);
-                    
-                    DataStorage.ShotsFired++;
-                    //Util.trace(DataStorage.ShotsFired);
-
-                    int type = Util.rng.Next(6);
-                    Particle vb = new Particle(AppMain.textures.veggies);
-                    vb.frame = type;
-                    vb.position = position + noisy_aim * 105 * 1.5f + new Vector2(noisy_aim.y, -noisy_aim.x) * 5;
-                    vb.velocity = noisy_aim * VegetableGun.velocity;
-                    vb.angle = Util.angle(noisy_aim);
-                    vb.collides_with = targetList();
-
-                    var s = VegetableGun.size + boosted_upgrade * VegetableGun.size_upgrade;
-                    vb.scale = new Vector2(s / 8.0f, s / 8.0f);
-                    vb.ground_at = 480;
-                    vb.drawable_size = 100;
-                    vb.collide_behavior = (ref Particle p, Entity e) => {
-                        p.remove = true;
-                        if (e != null) {
-                            (e as Target).damage(VegetableGun.damage + boosted_upgrade * VegetableGun.damage_upgrade,
-                                                 Gun.Ammo.VEGETABLE);
-                        }
-
-                        Particle splat = new Particle (AppMain.textures.veggies);
-                        splat.frame = type / 2 * 4 + 8;
-                        splat.frame_speed = 0.1f;
-                        splat.loop_end = (int)splat.frame + 2;
-                        splat.loop = false;
-                        splat.position = p.position;
-                        splat.velocity = e != null ? new Vector2 (e.velocity.x, 0) : Vector2.zero;
-                        splat.angle = p.angle;
-                        splat.scale = p.scale / 2;
-                        Game.instance.bullet_manager.add(splat);
-                    };
-
-                    Game.instance.bullet_manager.add(vb);
-                }
-
-                if (ammo == Ammo.DRAGON) {
-                    DragonGun.fireBullet(position, noisy_aim, boosted_upgrade, targetList());
-                }
-
-                ammo_ct--;
-                if (ammo_ct <= 0 && ammo != Ammo.GATLING) {
-                    stopFiring();
-                    destroyGun();
-                }
-            }
+            return 1.0f;
         }
     }
 
@@ -446,18 +492,19 @@ namespace Gunhouse
             if (hidden) { return; }
 
             if (type == Gun.Ammo.DRAGON) {
-                Particle db = new Particle(AppMain.textures.dragonbullet);
+                Particle db = new Particle(AppMain.textures.gun_dragon);
                 db.frame = 1;
                 db.frame_speed = 0.15f;
                 db.position = position;
                 db.velocity = velocity;
                 db.scale = new Vector2(size, size) / 96;
                 db.origin = new Vector2(1.0f / 2, 3.0f / 4);
+                db.loop_end = (int)gun_dragon.Sprites.special_0;
                 Game.instance.bullet_manager.add(db);
             }
             else if (type == Gun.Ammo.SKULL) {
-                Particle db = new Particle(AppMain.textures.skullbullet);
-                db.frame = 4;
+                Particle db = new Particle(AppMain.textures.gun_skull);
+                db.frame = (int)gun_skull.Sprites.explosion_0;
                 db.frame_speed = 0.15f;
                 db.position = position;
                 db.velocity = velocity;
@@ -489,6 +536,8 @@ namespace Gunhouse
         public Target[] hit_targets = new Target[10];
         public int next_hit_index = 0;
         public int ticks_since_last_hit = 0;
+        Vector2 scale = new Vector2(0.5f, 0.5f);
+        Vector2 scaleInvertX = new Vector2(-0.5f, 0.5f);
 
         public BeachBall(Vector2 position_, Vector2 velocity_, EntityGroup targets_, Target target_, int upgrade_)
                         : base (position_, velocity_, targets_, target_)
@@ -519,13 +568,11 @@ namespace Gunhouse
             if (t == null) { return; }
 
             bool skip_hit = false;
-            for (int i = 0; i < 10; i++)
-            {
+            for (int i = 0; i < 10; i++) {
                 if (t == hit_targets[i]) { skip_hit = true; }
             }
 
-            if (!skip_hit)
-            {
+            if (!skip_hit) {
                 ticks_since_last_hit = 0;
                 hit_targets[next_hit_index] = t;
                 next_hit_index = Util.clamp(next_hit_index + 1, 0, 9);
@@ -556,18 +603,18 @@ namespace Gunhouse
 
             angle += spin;
             ticks_since_last_hit++;
-            if (ticks_since_last_hit > 60)
-            {
+            if (ticks_since_last_hit > 60) {
                 for (int i = 0; i < 10; i++) { hit_targets [i] = null; }
             }
         }
 
         public override void draw()
         {
-            AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet1 + sprite,
-                                            position, Vector2.one / 56 * size.x, angle, Vector4.one);
-            AppMain.textures.beachball.draw((int)beachball.Sprites.gun_beachball_bullet_highlite,
-                                            position, new Vector2 (-1, 1) / 56 * size.x, 0, Vector4.one);
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.bullet_blue + sprite,
+                position, scale / 56 * size.x, angle, Vector4.one);
+
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.bullet_shine,
+                position, scaleInvertX / 56 * size.x, 0, Vector4.one);
         }
     }
 
@@ -577,33 +624,31 @@ namespace Gunhouse
         public float offset = 0;
         public float phase = 0;
         public float offset_cap = 0.0f;
+        Vector2 scale = new Vector2(-0.5f, 0.5f);
 
         public SinBullet (Vector2 position_, Vector2 velocity_, EntityGroup targets_,
-                          Target target_, int upgrade_)
-            : base (position_, velocity_, targets_, target_)
+                          Target target_, int upgrade_) : base (position_, velocity_, targets_, target_)
         {
             position = position_;
             velocity = velocity_;
             upgrade = upgrade_;
             int s = SinGun.size + upgrade * SinGun.size_upgrade;
             size = new Vector2 (s, s);
-            //Console.WriteLine("Height: {0}", SinGun.vertical_range+upgrade*SinGun.vertical_range_upgrade);
         }
 
-        public override void tick ()
+        public override void tick()
         {
             base.tick ();
             position.y -= offset;
             position += velocity;
             float last_offset = offset;
 
-            offset = (float)Math.Sin (position.x / SinGun.wavelength + phase) *
+            offset = (float)Math.Sin(position.x / SinGun.wavelength + phase) *
             (SinGun.vertical_range + upgrade * SinGun.vertical_range_upgrade) *
             offset_cap;
-            angle = Util.angle (new Vector2 (velocity.x, offset) - new Vector2 (0, last_offset));
+            angle = Util.angle(new Vector2 (velocity.x, offset) - new Vector2(0, last_offset));
             position.y += offset;
-            if (position.x > 1000)
-                remove = true;
+            if (position.x > 1000) remove = true;
 
             offset_cap = 0.05f + 0.95f * offset_cap;
         }
@@ -611,15 +656,15 @@ namespace Gunhouse
         public override void hit (Target t)
         {
             if (t != null) {
-                t.damage (SinGun.damage + SinGun.damage_upgrade * upgrade, Gun.Ammo.SIN);
+                t.damage(SinGun.damage + SinGun.damage_upgrade * upgrade, Gun.Ammo.SIN);
                 //remove = true;
             }
         }
 
         public override void draw ()
         {
-            AppMain.textures.laserbullet.draw (0,
-                position, new Vector2 (-1, 1) * size.x / 20, angle, Vector4.one);
+            AppMain.textures.gun_sin.draw((int)gun_sin.Sprites.bullet,
+                                          position, scale * size.x / 20, angle, Vector4.one);
         }
     }
 
@@ -630,6 +675,7 @@ namespace Gunhouse
         public int upgrade = 0;
         public float frame = 0;
         public bool special = false;
+        static Vector2 scale = new Vector2(0.5f, 0.5f);
 
         public SkullBullet (bool special_, Vector2 position, Vector2 velocity_, int upgrade_, EntityGroup targets_, Target target_ = null)
                             : base (position, velocity_, targets_, target_)
@@ -710,8 +756,8 @@ namespace Gunhouse
 
         public override void draw()
         {
-            AppMain.textures.skullbullet.draw((int)frame + (attached_to != null ? 2 : 0),
-                                              position, Vector2.one * size.x / 40, angle, Vector4.one);
+            AppMain.textures.gun_skull.draw((int)frame + (attached_to != null ? 2 : 0),
+                                            position, scale * size.x / 40, angle, Vector4.one);
         }
     }
 
@@ -903,33 +949,36 @@ namespace Gunhouse
 
     public class Forker
     {
-        public static void bullet (Vector2 position, int upgrade)
+        static Vector2 scale = new Vector2(0.5f, 0.5f);
+
+        public static void bullet(Vector2 position, int upgrade)
         {
             for (int a = -1; a <= 1; a += 2) {
-                DataStorage.ShotsFired+=2;
-                //Util.trace(DataStorage.ShotsFired);
+                DataStorage.ShotsFired += 2;
 
-                Particle gb = new Particle (AppMain.textures.gumballs);
-                gb.frame = Util.rng.Next (5);
-                gb.position = position + new Vector2 (0, a * 5);
+                Particle gb = new Particle(AppMain.textures.gun_fork);
+                gb.frame = Util.rng.Next((int)gun_fork.Sprites.splat_0);
+                gb.position = position + new Vector2(0, a * 5);
                 gb.angle = ForkGun.angle / 180 * (float)Math.PI * a;
-                gb.velocity = Util.fromPolar (gb.angle, ForkGun.velocity);
+                gb.velocity = Util.fromPolar(gb.angle, ForkGun.velocity);
                 gb.collides_with = Game.instance.enemy_group.entities;
-                gb.scale = Vector2.one / 40 * (ForkGun.size + ForkGun.size_upgrade * upgrade);
+                gb.scale = scale / 40 * (ForkGun.size + ForkGun.size_upgrade * upgrade);
                 gb.ground_at = 480;
                 gb.collide_behavior = (ref Particle p, Entity e) => {
                     p.remove = true;
-                    if (e != null)
-                        (e as Target).damage (ForkGun.damage + ForkGun.damage_upgrade * upgrade, Gun.Ammo.FORK);
-                    Particle splat = new Particle (AppMain.textures.gumballs);
-                    splat.frame = 5;
+                    if (e != null) {
+                        (e as Target).damage(ForkGun.damage + ForkGun.damage_upgrade * upgrade, Gun.Ammo.FORK);
+                    }
+                    Particle splat = new Particle(AppMain.textures.gun_fork);
+                    splat.frame = (int)gun_fork.Sprites.splat_0;
+                    //splat.loop_end = (int)gun_fork.Sprites.splat_1 + 1;
                     splat.frame_speed = 0.2f;
                     splat.position = p.position;
-                    splat.velocity = e != null ? new Vector2 (e.velocity.x, 0) : Vector2.zero;
+                    splat.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
                     splat.scale = p.scale;
-                    Game.instance.particle_manager.add (splat);
+                    Game.instance.particle_manager.add(splat);
                 };
-                Game.instance.bullet_manager.add (gb);
+                Game.instance.bullet_manager.add(gb);
             }
         }
     }
@@ -937,17 +986,17 @@ namespace Gunhouse
     public class Spike : Entity
     {
         public int upgrade, timeout;
-        public float frame = 0;
+        public float frame = (int)gun_sin.Sprites.special_0;
+        static Vector2 scale = new Vector2(0.5f, 0.5f);
 
         public Spike(int pos_x, int upgrade_)
         {
             upgrade = upgrade_;
             int s = (int)(SinGun.special_spike_size + SinGun.special_spike_size_upgrade * upgrade);
-            size = new Vector2 (s, s);
+            size = new Vector2(s, s);
             angle = Util.rng.NextFloat(-0.4f, 0.4f);
             position = new Vector2(pos_x, 500);
-            timeout = (int)(60 * (SinGun.special_spike_lifetime + SinGun.special_spike_lifetime_upgrade * upgrade)) +
-                           Util.rng.Next (-20, 40);
+            timeout = (int)(60 * (SinGun.special_spike_lifetime + SinGun.special_spike_lifetime_upgrade * upgrade)) + Util.rng.Next(-20, 40);
 
             for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                 Target t = (Target)Game.instance.enemy_group.entities[i];
@@ -963,15 +1012,15 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int y_size = (int)(AppMain.textures.laserspecial.sprites [(int)frame].size.y * size.y / 500);
+            int y_size = (int)(AppMain.textures.gun_sin.sprites[(int)frame].size.y * size.y / 500);
             Vector2 rot = new Vector2((float)Math.Cos(angle),
                                       (float)Math.Sin(angle - (Math.PI / 2))) * ((y_size - 30) / 2);
-            AppMain.textures.laserspecial.draw((int)frame, position + rot, size / 500.0f, angle, Vector4.one);
+            AppMain.textures.gun_sin.draw((int)frame, position + rot, size / 500.0f, angle, Vector4.one);
         }
 
         public override void tick()
         {
-            if (frame < 4.0) { frame += 0.15f; }
+            if (frame < (int)gun_sin.Sprites.special_4) { frame += 0.15f; }
 
             if (--timeout <= 0) {
                 remove = true;
@@ -990,13 +1039,16 @@ namespace Gunhouse
                 AppMain.screenShake(upgrade * 5, 30);
 
                 for (int i = 0; i < 5; i++) {
-                    Particle p = new Particle (AppMain.textures.laserspecial);
-                    p.frame = Util.rng.Next (5, 11);
-                    Vector2 rot = new Vector2((float)Math.Cos (angle),
-                                              (float)Math.Sin (angle - (Math.PI / 2))) * (size.y * i / 5);
+                    Particle p = new Particle(AppMain.textures.gun_sin);
+                    p.frame = Util.rng.Next((int)gun_sin.Sprites.special_shard_0, (int)gun_sin.Sprites.special_shard_5);
+                    Vector2 rot = new Vector2((float)Math.Cos(angle),
+                                              (float)Math.Sin(angle - (Math.PI / 2))) * (size.y * i / 5);
                     p.position = position + rot;
+                    p.position.x += Util.rng.NextFloat(-20, 20);
+                    p.position.y += Util.rng.NextFloat(-75, -20);
+
                     p.velocity = new Vector2(Util.rng.NextFloat(-2, 2), Util.rng.NextFloat(0, 2));
-                    p.scale = Vector2.one;
+                    p.scale = scale;
                     p.gravity = new Vector2(0, 0.25f);
                     p.angle = 0;
                     p.spin = Util.rng.NextFloat(-0.05f, 0.05f);
@@ -1100,6 +1152,7 @@ namespace Gunhouse
         public int rate, timeout, upgrade;
         public Vector2 vel;
         public bool derpy = false;
+        Vector2 scale = new Vector2(-1, 1);
 
         public DragonGun(int upgrade_)
         {
@@ -1116,13 +1169,10 @@ namespace Gunhouse
         public static void fireBullet(Vector2 position, Vector2 vector, int upgrade, List<Entity> target_list,
                                       bool special = false, bool derpy = false)
         {
-            Particle db = new Particle(AppMain.textures.dragonbullet);
-
             DataStorage.ShotsFired++;
-            //Util.trace(DataStorage.ShotsFired);
-
             Choom.PlayEffect(SoundAssets.DragonShot);
 
+            Particle db = new Particle(AppMain.textures.gun_dragon);
             db.position = position + vector.normalized * 100 * 1.5f;
 
             if (special) {
@@ -1132,16 +1182,23 @@ namespace Gunhouse
             }
 
             db.gravity = new Vector2(0, DragonGun.gravity);
-            if (special) db.velocity = vector;
-            else db.velocity = vector * DragonGun.bullet_velocity;
+
+            if (special) {
+                db.velocity = vector;
+            }
+            else {
+                db.velocity = vector * DragonGun.bullet_velocity;
+            }
+
             db.collides_with = target_list;
             db.spin = 0.2f;
             db.angle = Util.rng.NextFloat(0, (float)Math.PI * 2);
 
             var size = DragonGun.bullet_size + DragonGun.bullet_size_upgrade * upgrade;
-            db.scale = new Vector2 (size / 6.0f, size / 6.0f);
+            db.scale = new Vector2(size / 12.0f, size / 12.0f);
             db.ground_at = 440;
             db.origin = new Vector2 (1.0f / 3, 2.0f / 5);
+
             db.collide_behavior = (ref Particle p, Entity e) => {
                 p.remove = true;
                 Choom.PlayEffect(SoundAssets.Explosion[Util.rng.Next(SoundAssets.Explosion.Length)]);
@@ -1158,19 +1215,19 @@ namespace Gunhouse
             Game.instance.bullet_manager.add(db);
         }
 
-        public override void draw ()
+        public override void draw()
         {
             if (derpy) {
-                AppMain.textures.dragon_special_derp.draw(0, position + new Vector2(-80, -70), new Vector2(-1, 1),
-                                                          special_fire_angle, Vector4.one);
+                AppMain.textures.gun_dragon.draw((int)gun_dragon.Sprites.special_1,
+                        position + new Vector2(-80, -70), scale, special_fire_angle, Vector4.one);
             }
             else {
-                AppMain.textures.dragon_special_angry.draw(0, position + new Vector2(-10, -10), new Vector2(-1, 1),
-                                                           special_fire_angle, Vector4.one);
+                AppMain.textures.gun_dragon.draw((int)gun_dragon.Sprites.special_0,
+                        position + new Vector2(-10, -10), scale, special_fire_angle, Vector4.one);
             }
         }
 
-        public override void tick ()
+        public override void tick()
         {
             vel.y = (position.y * 0.95f - position.y);
             position += vel;
@@ -1198,12 +1255,13 @@ namespace Gunhouse
             dest_y = position.y + 550;
 
             int s = (int)(IglooGun.special_penguin_size + IglooGun.special_penguin_size_upgrade * upgrade);
-            size = new Vector2 (s, s) / 100;
+            size = new Vector2(s, s) / 100;
         }
 
         public override void draw()
         {
-            AppMain.textures.penguinbullet.draw((int)frame, position, size, Util.angle(velocity), Vector4.one);
+            AppMain.textures.gun_penguin.draw((int)frame, position, size, Util.angle(velocity), Vector4.one);
+            //AppMain.textures.penguinbullet.draw((int)frame, position, size, Util.angle(velocity), Vector4.one);
         }
 
         public override void tick()
@@ -1254,7 +1312,7 @@ namespace Gunhouse
             DataStorage.ShotsFired++;
             //Util.trace(DataStorage.ShotsFired);
 
-            Particle pb = new Particle(AppMain.textures.penguinbullet);
+            Particle pb = new Particle(AppMain.textures.gun_penguin);
             pb.frame_speed = 0.15f;
             pb.loop_start = 0;
             pb.loop_end = 2;
@@ -1269,7 +1327,7 @@ namespace Gunhouse
             float s = special ? IglooGun.special_penguin_size + IglooGun.special_penguin_size_upgrade * upgrade :
                                 IglooGun.size + IglooGun.size_upgrade * upgrade;
 
-            pb.scale = new Vector2 (s, s) / 100.0f;
+            pb.scale = new Vector2(s, s) / 100.0f;
             pb.collide_behavior = (ref Particle p, Entity e) => {
                 p.remove = true;
 
@@ -1288,7 +1346,7 @@ namespace Gunhouse
                     (e as Target).damage(damage, Gun.Ammo.IGLOO);
                 }
 
-                Particle eb = new Particle(AppMain.textures.penguinbullet);
+                Particle eb = new Particle(AppMain.textures.gun_penguin);
                 eb.frame = 2;
                 eb.frame_speed = 0.15f;
                 eb.velocity = e != null ? new Vector2(e.velocity.x, 0) : Vector2.zero;
@@ -1414,7 +1472,7 @@ namespace Gunhouse
         public Vector2 origin;
         public int upgrade;
         public float spin = 0, acceleration = 0;
-        public float frame = 6.99f;
+        public float frame = (int)gun_vegetable.Sprites.special_0;
 
         public BigVegetable(int upgrade_)
         {
@@ -1428,46 +1486,40 @@ namespace Gunhouse
 
         public override void tick()
         {
-            if (frame >= 7)
-            {
+            if (frame >= (int)gun_vegetable.Sprites.special_7) {
                 frame += 0.15f;
                 position = new Vector2(360, 490) + new Vector2(35 * size.y, 0);
-                if (frame >= 11) { remove = true; }
+                if (frame >= (int)gun_vegetable.Sprites.special_10) { remove = true; }
             }
-            else
-            {
-                frame -= 0.15f;
-                position = new Vector2(360, 490) - new Vector2(0, 35 * size.y);
-                origin = new Vector2(0.5f, 1.0f - 15 * size.y / AppMain.textures.veggie_special.sprites [(int)frame].size.y);
-            }
-
-            if (frame < 0) {
-                frame = 0;
+            else if (frame > (int)gun_vegetable.Sprites.special_6) {
                 acceleration += 0.00005f;
                 spin += acceleration;
                 angle += spin;
 
-                if (angle > Math.PI / 2)
-                {
+                if (angle > Math.PI / 2) {
                     int damage = VegetableGun.special_damage + VegetableGun.special_damage_upgrade * upgrade;
-                    damage = (int)(damage * GunUpgrade.upgradeMultiplier(Gun.Ammo.VEGETABLE));
+                    damage = (int)(damage * Gun.UpgradeMultiplier(Gun.Ammo.VEGETABLE));
 
                     AppMain.screenShake(upgrade * 5, 40);
 
                     for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                         ((Target)Game.instance.enemy_group.entities[i]).damage(damage, Gun.Ammo.VEGETABLE);
                     }
-
-                    frame = 7.0f;
+                    frame = (int)gun_vegetable.Sprites.special_7;
                     origin = new Vector2 (1 - origin.y, origin.x);
                     angle = 0;
                 }
+            }
+            else {
+                frame += 0.15f;
+                position = new Vector2(360, 490) - new Vector2(0, 35 * size.y);
+                origin = new Vector2(0.5f, 1.0f - 15 * size.y / AppMain.textures.gun_vegetable.sprites[(int)frame].size.y);
             }
         }
 
         public override void draw()
         {
-            AppMain.textures.veggie_special.draw((int)frame, position, origin, size, angle, Vector4.one);
+            AppMain.textures.gun_vegetable.draw((int)frame, position, origin, size, angle, Vector4.one);
         }
     }
 
@@ -1476,6 +1528,7 @@ namespace Gunhouse
         public float radius;
         public int upgrade;
         public int sprite;
+        Vector2 scaleInvertX = new Vector2(-0.5f, 0.5f);
 
         public BigBounce(int size)
         {
@@ -1483,7 +1536,7 @@ namespace Gunhouse
             upgrade = size;
             radius = BeachBallGun.special_radius + size * BeachBallGun.special_radius_upgrade;
             position = new Vector2 (-radius, 500 - radius);
-            sprite = Util.rng.Next (4);
+            sprite = Util.rng.Next(3);
         }
 
         public override void tick()
@@ -1498,10 +1551,8 @@ namespace Gunhouse
                 remove = true;
             }
 
-            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i)
-            {
-                if ((Game.instance.enemy_group.entities[i].position - position).sqrMagnitude < radius * radius)
-                {
+            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
+                if ((Game.instance.enemy_group.entities[i].position - position).sqrMagnitude < radius * radius) {
                     AppMain.screenShake(upgrade * 7, 5);
                     ((Target)Game.instance.enemy_group.entities[i]).damage((int)(BeachBallGun.special_damage +
                                                     BeachBallGun.special_damage_upgrade * upgrade), Gun.Ammo.BOUNCE);
@@ -1509,12 +1560,12 @@ namespace Gunhouse
             }
         }
 
-        public override void draw ()
+        public override void draw()
         {
-            AppMain.textures.beachball.draw ((int)beachball.Sprites.gun_beachball_special_1 + sprite,
-                position, new Vector2 (-1, 1) / 233 * radius, angle, Vector4.one);
-            AppMain.textures.beachball.draw ((int)beachball.Sprites.gun_beachball_special_highlite,
-                position + new Vector2 (-7, -7) / 233 * radius, new Vector2 (-1, 1) / 233 * radius, 0, Vector4.one);
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.special_blue + sprite,
+                                                position, scaleInvertX / 233 * radius, angle, Vector4.one);
+            AppMain.textures.gun_beachball.draw((int)gun_beachball.Sprites.special_shine,
+                position + new Vector2(-7, -7) / 233 * radius, scaleInvertX / 233 * radius, 0, Vector4.one);
         }
     }
 
@@ -1552,33 +1603,25 @@ namespace Gunhouse
             int right = ForkGun.shield_right;
             int left = ForkGun.shield_left;
 
-            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i)
-            {
+            for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                 if (Game.instance.enemy_group.entities[i].position.x < right &&
-                    Game.instance.enemy_group.entities[i].position.x > left)
-                {
-                    if (Game.instance.enemy_group.entities[i].position.x < (left + right) / 2)
-                    {
+                    Game.instance.enemy_group.entities[i].position.x > left) {
+                    if (Game.instance.enemy_group.entities[i].position.x < (left + right) / 2) {
                         Game.instance.enemy_group.entities[i].position.x = left;
                     }
-                    else
-                    {
+                    else {
                         Game.instance.enemy_group.entities[i].position.x = right;
                     }
                 }
             }
 
-            for (int i = 0; i < Game.instance.enemy_bullet_group.entities.Count; ++i)
-            {
+            for (int i = 0; i < Game.instance.enemy_bullet_group.entities.Count; ++i) {
                 if (Game.instance.enemy_bullet_group.entities[i].position.x < right &&
-                    Game.instance.enemy_bullet_group.entities[i].position.x > left)
-                {
-                    if (Game.instance.enemy_bullet_group.entities[i] is EnemyBullet)
-                    {
+                    Game.instance.enemy_bullet_group.entities[i].position.x > left) {
+                    if (Game.instance.enemy_bullet_group.entities[i] is EnemyBullet) {
                         ((EnemyBullet)Game.instance.enemy_bullet_group.entities[i]).kill();
                     }
-                    else
-                    {
+                    else {
                         Game.instance.enemy_bullet_group.entities[i].remove = true;
                         Bullet.explosion(Game.instance.enemy_bullet_group.entities[i].position,
                                          Gun.Ammo.NONE, Vector2.zero, 15, 0, null);
@@ -1595,6 +1638,7 @@ namespace Gunhouse
             AppMain.textures.forkspecial.draw("fork-special-spawn", frame,
                 new Vector2((ForkGun.shield_left + ForkGun.shield_right) / 2, 544 / 2 - 30),
                 new Vector2(-1, 1), 0, Vector4.one);
+            
             if (frame >= 250) {
                 AppMain.textures.forkspecial.atlas.draw (6,
                     new Vector2((ForkGun.shield_left + ForkGun.shield_right) / 2 + 15, 544 / 2 - 90),
@@ -1665,18 +1709,18 @@ namespace Gunhouse
             Shield.existing_shield = null;
 
             // build list of equipped ammo
-            Gun.Ammo[] equipped = new Gun.Ammo[Shop.max_equipped];
+            Gun.Ammo[] equipped = new Gun.Ammo[3];
             if (!MetaState.hardcore_mode) {
                 int equip_index = 0;
                 for (int i = 0; i < DataStorage.NumberOfGuns; ++i) {
                     if (!DataStorage.GunEquipped[i]) { continue; }
-                    equipped[equip_index++] = Shop.guns[i].ammo;
+                    equipped[equip_index++] = (Gun.Ammo)i;
                 }
             }
             else {
-                equipped[0] = Shop.guns[(int)Gun.Ammo.DRAGON].ammo;
-                equipped[1] = Shop.guns[(int)Gun.Ammo.IGLOO].ammo;
-                equipped[2] = Shop.guns[(int)Gun.Ammo.SKULL].ammo;
+                equipped[0] = Gun.Ammo.DRAGON;
+                equipped[1] = Gun.Ammo.IGLOO;
+                equipped[2] = Gun.Ammo.SKULL;
             }
 
             // choose among equpped ammo
@@ -1696,54 +1740,23 @@ namespace Gunhouse
             for (int i = 0; i < ammo_available.Count; ++i) {
                 switch (ammo_available[i])
                 {
-                case Gun.Ammo.BOOMERANG:
-                    AppMain.textures.boomerang.touch();
-                    AppMain.textures.boomeranggun.touch();
-                    break;
-                case Gun.Ammo.BOUNCE:
-                    AppMain.textures.beachball.touch();
-                    AppMain.textures.beachballgun.touch();
-                    break;
-                case Gun.Ammo.DRAGON:
-                    AppMain.textures.dragongun.touch();
-                    AppMain.textures.dragonbullet.touch();
-                    AppMain.textures.dragon_special_angry.touch();
-                    AppMain.textures.dragon_special_derp.touch();
-                    break;
-                case Gun.Ammo.FLAME:
-                    AppMain.textures.flamegun.touch();
-                    AppMain.textures.flames.touch();
-                    break;
+                case Gun.Ammo.BOOMERANG: AppMain.textures.boomerang.touch(); break;
+                case Gun.Ammo.BOUNCE: AppMain.textures.gun_beachball.touch(); break;
+                case Gun.Ammo.DRAGON: AppMain.textures.gun_dragon.touch(); break;
+                case Gun.Ammo.FLAME: AppMain.textures.flames.touch(); break;
                 case Gun.Ammo.FORK:
-                    AppMain.textures.gun.touch();
-                    AppMain.textures.gumballs.touch();
+                    AppMain.textures.gun_fork.touch();
                     AppMain.textures.forkspecial.touch();
                     break;
-                case Gun.Ammo.IGLOO:
-                    AppMain.textures.penguingun.touch();
-                    AppMain.textures.penguinbullet.touch();
-                    break;
-                case Gun.Ammo.LIGHTNING:
-                    AppMain.textures.lightninggun.touch();
-                    AppMain.textures.lightning_strike.touch();
-                    break;
-                case Gun.Ammo.SIN:
-                    AppMain.textures.laserbullet.touch();
-                    AppMain.textures.lasergun.touch();
-                    AppMain.textures.laserspecial.touch();
-                    break;
-                case Gun.Ammo.SKULL:
-                    AppMain.textures.skullbullet.touch();
-                    AppMain.textures.skullgun.touch();
-                    break;
-                case Gun.Ammo.VEGETABLE:
-                    AppMain.textures.carrotgun.touch();
-                    AppMain.textures.veggies.touch();
-                    AppMain.textures.veggie_special.touch();
-                    break;
+                case Gun.Ammo.IGLOO: AppMain.textures.gun_penguin.touch(); break;
+                case Gun.Ammo.LIGHTNING: AppMain.textures.lightning_strike.touch(); break;
+                case Gun.Ammo.SIN: AppMain.textures.gun_sin.touch(); break;
+                case Gun.Ammo.SKULL: AppMain.textures.gun_skull.touch(); break;
+                case Gun.Ammo.VEGETABLE: AppMain.textures.gun_vegetable.touch(); break;
                 }
 
-                AppMain.textures.pickups.touch();
+                AppMain.textures.house_guns.touch();
+                AppMain.textures.ui_game.touch();
                 AppMain.textures.gunpoof.touch();
                 AppMain.textures.skeletonkingprojectile.touch();
                 AppMain.textures.lightning_match.touch();
@@ -1781,6 +1794,8 @@ namespace Gunhouse
             ready_to_open = (puzzle_release_timeout <= 0) && Game.instance.win_timer <= 0 &&
                             (Game.instance.bullet_manager.particle_count + Game.instance.bullet_group.entities.Count) == 1 &&
                             AppMain.top_state == Game.instance;
+
+            // only after smoke
 
             for (int i = 0; i < Game.instance.gun_group.entities.Count; ++i) {
                 if (((Gun)Game.instance.gun_group.entities[i]).firing &&
@@ -1826,7 +1841,7 @@ namespace Gunhouse
                 }
             }
 
-            if (AppMain.top_state != Game.instance && !(AppMain.top_state is PauseState)) {
+            if (AppMain.top_state != Game.instance && !AppMain.IsPaused) {
                 door_position = 1.0f;
                 door_target_position = 1.0f;
                 closeDoor();
@@ -1838,58 +1853,81 @@ namespace Gunhouse
 
         public override void draw()
         {
-            #region Specials
+            Vector2 scale = new Vector2(0.5f, 0.5f);
+            Vector2 scaleInvertX = new Vector2(-0.5f, 0.5f);
 
-            for (int i = 0; i < special_attacks.Length; ++i)
-            {
-                Vector2 vibrate = Vector2.zero;
+            #region Orphan Meter Health
 
-                bool selected = Game.instance.house.isDoorClosed &&
-                                    Game.instance.puzzle.selected_weapon == new Vector2(0, i);
-                var pos = new Vector2(Puzzle.grid_left - 40,
-                                      Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
-
-                //#if !UNITY_IOS
-                if (selected && Gun.fireableExists() && AppMain.game_pad_active) {
-                    AppMain.textures.arrow.draw(0, pos + new Vector2(64 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0), new Vector2(-1, 1), 0, Vector4.one);
-                }
-                //#endif
-
-                if (special_attacks[i].Item1 != Gun.Ammo.NONE)
-                {
-                    Vector2 pulse = new Vector2(-1, 1);
-                    if (door_position == 1.0f)
-                    {
-                        pulse *= ((float)Math.Sin (i + time / 20.0f) / 10.0f + 1.05f);
-                    }
-
-                    vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2),
-                                             Util.rng.NextFloat(0, special_attacks[i].Item2)) / 4;
-
-                    AppMain.textures.elements.draw(Puzzle.ammoElementToSprite(special_attacks[i].Item1) + 10,
-                                                   pos + vibrate, pulse, Vector4.one);
-                }
-
-                AppMain.textures.elements.draw((int)elements.Sprites.house_tanks,
-                                               new Vector2(Puzzle.grid_left - 40,
-                                                           Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size + 8) + vibrate,
-                                               new Vector2(-1, 1), Vector4.one);
+            float shake = 0;
+            float meter_val = health / max_health;
+            if (meter_val > health_complain_threshold) {
+                complained_about_health = false;
             }
+
+            if (meter_val < health_complain_threshold) {
+                if (!complained_about_health) {
+                    Choom.PlayEffect(SoundAssets.HealthLow);
+                    complained_about_health = true;
+                    shake = (1 - meter_val) * 5;
+                }
+            }
+
+            // smart resize if the screen is too small
+            float part_size = (AppMain.vscreen.x - 72.0f - (Puzzle.grid_left + Puzzle.piece_size * 3.0f + 200.0f + 32.0f)) / 6.0f;
+            var heart_pos = new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 200 + 32, 42) +
+                Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.Next((int)shake));
+
+            float shown = 0;
+            for (int i = 0; i < MetaState.hearts; ++i) {
+                float size = 0;
+                if (shown + House.health_per_heart < health) {
+                    size = 1;
+                }
+                else if (shown < health) {
+                    size = (health - shown) / House.health_per_heart;
+                }
+
+                AppMain.textures.puzzle.draw((int)puzzle.Sprites.heart_outline,
+                                             heart_pos, scale / 96 * 58, Vector4.one);
+                AppMain.textures.puzzle.draw((int)puzzle.Sprites.heart,
+                                             heart_pos + new Vector2(2, 2), scale * size / 96 * 58, Vector4.one);
+
+                heart_pos.x += part_size;
+                shown += House.health_per_heart;
+            }
+
+            #endregion
+
+            #region Weaknesses
+
+            AppMain.textures.puzzle.draw((int)puzzle.Sprites.match_bonus_background,
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 105, 40),
+                                         new Vector2(-185.0f / 368, 115.0f / 250), Vector4.one);
+
+            AppMain.textures.puzzle.draw(Puzzle.AmmoToSprite(Game.instance.next_bonuses[1]),
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140, 42.5f),
+                                         scaleInvertX * next_transition, Vector4.one);
+
+            if (door_position != 1.0f) {
+                scaleInvertX *= (float)(Math.Sin(time / 10.0f) / 6 + 1);
+            }
+            AppMain.textures.puzzle.draw(Puzzle.AmmoToSprite(Game.instance.next_bonuses[0]),
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140 - 70 * next_transition, 42.5f),
+                                         scaleInvertX, Vector4.one);
 
             #endregion
 
             #region Door Timer
 
-            // draw time until door close
-            AppMain.textures.housebits.draw((int)housebits.Sprites.counter_time_base_yellow,
-                                            new Vector2(Puzzle.grid_left + 110, Puzzle.grid_top - 45),
-                                            new Vector2(-1, 1) * 3 / 4, Vector4.one);
+            AppMain.textures.puzzle.draw((int)puzzle.Sprites.house_counter,
+                                         new Vector2(Puzzle.grid_left + 112, Puzzle.grid_top - 45),
+                                         new Vector2(-0.5f, 0.5f) * 3 / 4, Vector4.one);
 
             if (!AppMain.tutorial.hasFocus && AppMain.tutorial.Countdown &&
                 door_target_position != 1.0f) {
                 string open_time = string.Format("{0:00.0}", (1.0f - door_position) / door_velocity / 60.0f);
 
-                Vector2 time_pos = new Vector2(Puzzle.grid_left + 110, Puzzle.grid_top - 45) + new Vector2(32, -1);
+                Vector2 time_pos = new Vector2(Puzzle.grid_left + 110, Puzzle.grid_top - 45) + new Vector2(31.8f, -1);
 
                 for (int i = 0; i < open_time.Length; ++i) {
                     int n = open_time[i] - '0' - 1;
@@ -1907,107 +1945,74 @@ namespace Gunhouse
 
             #endregion
 
-            #region Weaknesses
-
-            AppMain.textures.hud.draw((int)hud.Sprites.frame, new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 105, 40),
-                                      new Vector2(-185.0f / 181, 115.0f / 123), Vector4.one);
-
-            Vector2 scale = new Vector2(-1, 1);
-
-            AppMain.textures.elements.draw(Puzzle.ammoElementToSprite(Game.instance.next_bonuses[1]),
-                                           new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140, 42.5f),
-                                           scale * next_transition, Vector4.one);
-
-            if (door_position != 1.0f)
-            {
-                scale *= (float)(Math.Sin(time / 10.0f) / 6 + 1);
-            }
-
-            AppMain.textures.elements.draw(Puzzle.ammoElementToSprite(Game.instance.next_bonuses[0]),
-                                           new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 140 - 70 * next_transition, 42.5f),
-                                           scale, Vector4.one);
-
-            #endregion
-
             #region House
 
-            AppMain.textures.house.draw (0, new Vector2(Puzzle.grid_left + 95, Puzzle.grid_top + 144), Vector2.one, Vector4.one);
+            AppMain.textures.house.draw(0, new Vector2(Puzzle.grid_left + 95, Puzzle.grid_top + 146), scale, Vector4.one);
 
-            AppMain.textures.housebits.draw((int)housebits.Sprites.house_gun_base,
-                                            new Vector2(Puzzle.grid_left + Puzzle.piece_size * 1.8f, Puzzle.grid_top + Puzzle.piece_size * 3),
-                                            new Vector2(-1, 1), Vector4.one);
-
-            float shake = 0;
-            float meter_val = health / max_health;
-            if (meter_val > health_complain_threshold) {
-                complained_about_health = false;
-            }
-
-            if (meter_val < health_complain_threshold) {
-                if (!complained_about_health) {
-                    Choom.PlayEffect(SoundAssets.HealthLow);
-                    complained_about_health = true;
-                    shake = (1 - meter_val) * 5;
-                }
-            }
-
-            #endregion
-
-            #region Orphan Meter
-
-            // smart resize if the screen is too small
-            float part_size = (AppMain.vscreen.x - 72.0f - (Puzzle.grid_left + Puzzle.piece_size * 3.0f + 200.0f + 32.0f)) / 6.0f;
-            var heart_pos = new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 200 + 32, 42) +
-                Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2), Util.rng.Next((int)shake));
-
-            float shown = 0;
-            for (int i = 0; i < MetaState.hearts; ++i)
-            {
-                float size = 0;
-                if (shown + House.health_per_heart < health)
-                {
-                    size = 1;
-                }
-                else if (shown < health)
-                {
-                    size = (health - shown) / House.health_per_heart;
-                }
-
-                AppMain.textures.hud.draw((int)hud.Sprites.heart_frame, heart_pos, Vector2.one / 96 * 58, Vector4.one);
-                AppMain.textures.hud.draw((int)hud.Sprites.heart, heart_pos + new Vector2(3, 3),
-                                          Vector2.one * size / 96 * 58, Vector4.one);
-
-                heart_pos.x += part_size;
-                shown += House.health_per_heart;
-            }
-
-            #endregion
-
-            #region Door
+            /* ================================================== */
+            /* DOOR */
 
             float amount_open = visibleDoorPosition();
 
-            if (amount_open != 0)
-            {
-                float doorcrop = (1.0f - amount_open) *
-                    (AppMain.textures.door.sprites[0].bounds.Point00.y -
-                                  AppMain.textures.door.sprites[0].bounds.Point11.y);
+            if (amount_open != 0) {
+                AtlasSprite door = AppMain.textures.puzzle.sprites[DataStorage.DisconcertingObjectivesSeen >= 20 ?
+                                                                   (int)puzzle.Sprites.house_door_alt :
+                                                                   (int)puzzle.Sprites.house_door];
 
-                AppMain.renderer.addSprite(AppMain.textures.door.texture,
+                float doorcrop = (1.0f - amount_open) * (door.bounds.Point00.y - door.bounds.Point11.y);
+
+                AppMain.renderer.addSprite(AppMain.textures.puzzle.texture,
                                            new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3, Puzzle.grid_top),
                                            new Vector2(Puzzle.grid_left, Puzzle.grid_top),
                                            new Vector2(Puzzle.grid_left, Puzzle.grid_top + visibleDoorPosition() *
-                                                       Puzzle.piece_size * 6),
+                                Puzzle.piece_size * 6),
                                            new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3,
-                                                       Puzzle.grid_top + visibleDoorPosition() *
-                                                       Puzzle.piece_size * 6),
+                                Puzzle.grid_top + visibleDoorPosition() *
+                                Puzzle.piece_size * 6),
                                            new Necrosofty.Math.Bounds2(
-                                               new Vector2(AppMain.textures.door.sprites[0].bounds.Point00.x,
-                                                            AppMain.textures.door.sprites[0].bounds.Point00.y - doorcrop),
-                                               new Vector2(AppMain.textures.door.sprites[0].bounds.Point11.x,
-                                                            AppMain.textures.door.sprites[0].bounds.Point11.y)
-                                              ),
+                                               new Vector2(door.bounds.Point00.x, door.bounds.Point00.y - doorcrop),
+                                               new Vector2(door.bounds.Point11.x, door.bounds.Point11.y)),
                                            Vector4.one);
+            }
+
+            AppMain.textures.puzzle.draw((int)puzzle.Sprites.house_border,
+                                         new Vector2(Puzzle.grid_left + Puzzle.piece_size * 1.8f, Puzzle.grid_top + Puzzle.piece_size * 3),
+                                         new Vector2(-0.5f, 0.5f), Vector4.one);
+
+            #endregion
+
+            #region Specials
+
+            for (int i = 0; i < special_attacks.Length; ++i) {
+                Vector2 vibrate = Vector2.zero;
+                var pos = new Vector2(Puzzle.grid_left - 40,
+                                      Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
+
+                if (special_attacks[i].Item1 != Gun.Ammo.NONE) {
+                    Vector2 pulse = new Vector2(-0.5f, 0.5f);
+                    if (door_position == 1.0f) {
+                        pulse *= ((float)Math.Sin (i + time / 20.0f) / 10.0f + 1.05f);
+                    }
+
+                    vibrate = Util.fromPolar(Util.rng.NextFloat((float)Math.PI * 2),
+                                             Util.rng.NextFloat(0, special_attacks[i].Item2)) / 4;
+
+                    AppMain.textures.puzzle.draw(Puzzle.AmmoToSprite(special_attacks[i].Item1),
+                                                 pos + vibrate, pulse, Vector4.one);
+                }
+
+                AppMain.textures.puzzle.draw((int)puzzle.Sprites.house_tank,
+                                             new Vector2(Puzzle.grid_left - 40,
+                                                         Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size + 8) + vibrate,
+                                             new Vector2(-0.5f, 0.5f), Vector4.one);
+
+                bool selected = Game.instance.house.isDoorClosed &&
+                                    Game.instance.puzzle.selected_weapon == new Vector2(0, i);
+
+                if (selected && Gun.fireableExists() && AppMain.game_pad_active) {
+                    AppMain.textures.ui_game.draw((int)ui_game.Sprites.arrow,
+                                                  pos + new Vector2(64 + Mathf.Abs(Mathf.Sin(AppMain.frame / 30f)) * 16, 0), new Vector2(-1, 1), 0, Vector4.one);
+                }
             }
 
             #endregion

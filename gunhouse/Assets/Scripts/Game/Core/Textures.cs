@@ -96,36 +96,22 @@ namespace Gunhouse
     {
         #region Field Properties
 
-        #if LOADING_SCREEN || LOADING_CREDITS
-        public Atlas loading;
-        #endif
+        public Atlas ui_game;
+        public Atlas house;
+        public Atlas puzzle, house_guns;
+        public Atlas gun_beachball, gun_dragon, gun_fork, gun_penguin, gun_sin, gun_skull, gun_vegetable;
 
-        public Atlas arrow, pick_a_day;
-        public Atlas ui, hud, house, housebits, elements;
-        public Atlas door, pickups;
-
-        public Atlas minion, orphan, circle, explosion, gunpoof, block, block_logo, cracks;
-        public Atlas title, taptobegin;
-        public Atlas font, clouds, cloudpuff;
-        public Atlas gun, bullets, dot, highlight, fade;
-        public Atlas store_board, store;
+        public Atlas explosion; /* only used on peterboss and penguinpirate. */
+        public Atlas minion, orphan, circle, gunpoof, block, block_logo, cracks;
+        public Atlas taptobegin;
+        public Atlas clouds, cloudpuff;
+        public Atlas bullets, dot, highlight;
         public Atlas shadowblob, shadowblob2;
 
         public Atlas counter_money, counter_time;
-        public Atlas money_guy;
-
-        public SpriterSet cat;
 
         public SpriterSet lightning_match;
-
-        public Atlas specialgun;
-        public Atlas carrotgun, dragongun, penguingun, skullgun, lasergun;
-        public Atlas beachballgun, boomeranggun, flamegun, lightninggun;
-        public Atlas laserbullet, veggies, veggie_special, penguinbullet, dragonbullet, skullbullet, gumballs;
-        public Atlas beachball;
         public SpriterSet forkspecial, lightning_strike, boomerang, flames;
-        public Atlas dragon_special_derp, dragon_special_angry;
-        public Atlas laserspecial;
 
         public Atlas stage_oakland_noon, stage_oakland_dusk, stage_oakland_night;
         public Atlas stage_skeleton_noon, stage_skeleton_dusk, stage_skeleton_night;
@@ -169,15 +155,7 @@ namespace Gunhouse
             return result;
         }
 
-        public Textures()
-        {
-            #if LOADING_SCREEN || LOADING_CREDITS
-            loading = new Atlas("loading.png", "loading.txa.txt", 0);
-            #endif
-
-            fade = new Atlas("fade_white.png", 1);
-            font = new Atlas("font.png", "font.fnt.txt", 1);
-        }
+        public Textures() { }
 
         public void loadTheRest()
         {
@@ -343,10 +321,8 @@ namespace Gunhouse
 
             #endregion
 
-            house = new Atlas("house.png", new Vector2(287, 527), z_order++);
+            house = new Atlas("house.png", "house.txa.txt", z_order++);
             house.texture.hud = true;
-
-            title = new Atlas("title.png", new Vector2(376, 300), z_order++);
 
             block = new Atlas("block.png", "block.txa.txt", z_order++);
             block.texture.hud = true;
@@ -359,56 +335,25 @@ namespace Gunhouse
             highlight = new Atlas("fade_white.png", z_order++);
             highlight.texture.hud = true;
 
-            if (DataStorage.DisconcertingObjectivesSeen >= 20) {
-                door = new Atlas("door_alt.png", new Vector2(192, 382), z_order++);
-            }
-            else {
-                door = new Atlas("door.png", new Vector2(192, 382), z_order++);
-            }
-            door.texture.hud = true;
-
-            housebits = new Atlas("housebits.png", "housebits.txa.txt", z_order++);
-            housebits.texture.hud = true;
+            puzzle = new Atlas("puzzle.png", "puzzle.txa.txt", z_order++);
+            puzzle.texture.hud = true;
 
             /* NOTE(shane): The way the z-ordering works means that this needs to be placed after the house. */
             stage_space_anchor = new Atlas("stage_space_anchor.png", "stage_space_anchor.txa.txt", z_order++);
 
-            #region Guns
+            house_guns = new Atlas("guns.png", "guns.txa.txt", z_order++);
+            house_guns.texture.hud = true;
 
-            carrotgun = new Atlas("gun-carrot.png", new Vector2(224, 156), z_order++);
-            penguingun = new Atlas("gun-penguin.png", new Vector2(218, 148), z_order++);
-            skullgun = new Atlas("gun-skull.png", new Vector2(227, 161), z_order++);
-            dragongun = new Atlas("gun-dragon.png", new Vector2(266, 104), z_order++);
-            lasergun = new Atlas("gun-laser.png", new Vector2(218, 131), z_order++);
-            gun = new Atlas("gun-gumball.png", new Vector2(251, 156), z_order++);
-            beachballgun = new Atlas("gun-beachball.png", new Vector2(184, 154), z_order++);
-            boomeranggun = new Atlas("gun-boomerang.png", new Vector2(198, 155), z_order++);
-            flamegun = new Atlas("gun-flame.png", new Vector2(208, 155), z_order++);
-            lightninggun = new Atlas("gun-lightning.png", new Vector2(239, 154), z_order++);
-
-            gun.sprites[0].center = new Vector2(0.25f, 0.5f);
-            carrotgun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-            penguingun.sprites[0].center = new Vector2(1.0f / 6, 2.0f / 3);
-            skullgun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-            dragongun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-            lasergun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-            beachballgun.sprites[0].center = new Vector2(0.25f, 2.0f / 3);
-            boomeranggun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-            flamegun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-            lightninggun.sprites[0].center = new Vector2(1.0f / 6, 0.5f);
-
-            carrotgun.texture.hud = true;
-            penguingun.texture.hud = true;
-            skullgun.texture.hud = true;
-            dragongun.texture.hud = true;
-            lasergun.texture.hud = true;
-            gun.texture.hud = true;
-            beachballgun.texture.hud = true;
-            boomeranggun.texture.hud = true;
-            flamegun.texture.hud = true;
-            lightninggun.texture.hud = true;
-
-            #endregion
+            house_guns.sprites[(int)guns.Sprites.gumball].center = new Vector2(0.25f, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.vegetable].center = new Vector2(1.0f / 6, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.ice].center = new Vector2(1.0f / 6, 2.0f / 3);
+            house_guns.sprites[(int)guns.Sprites.skull].center = new Vector2(1.0f / 6, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.dragon].center = new Vector2(1.0f / 6, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.laser].center = new Vector2(1.0f / 6, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.beachball].center = new Vector2(0.25f, 2.0f / 3);
+            house_guns.sprites[(int)guns.Sprites.boomerang].center = new Vector2(1.0f / 6, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.flame].center = new Vector2(1.0f / 6, 0.5f);
+            house_guns.sprites[(int)guns.Sprites.lightning].center = new Vector2(1.0f / 6, 0.5f);
 
             skeletonkingminiboss = new SpriterSet("skeletonkingminiboss.ssb.txt",
                                                   new Atlas("skeletonkingminiboss.png",
@@ -424,9 +369,7 @@ namespace Gunhouse
             counter_time = new Atlas("counter-time-numbers-yellow.png", new Vector2(32, 40), z_order++);
             counter_time.texture.hud = true;
 
-            lightning_match = new SpriterSet("lightning-match.ssb.txt",
-                                             new Atlas("lightning-match.png",
-                                                       "lightning-match.txa.txt", z_order++));
+            lightning_match = new SpriterSet("lightning-match.ssb.txt", new Atlas("lightning-match.png", "lightning-match.txa.txt", z_order++));
             lightning_match.atlas.texture.hud = true;
 
             stage_skeleton_anchors = new Atlas("stage_skeleton_anchors.png", "stage_skeleton_anchors.txa.txt", z_order++);
@@ -435,16 +378,6 @@ namespace Gunhouse
             stage_drhoot_anchors = new Atlas("stage_drhoot_anchors.png", "stage_drhoot_anchors.txa.txt", z_order++);
             stage_pyramid_anchors = new Atlas("stage_pyramid_anchors.png", "stage_pyramid_anchors.txa.txt", z_order++);
             stage_oakland_anchors = new Atlas("stage_oakland_anchors.png", "stage_oakland_anchors.txa.txt", z_order++);
-
-            store_board = new Atlas("store_board.png", "store_board.txa.txt", z_order++);
-            hud = new Atlas("hud.png", "hud.txa.txt", z_order++);
-            hud.texture.hud = true;
-
-            elements = new Atlas("elements.png", "elements.txa.txt", z_order++);
-            elements.texture.hud = true;
-
-            cat = new SpriterSet("cat.ssb.txt",
-                                 new Atlas("cat.png", "cat.txa.txt", z_order++));
 
             shadowblob2 = new Atlas("shadowblob.png", new Vector2(280, 88), z_order++);
             shadowblob2.texture.hud = true;
@@ -455,9 +388,7 @@ namespace Gunhouse
             cloudpuff = new Atlas("cloudpuff.png", "cloudpuff.txa.txt", z_order++);
             gunpoof = new Atlas("gunpoof.png", "gunpoof.txa.txt", z_order++);
 
-            peterbossbullet = new SpriterSet("peter_boss_bullet.ssb.txt",
-                                             new Atlas("peter_boss_bullet.png",
-                                                       "peter_boss_bullet.txa.txt", z_order++));
+            peterbossbullet = new SpriterSet("peter_boss_bullet.ssb.txt", new Atlas("peter_boss_bullet.png", "peter_boss_bullet.txa.txt", z_order++));
 
             icecreambossbullet = new SpriterSet("icecream-boss-bullet.ssb.txt",
                                                 new Atlas("icecream-boss-bullet.png",
@@ -522,61 +453,26 @@ namespace Gunhouse
                                                 new Atlas("icecream-tank-bullet.png",
                                                           "icecream-tank-bullet.txa.txt", z_order++));
 
-            penguinbullet = new Atlas("penguin-bullet.png", "penguin-bullet.txa.txt", z_order++);
-            dragonbullet = new Atlas("dragon-bullet.png", "dragon-bullet.txa.txt", z_order++);
-            gumballs = new Atlas("gumballs.png", "gumballs.txa.txt", z_order++);
-            veggies = new Atlas("veggies.png", "veggies.txa.txt", z_order++);
-            laserbullet = new Atlas("laser-bullet.png", new Vector2(40, 20), z_order++);
+            boomerang = new SpriterSet("boomerang.ssb.txt", new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
+            flames = new SpriterSet("flame.ssb.txt", new Atlas("flame.png", "flame.txa.txt", z_order++));
 
-            boomerang = new SpriterSet("boomerang.ssb.txt",
-                                       new Atlas("boomerang.png", "boomerang.txa.txt", z_order++));
-            flames = new SpriterSet("flame.ssb.txt",
-                                    new Atlas("flame.png", "flame.txa.txt", z_order++));
+            gun_sin = new Atlas("gun_sin.png", "gun_sin.txa.txt", z_order++);
+            gun_penguin = new Atlas("gun_penguin.png", "gun_penguin.txa.txt", z_order++);
+            gun_fork = new Atlas("gun_fork.png", "gun_fork.txa.txt", z_order++);
+            gun_dragon = new Atlas("gun_dragon.png", "gun_dragon.txa.txt", z_order++);
+            gun_vegetable = new Atlas("gun_vegetable.png", "gun_vegetable.txa.txt", z_order++);
+            gun_skull = new Atlas("gun_skull.png", "gun_skull.txa.txt", z_order++);
+            gun_beachball = new Atlas("gun_beachball.png", "gun_beachball.txa.txt", z_order++);
 
-            laserspecial = new Atlas("laser-special.png", "laser-special.txa.txt", z_order++);
-
-            dragon_special_derp = new Atlas("special-dragon.png", new Vector2(482, 410), z_order++);
-            dragon_special_angry = new Atlas("special-dragon-2.png", new Vector2(380, 358), z_order++);
-            veggie_special = new Atlas("veggie-special.png", "veggie-special.txa.txt", z_order++);
-
-            lightning_strike = new SpriterSet("lightning-strike.ssb.txt",
-                                              new Atlas("lightning-strike.png",
-                                                        "lightning-strike.txa.txt", z_order++));
-
-            skullbullet = new Atlas("skull-bullet.png", "skull-bullet.txa.txt", z_order++);
-            beachball = new Atlas("beachball.png", "beachball.txa.txt", z_order++);
+            lightning_strike = new SpriterSet("lightning-strike.ssb.txt", new Atlas("lightning-strike.png", "lightning-strike.txa.txt", z_order++));
 
             explosion = new Atlas("explosion.png", "explosion.txa.txt", z_order++);
 
-            pickups = new Atlas("pickups.png", "pickups.txa.txt", z_order++);
-            pickups.texture.hud = true;
-
-            pick_a_day = new Atlas("pick_day_button.png", z_order++);
-            pick_a_day.texture.hud = true;
-
-            font = new Atlas("font.png", "font.fnt.txt", z_order++);
-            font.texture.hud = true;
-
-            #if LOADING_SCREEN || LOADING_CREDITS
-            loading = new Atlas("loading.png", "loading.txa.txt", z_order++);
-            #endif
-
-            money_guy = new Atlas("moneyguy.png", "moneyguy.txa.txt", z_order++);
-            money_guy.texture.hud = true;
+            ui_game = new Atlas("ui_game.png", "ui_game.txa.txt", z_order++);
+            ui_game.texture.hud = true;
 
             counter_money = new Atlas("counter-money-numbers.png", new Vector2(16, 20), z_order++);
             counter_money.texture.hud = true;
-
-            ui = new Atlas("ui.png", "ui.txa.txt", z_order++);
-            ui.texture.hud = true;
-
-            arrow = new Atlas("arrow.png", z_order++);
-            arrow.texture.hud = true;
-
-            store = new Atlas("store.png", "store.txa.txt", z_order++);
-
-            fade = new Atlas("fade_white.png", z_order++);
-            fade.texture.hud = true;
         }
     }
 }

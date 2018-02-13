@@ -6,17 +6,13 @@ namespace Gunhouse
 {
     public class PenguinPirateBackgroundDay : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.05f, 1.05f);
-        Vector2 scaleOne = new Vector2(1.05f, 1.05f);
+        Vector2 scaleAmount = new Vector2(0.525f, 0.525f);
+        Vector2 scaleReverse = new Vector2(-0.525f, 0.525f);
 
         public const int n_clouds = 3;
         public Vector2[] clouds = new Vector2[n_clouds];
         public int time = 100;
-        #if FIXED_16X9
-        Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 100);
-        #else
-        Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 40);
-        #endif
+        Vector2 groundPosition = (AppMain.vscreen * 0.5f) + new Vector2(0, 240);
 
         public PenguinPirateBackgroundDay()
         {
@@ -38,34 +34,35 @@ namespace Gunhouse
         public override void draw()
         {
             atlas().draw((int)stage_penguin_noon.Sprites.background,
-                         new Vector2(AppMain.vscreen.x * 0.5f, 444 * 0.5f), scaleOne, Vector4.one);
+                         (AppMain.vscreen * 0.5f) + new Vector2(0, -115), scaleAmount, Vector4.one);
 
             for (int i = 0; i < n_clouds; i++) {
                 atlas().draw((int)stage_penguin_noon.Sprites.cloud_0 + i,
-                             new Vector2(clouds[i].x+(float)Math.Sin(i*1.5f+time/(100.0f+i*15))*3.0f,
-                                         clouds[i].y+(float)Math.Cos(i*1.5f+time/(100.0f+i*15))*5.0f),
-                             scaleOne, Vector4.one);
+                             new Vector2(clouds[i].x + (float)Math.Sin(i * 1.5f + time / (100.0f + i * 15)) * 3.0f,
+                                         clouds[i].y + (float)Math.Cos(i * 1.5f + time / (100.0f + i * 15)) * 5.0f),
+                             scaleAmount, Vector4.one);
             }
 
             int n = 0;
-            for(int y = 442; y <= 540; y += 20) {
-                atlas().draw((int)stage_penguin_noon.Sprites.foreground,
-                             new Vector2(960/2+(float)Math.Tanh(Math.Sin(time/(25.0f+(y-422)/8)))*20.0f,
-                                         y    +(float)Math.Abs(Math.Cos(time/(25.0f+(y-422)/8)))*5.0f),
-                             n % 2 == 0 ? scaleOne : scaleAmount, Vector4.one);
+            for(int y = 362; y <= 460; y += 20) {
+                atlas().draw((int)stage_penguin_noon.Sprites.wave,
+                             new Vector2(960 / 2 + (float)Math.Tanh(Math.Sin(time / (25.0f + (y - 422) / 8))) * 20.0f,
+                                         y + (float)Math.Abs(Math.Cos(time / (25.0f + (y - 422) / 8))) * 5.0f),
+                             n % 2 == 0 ? scaleReverse : scaleAmount, Vector4.one);
                 n++;
             }
 
-            atlas().draw((int)stage_penguin_noon.Sprites.ground, groundPosition, scaleOne, Vector4.one);
+            atlas().draw((int)stage_penguin_noon.Sprites.ground, groundPosition, scaleAmount, Vector4.one);
 
-            int sprite = (int)stage_penguin_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_penguin_dusk)
-                sprite = (int)stage_penguin_anchors.Sprites.dusk_anchor;
-            if (atlas() == AppMain.textures.stage_penguin_night)
-                sprite = (int)stage_penguin_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_penguin_anchors.draw(sprite, new Vector2(320 * 0.5f, AppMain.vscreen.y - 119 * 0.5f),
-                                                        scaleAmount, Vector4.one);
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_penguin_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_penguin_dusk) sprite = (int)stage_penguin_anchors.Sprites.dusk_anchor;
+                if (atlas() == AppMain.textures.stage_penguin_night) sprite = (int)stage_penguin_anchors.Sprites.night_anchor;
+
+                AppMain.textures.stage_penguin_anchors.draw(sprite, new Vector2(320 * 0.5f, AppMain.vscreen.y - 119 * 0.5f),
+                                                            scaleReverse, Vector4.one);
+            }
         }
     }
 

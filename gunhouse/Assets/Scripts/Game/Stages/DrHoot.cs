@@ -6,15 +6,11 @@ namespace Gunhouse
 {
     public class ForestBackgroundDay : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.02f, 1.02f);
+        Vector2 scaleAmount = new Vector2(-0.525f, 0.525f);
 
         public const int n_clouds = 5;
         public Vector4[] clouds = new Vector4[n_clouds];
-        #if FIXED_16X9
-        Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 100);
-        #else
         Vector2 groundPosition = new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y - 60);
-        #endif
 
         public ForestBackgroundDay()
         {
@@ -44,26 +40,20 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int sprite = (int)stage_drhoot_anchors.Sprites.noon_anchor;
-            if (atlas() == AppMain.textures.stage_drhoot_dusk)
-                sprite = (int)stage_drhoot_anchors.Sprites.dusk_anchor;
-            if (atlas() == AppMain.textures.stage_drhoot_night)
-                sprite = (int)stage_drhoot_anchors.Sprites.night_anchor;
+            if (AppMain.DisplayAnchor) {
+                int sprite = (int)stage_drhoot_anchors.Sprites.noon_anchor;
+                if (atlas() == AppMain.textures.stage_drhoot_dusk) sprite = (int)stage_drhoot_anchors.Sprites.dusk_anchor;
+                if (atlas() == AppMain.textures.stage_drhoot_night) sprite = (int)stage_drhoot_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_drhoot_anchors.draw(sprite,
-                                                       new Vector2(390 * 0.5f, AppMain.vscreen.y - 175 * 0.5f),
-                                                       scaleAmount, Vector4.one);
-
+                AppMain.textures.stage_drhoot_anchors.draw(sprite,
+                                                           new Vector2(390 * 0.5f, AppMain.vscreen.y - 175 * 0.5f),
+                                                           scaleAmount, Vector4.one);
+            }
             atlas().draw((int)stage_drhoot_noon.Sprites.background,
-                         new Vector2(AppMain.vscreen.x * 0.5f, AppMain.vscreen.y * 0.5f), scaleAmount, Vector4.one);
+                         (AppMain.vscreen * 0.5f) + new Vector2(0, -103), scaleAmount, Vector4.one);
 
-            atlas().draw((int)stage_drhoot_noon.Sprites.platform, new Vector2(715, 410), scaleAmount, Vector4.one);
-
-            #if FIXED_16X9
+            atlas().draw((int)stage_drhoot_noon.Sprites.platform, new Vector2(715, 360), scaleAmount, Vector4.one);
             atlas().draw((int)stage_drhoot_noon.Sprites.ground, groundPosition, scaleAmount, Vector4.one);
-            #else
-            atlas().draw((int)stage_drhoot_noon.Sprites.floor, groundPosition, scaleAmount, Vector4.one);
-            #endif
         }
     }
 

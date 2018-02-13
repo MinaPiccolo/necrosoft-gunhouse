@@ -5,16 +5,12 @@ namespace Gunhouse
 {
     public class StageOaklandBackgroundDay : Entity
     {
-        Vector2 scaleAmount = new Vector2(-1.01f, 1.01f);
+        Vector2 scaleAmount = new Vector2(-0.525f, 0.525f);
+        Vector2 scaleAnchor = new Vector2(0.4f, 0.4f);
 
         public const int n_clouds = 2;
         public Vector4[] clouds = new Vector4[n_clouds];
-
-        #if FIXED_16X9
-        Vector2 groundPosition = AppMain.vscreen * 0.5f + new Vector2(0, 85);
-        #else
-        Vector2 groundPosition = AppMain.vscreen * 0.5f;
-        #endif
+        Vector2 groundPosition = (AppMain.vscreen * 0.5f) + new Vector2(0, -10);
 
         public StageOaklandBackgroundDay()
         {
@@ -42,17 +38,20 @@ namespace Gunhouse
 
         public override void draw()
         {
-            int sprite = atlas() == AppMain.textures.stage_oakland_noon ?
-                         (int)stage_oakland_anchors.Sprites.noon_anchor :
-                         atlas() == AppMain.textures.stage_oakland_dusk ?
-                         (int)stage_oakland_anchors.Sprites.dusk_anchor : 
-                         (int)stage_oakland_anchors.Sprites.night_anchor;
+            if (AppMain.DisplayAnchor) {
+                int sprite = atlas() == AppMain.textures.stage_oakland_noon ?
+                             (int)stage_oakland_anchors.Sprites.noon_anchor :
+                             atlas() == AppMain.textures.stage_oakland_dusk ?
+                             (int)stage_oakland_anchors.Sprites.dusk_anchor : 
+                             (int)stage_oakland_anchors.Sprites.night_anchor;
 
-            AppMain.textures.stage_oakland_anchors.draw(sprite,
-                                                        new Vector2(385 * 0.5f, AppMain.vscreen.y - 160 * 0.5f),
-                                                        scaleAmount, Vector4.one);
+                AppMain.textures.stage_oakland_anchors.draw(sprite,
+                                                            new Vector2(140, 480),
+                                                            scaleAnchor, Vector4.one);
+            }
 
-            atlas().draw((int)stage_oakland_noon.Sprites.background, AppMain.vscreen * 0.5f, scaleAmount, Vector4.one);
+            atlas().draw((int)stage_oakland_noon.Sprites.background,
+                         AppMain.vscreen * 0.5f + new Vector2(0, -100), scaleAmount, Vector4.one);
 
             atlas().draw((int)stage_oakland_noon.Sprites.cloud_0, clouds[0], scaleAmount, Vector4.one);
             atlas().draw((int)stage_oakland_noon.Sprites.cloud_1, clouds[1], scaleAmount, Vector4.one);

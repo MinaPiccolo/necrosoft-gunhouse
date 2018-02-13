@@ -76,14 +76,12 @@ namespace Gunhouse
         public static void trace(params object[] args)
         {
             string s = "";
-            foreach(object o in args)
-            {
+            foreach(object o in args) {
                 if (o == null) s += "(null) ";
                 else s += o.ToString() + " ";
             }
 
-            while(s.Length > 16000)
-            {
+            while(s.Length > 16000) {
                 Debug.Log(s.Substring(0, 16000));
                 s = s.Substring(16000);
             }

@@ -21,14 +21,14 @@ namespace Necrosoft
 
         void OnEnable()
         {
-            Application.logMessageReceived += HandleLog;
+            //Application.logMessageReceived += HandleLog;
             Log.messages += Message;
         }
 
         void OnDisable()
         {
             Log.messages -= Message;
-            Application.logMessageReceived -= HandleLog;
+            //Application.logMessageReceived -= HandleLog;
         }
 
         void OnGUI()

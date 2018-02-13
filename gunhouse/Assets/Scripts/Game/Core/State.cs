@@ -51,16 +51,7 @@ namespace Gunhouse
         public static string filename = null;
         public static int time = 0, playback_frame = 0;
 
-        const int n_keys = 512, n_mouse_buttons = 7;
-        public static bool[] keys, keys_down, keys_up;
-        public static bool any_key_down;
-        public static int last_key = -1;
-
-        public static float[] cc =  new float[128];
-        public static bool[] cc_changed = new bool[128];
-
-        public static PlayerInput controllerInput;
-        public static PlayerActions Pad { get { return controllerInput.pad; } }
+        public static PlayerInput Pad;
 
         public static void clearTouches()
         {
@@ -70,46 +61,8 @@ namespace Gunhouse
 
         public static void tick(List<Necrosofty.Input.TouchData> touches_in)
         {
-            // initialize keys if needed
-            if (keys == null)
-            {
-                keys      = new bool[n_keys];
-                keys_down = new bool[n_keys];
-                keys_up   = new bool[n_keys];
-            }
-
-            any_key_down = false;
-
-            // update keys
-            for(int i = 0; i<n_keys; i++)
-            {
-                bool prev = keys[i];
-                keys[i] = UnityEngine.Input.GetKey((KeyCode)i);
-                keys_down[i] =  keys[i] && !prev;
-                keys_up[i] = !keys[i] &&  prev;
-
-                if(keys_down[i])
-                {
-                    last_key = i;
-                    if(i < 256) any_key_down = true;
-                }
-            }
-
-            if (last_key != -1 && !keys[last_key]) last_key = -1;
-
-            for(int i=0; i<cc.Length; i++)
-            {
-                float new_value = 0;//MidiJack.MidiMaster.GetKnob(0, i, 0.5f);
-                cc_changed[i] = (new_value!=cc[i]);
-                cc[i] = new_value;
-
-//                if(cc_changed[i])
-//                    Util.trace(i, " changed: ", cc[i]);
-            }
-
             // flag to make sure we update all touches
-            for(int i = 0; i < touches.Count; ++i)
-            {
+            for(int i = 0; i < touches.Count; ++i) {
                 Touch touch = touches[i];
                 touch.updated = false;
                 touches[i] = touch;
@@ -125,8 +78,7 @@ namespace Gunhouse
                 bool handled = false;
 
                 // if a touch with a matching id already exists, update it
-                for (int j = 0; j < touches.Count; ++j)
-                {
+                for (int j = 0; j < touches.Count; ++j) {
                     Touch touch = touches[j];
                     if (touch_in.ID == touch.id)
                     {
@@ -141,8 +93,7 @@ namespace Gunhouse
                 }
 
                 // if not, add it
-                if (!handled)
-                {
+                if (!handled) {
                     Touch new_touch = new Touch();
                     new_touch.id = touch_in.ID;
                     new_touch.position = new Vector2(AppMain.vscreen.x - (touch_in.X + 0.5f) * AppMain.vscreen.x,
@@ -157,14 +108,12 @@ namespace Gunhouse
             }
 
             // find unhandled touches and process them
-            for (int i = 0; i < touches.Count; ++i)
-            {
+            for (int i = 0; i < touches.Count; ++i) {
                 Touch touch = touches[i];
 
                 if (touch.updated) { continue; }
 
-                if (touch.status != Touch.Status.UP)
-                {
+                if (touch.status != Touch.Status.UP) {
                     touch.status = Touch.Status.UP;
                     touches[i] = touch;
 

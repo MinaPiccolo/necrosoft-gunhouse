@@ -1,0 +1,97 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:23a01c3a59810823d81aed71f8a32a52:07356315b38c68c5bc34c7c37091384a:96898df3d5f0f86a521ce41fc295dd82$
+#
+:format=40300
+:texture=menu.png
+:size=2048x2048
+:pivotpoints=enabled
+:borders=disabled
+
+arrow_vertical;358;642;90;124; 0.5;0.5; 0;0;0;0
+backboard;1012;305;526;408; 0.5;0.5; 0;0;0;0
+board_chimney;963;652;47;115; 0.5;0.5; 0;0;0;0
+board_flowerpot;574;361;102;256; 0.5;0.5; 0;0;0;0
+board_interior_dark;1746;1120;182;143; 0.5;0.5; 0;0;0;0
+board_money;513;578;59;65; 0.5;0.5; 0;0;0;0
+board_money_gears;1867;887;45;108; 0.5;0.5; 0;0;0;0
+board_weapon;1540;556;120;146; 0.5;0.5; 0;0;0;0
+cat/body;1746;997;178;121; 0.5;0.5; 0;0;0;0
+cat/eyes_closed;875;1440;83;21; 0.5;0.5; 0;0;0;0
+cat/eyes_half_open;875;1507;84;26; 0.5;0.5; 0;0;0;0
+cat/eyes_open;875;1463;83;42; 0.5;0.5; 0;0;0;0
+cat/paw_0;1867;691;42;96; 0.5;0.5; 0;0;0;0
+cat/paw_1;2009;1958;38;89; 0.5;0.5; 0;0;0;0
+cat/paw_2;2009;1869;38;87; 0.5;0.5; 0;0;0;0
+cat/tail_0;789;1269;68;62; 0.5;0.5; 0;0;0;0
+cat/tail_1;963;1596;62;67; 0.5;0.5; 0;0;0;0
+cat/tail_2;963;839;55;64; 0.5;0.5; 0;0;0;0
+cat/tail_3;963;769;50;68; 0.5;0.5; 0;0;0;0
+clock/face;1540;84;461;467; 0.5;0.5; 0;0;0;0
+clock/hand_long;2009;1702;34;165; 0.5;0; 0;0;0;0
+clock/hand_short;2009;1578;29;122; 0.5;0; 0;0;0;0
+clock/nose;859;1218;66;70; 0.5;0.5; 0;0;0;0
+controllers/ps_circle;789;1139;64;64; 0.5;0.5; 0;0;0;0
+controllers/ps_square;789;1073;64;64; 0.5;0.5; 0;0;0;0
+controllers/ps_triangle;629;885;64;64; 0.5;0.5; 0;0;0;0
+controllers/ps_x;629;819;64;64; 0.5;0.5; 0;0;0;0
+controllers/switch_down;1926;879;121;124; 0.5;0.5; 0;0;0;0
+controllers/switch_down_invert;112;642;121;124; 0.5;0.5; 0;0;0;0
+controllers/switch_dpad;630;56;100;100; 0.5;0.5; 0;0;0;0
+controllers/switch_left;450;645;124;121; 0.5;0.5; 0;0;0;0
+controllers/switch_right;682;546;124;121; 0.5;0.5; 0;0;0;0
+controllers/switch_right_invert;402;35;124;121; 0.5;0.5; 0;0;0;0
+controllers/switch_stick_l;528;55;100;101; 0.5;0.5; 0;0;0;0
+controllers/switch_up;235;642;121;124; 0.5;0.5; 0;0;0;0
+controllers/touch_back;1930;1005;116;124; 0.5;0.5; 0;0;0;0
+controllers/xbox_a;629;753;64;64; 0.5;0.5; 0;0;0;0
+controllers/xbox_b;1662;638;64;64; 0.5;0.5; 0;0;0;0
+controllers/xbox_x;1662;572;64;64; 0.5;0.5; 0;0;0;0
+controllers/xbox_y;336;18;64;64; 0.5;0.5; 0;0;0;0
+element/ball;1599;972;132;132; 0.5;0.5; 0;0;0;0
+element/boomerang;695;803;132;132; 0.5;0.5; 0;0;0;0
+element/dragon;829;771;132;132; 0.5;0.5; 0;0;0;0
+element/flame;695;669;132;132; 0.5;0.5; 0;0;0;0
+element/fork;829;637;132;132; 0.5;0.5; 0;0;0;0
+element/ice;1733;863;132;132; 0.5;0.5; 0;0;0;0
+element/lightning;1599;838;132;132; 0.5;0.5; 0;0;0;0
+element/skull;1733;729;132;132; 0.5;0.5; 0;0;0;0
+element/vegetable;1599;704;132;132; 0.5;0.5; 0;0;0;0
+element/wave;1914;745;132;132; 0.5;0.5; 0;0;0;0
+gunhouse_logo;1027;1265;980;782; 0.5;0.5; 0;0;0;0
+gunhouse_text;1022;715;575;389; 0.5;0.5; 0;0;0;0
+heart;851;905;162;144; 0.5;0.5; 0;0;0;0
+loading/background;1;1600;960;63; 0.5;0.5; 0;0;0;0
+loading/fill;875;1290;73;50; 0.5;0.5; 0;0;0;0
+loading/outline;1;1535;960;63; 0.5;0.5; 0;0;0;0
+necrosoft_logo;1;1665;1024;382; 0.5;0.5; 0;0;0;0
+objectives/banner-box;732;60;96;96; 0.5;0.5; 0;0;0;0
+objectives/banner-check-green;950;1227;72;71; 0.5;0.5; 0;0;0;0
+objectives/board;1;8;333;295; 0.5;0.5; 0;0;0;0
+selection_large;856;1051;164;165; 0.5;0.5; 0;0;0;0
+selection_small;1;641;109;110; 0.5;0.5; 0;0;0;0
+shield;717;937;132;134; 0.5;0.5; 0;0;0;0
+skull;789;1205;65;62; 0.5;0.5; 0;0;0;0
+slider_blue;2009;1553;29;23; 0.5;0.5; 0;0;0;0
+slider_red;2009;1528;29;23; 0.5;0.5; 0;0;0;0
+store/2d_1;961;1398;64;132; 0.5;0.5; 0;0;0;0
+store/2d_2;1930;1131;117;132; 0.5;0.5; 0;0;0;0
+store/2d_3;576;619;104;132; 0.5;0.5; 0;0;0;0
+store/3d_1;1867;789;45;96; 0.5;0.5; 0;0;0;0
+store/3d_2;875;1342;81;96; 0.5;0.5; 0;0;0;0
+store/3d_3;958;1300;66;96; 0.5;0.5; 0;0;0;0
+titles/continue;1;1333;872;200; 0.5;0.5; 0;0;0;0
+titles/game_over;336;158;510;145; 0.5;0.5; 0;0;0;0
+titles/options;1;1120;786;211; 0.5;0.5; 0;0;0;0
+titles/paused;1;308;510;327; 0.5;0.5; 0;0;0;0
+titles/secret;1024;1106;720;157; 0.5;0.5; 0;0;0;0
+titles/stats;1;951;714;167; 0.5;0.5; 0;0;0;0
+titles/store;1;768;626;181; 0.5;0.5; 0;0;0;0
+titles/success;848;76;510;227; 0.5;0.5; 0;0;0;0
+tutorial/cursor;1911;553;124;190; 0.5;0.5; 0;0;0;0
+tutorial/skull_icon;1733;595;132;132; 0.5;0.5; 0;0;0;0
+tutorial/text_box;963;1532;62;62; 0.5;0.5; 0;0;0;0

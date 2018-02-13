@@ -59,7 +59,7 @@ namespace Gunhouse
 
             PSVitaVideoPlayer.TransferMemToMonoHeap();
 
-            #if !UNITY_EDITOR
+#if !UNITY_EDITOR
             Main.OnNPInitialized += OnInitializedNP;
 
             Main.Initialize(Main.kNpToolkitCreate_DoNotInitializeTrophies | Main.kNpToolkitCreate_NoRanking);
@@ -68,9 +68,9 @@ namespace Gunhouse
             StartSaveLoad();
             StartTrophy();
             StartDialog();
-            #else
+#else
             SceneManager.LoadScene((int)SceneIndex.Main);
-            #endif
+#endif
         }
 
         void Update()

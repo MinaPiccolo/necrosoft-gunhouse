@@ -8,6 +8,7 @@ namespace Gunhouse
 {
     public class GHRenderer
     {
+        bool reset_bw;
         public int layer;
         public GHTexture[] texture_order = new GHTexture[150];
         MatrixType matrix = new MatrixType { matrix = new float[][] { new float[Matrix.size], new float[Matrix.size], new float[Matrix.size] } };
@@ -292,9 +293,14 @@ namespace Gunhouse
                     }
 
                     if (Game.instance != null && !texture_order[i].hud) {
-                        m.material.SetFloat("_UniBW", Game.instance.house.visibleDoorPosition () < 1.0f ? 1.0f : 0.0f);
+                        m.material.SetFloat("_UniBW", Game.instance.house.visibleDoorPosition() < 1.0f ? 1.0f : 0.0f);
                         m.material.SetFloat("_UniPulseAmtX", Game.instance.house.visibleDoorPosition () < 1.0f ? (float)Math.Sin(Game.instance.time / 30.0f) * 6.0f : 0.0f);
                         m.material.SetFloat("_UniPulseAmtY", Game.instance.house.visibleDoorPosition () < 1.0f ? (float)Math.Sin(Game.instance.time / 40.0f) * 6.0f : 0.0f);
+                    }
+                    else {
+                        m.material.SetFloat("_UniBW", 0.0f);
+                        m.material.SetFloat("_UniPulseAmtX", 0.0f);
+                        m.material.SetFloat("_UniPulseAmtY", 0.0f);
                     }
 
                     Graphics.DrawMesh(m.mesh, Matrix4x4.identity, m.material, layer, null, 0, mpb);

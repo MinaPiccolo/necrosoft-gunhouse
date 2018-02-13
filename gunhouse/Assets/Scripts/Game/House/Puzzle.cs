@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Necrosoft;
 
 namespace Gunhouse
@@ -83,195 +82,12 @@ namespace Gunhouse
                                                     1.0f, selected);
 
                 float square_size = System.Math.Min(size.x, size.y);
-                AppMain.textures.block_logo.draw(Puzzle.ammoToLogoSprite(type), pos,
-                                                 new Vector2(-1, 1) * square_size / 64 / 4,
-                                                 new Vector4(0.5f, 0.5f, 0.5f, 0.5f),
-                                                 1.0f);
+
+                AppMain.textures.block_logo.draw(Puzzle.AmmoToLogoSprite(type), pos,
+                        new Vector2(-1, 1) * square_size / 64 / 4,
+                        new Vector4(0.5f, 0.5f, 0.5f, 0.5f),
+                        1.0f);
             }
-        }
-    }
-
-    public class PadMenuController
-    {
-        int selected_button = 0;
-        Button[] live_buttons;
-
-        public PadMenuController()
-        {
-            live_buttons = AppMain.menuOverlay.GetLiveButtons();
-        }
-
-        public void tick()
-        {
-            Vector2 direction = Util.keyRepeat("menuoverlay_pad_repeat", Vector2.zero, 20, 5, Input.Pad.Move);
-
-            if (direction.x != 0) {
-                selected_button += Util.sign(direction.x);
-                selected_button = Util.clamp(selected_button, 0, live_buttons.Length - 1);
-            }
-
-            if (Input.Pad.Submit.WasPressed) { live_buttons[selected_button].onClick.Invoke(); }
-
-            for (int i = 0; i < live_buttons.Length; ++i) {
-                Button b = live_buttons[i];
-                float pulse = 1 + Mathf.Sin(AppMain.frame / 30.0f) / 10;
-                if (i != selected_button) { pulse = 1; }
-                b.GetComponent<RectTransform>().localScale = new Vector3(pulse, pulse, 1);
-            }
-        }
-    }
-
-    public class PauseState : State
-    {
-        public int time = 120;
-        PadMenuController pmc;
-
-        public PauseState(State child_state_)
-        {
-            child_state = child_state_;
-
-            Choom.Pause();
-
-            AppMain.menuOverlay.Pause(child_state);
-
-            pmc = new PadMenuController();
-        }
-
-        public override void tick()
-        {
-            time++;
-
-            pmc.tick();
-
-            if (Input.Pad.Start.WasPressed) { AppMain.menuOverlay.Resume(); }
-            if (AppMain.back) { AppMain.back = false; }
-        }
-
-        public override void draw()
-        {
-            base.draw();
-        }
-    }
-
-    public class EndWaveState : State
-    {
-        public int time = 0;
-        public float alpha = 0.0f;
-        public bool won;
-
-        public string story = "";
-        public string story_so_far;
-
-        public int money_ticker;
-        public int money_tick_amt;
-
-        PadMenuController pmc;
-
-        public EndWaveState(bool won_, State child_state_)
-        {
-            MetaState.end_game = false;
-            AppMain.screenShake(0, 0);
-            Choom.StopAllEffects();
-
-            won = won_;
-            child_state = child_state_;
-            tick_child_state = false;
-
-            AppMain.tutorial.SetDisplay(false);
-            AppMain.menuOverlay.Show(won);
-
-            if (!won) { DataStorage.TimesDefeated++; }
-
-            if (!won && MetaState.hardcore_mode) {
-                Game.instance.saveHardcoreScore();
-                Platform.SaveHardcore();
-            }
-
-            pmc = new PadMenuController();
-
-            money_ticker = DataStorage.Money;
-            money_tick_amt = (DataStorage.Money - money_ticker) / 180;
-
-            if (won && MetaState.wave_number + 1 > DataStorage.StartOnWave &&
-                !MetaState.hardcore_mode) {
-
-                if ((MetaState.wave_number % 3) == 2) { Objectives.BossDefeated(); }
-                DataStorage.StartOnWave = MetaState.wave_number + 1;
-            }
-
-            Platform.SaveEndWave();
-            Objectives.CheckAchievements();
-        }
-
-        override public void tick()
-        {
-            if (AppMain.top_state != this) { return; }
-
-            base.tick();
-
-            pmc.tick();
-
-            MoneyGuy.me.tick();
-
-            money_ticker += money_tick_amt;
-            if (money_ticker >= DataStorage.Money) {
-                money_ticker = DataStorage.Money;
-            }
-        }
-
-        override public void draw()
-        {
-            base.draw();
-        }
-    }
-
-    public class EndGameState : State
-    {
-        public int time = 0;
-        public float alpha = 0.0f;
-
-        public string story = "";
-        public string story_so_far;
-
-        PadMenuController pmc;
-
-        public EndGameState(State child_state_)
-        {
-            MetaState.end_game = false;
-            AppMain.screenShake(0, 0);
-
-            Choom.StopAllEffects();
-
-            child_state = child_state_;
-
-            if (MetaState.wave_number + 1 > DataStorage.StartOnWave) {
-                DataStorage.StartOnWave = MetaState.wave_number + 1;
-            }
-
-            Objectives.BossDefeated();
-            Objectives.SurvivedFinalStage();
-            Objectives.CheckAchievements();
-
-            child_state = null;
-            AppMain.top_state = new CreditState(false);
-
-            pmc = new PadMenuController();
-        }
-
-        public override void tick()
-        {
-            if (AppMain.top_state != this) { return; }
-
-            pmc.tick();
-
-            base.tick();
-        }
-
-        override public void draw()
-        {
-            if (this != AppMain.top_state) { return; }
-
-            base.draw();
         }
     }
 
@@ -306,8 +122,8 @@ namespace Gunhouse
 
             if (true) {
                 AppMain.background = (Entity)Activator.CreateInstance(backgrounds[MetaState.wave_number % 3] as Type);
-                AppMain.background_fade = 0.0f;
-                AppMain.background_fade_delta = 1.0f / 120;
+                //AppMain.background_fade = 0.0f;
+                //AppMain.background_fade_delta = 1.0f / 120;
             }
 
             done = false;
@@ -365,7 +181,7 @@ namespace Gunhouse
         public void load()
         {
             AppMain.textures.orphan.touch();
-            AppMain.textures.ui.touch();
+
             foreach (Type t in enemy_list.Keys) {
                 t.GetMethod("loadAssets").Invoke(null, null);
             }
@@ -405,9 +221,6 @@ namespace Gunhouse
 
         public Puzzle puzzle;
 
-        public string day_name;
-
-        int dayTextTimer = 60 * 2;
         int startWaveTimer = 60 * 3;
 
         bool hidePauseButton = false;
@@ -507,10 +320,13 @@ namespace Gunhouse
             if ((MetaState.wave_number % 30) == 9 * 3 + 2) { music = "/Boss/boss3"; }
 
             Choom.Play("Music" + music);
-            day_name = dayName(MetaState.wave_number);
+
+            AppMain.MainMenu.DisplayDayName();
 
             #if UNITY_SWITCH
             hidePauseButton = UnityEngine.Switch.Operation.mode == UnityEngine.Switch.Operation.OperationMode.Console;
+            #elif UNITY_PS4
+            hidePauseButton = true;
             #endif
         }
 
@@ -585,17 +401,14 @@ namespace Gunhouse
 
             if (AppMain.top_state == this) {
                 if (!hidePauseButton) {
-                    AppMain.textures.hud.draw((int)hud.Sprites.pause, new Vector2(AppMain.vscreen.x - 47, 47),
-                                              new Vector2(-1, 1) * 64 / 97, Vector4.one);
+                    AppMain.textures.ui_game.draw((int)ui_game.Sprites.button_pause,
+                                                  new Vector2(AppMain.vscreen.x - 47, 47),
+                                                  new Vector2(-0.5f, 0.5f) * 64 / 97, Vector4.one);
                 }
 
                 if (time > startWaveTimer) {
                     AppMain.tutorial.SetLesson(Lesson.MAKE_BLOCKS);
                 }
-
-                float fade = 1;
-                if (time > dayTextTimer) { fade = 1 - (time - dayTextTimer) / 60.0f; }
-                Text.Draw(new Vector2(650, 240), day_name, Vector2.one * 1.25f, new Vector4 (1, 1, 1, fade));
             }
         }
 
@@ -611,18 +424,19 @@ namespace Gunhouse
 
                     Rect pauseButtonRect = new Rect(AppMain.vscreen.x - 100, 10, 90, 90);
                     if (pauseButtonRect.Contains(Input.touches[i].position)) {
-                        AppMain.top_state = new PauseState(this);
+                        AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
                     }
                 }
 
-                if (Input.Pad.Start.WasPressed) AppMain.top_state = new PauseState(this);
+                if (Input.Pad.Start.WasPressed) {
+                    AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
+                }
             }
 
             if (AppMain.back) {
                 AppMain.back = false;
                 if (Input.touches.Count > 0 || MetaState.wave.done) return;
-
-                AppMain.top_state = new PauseState(this);
+                AppMain.top_state = new MenuState(Menu.MenuState.Pause, this);
             }
 
             #endregion
@@ -630,7 +444,12 @@ namespace Gunhouse
             #region Value Resets
 
             if (house.door_position < 1.0f) {
-                if (!MetaState.end_game) {
+                if (MetaState.end_game) {
+                    /* peter is allowed attack while in puzzle mode. */
+                    enemy_group.tickrate = 1;
+                    enemy_bullet_group.tickrate = 1;
+                }
+                else {
                     enemy_group.tickrate = 0;
                     enemy_bullet_group.tickrate = 0;
                 }
@@ -675,12 +494,13 @@ namespace Gunhouse
 
             #if UNITY_EDITOR
 
-            if (Input.keys[(int)KeyCode.Delete]) { house.health = 0; }
+            if (UnityEngine.Input.GetKeyDown(KeyCode.N)) { house.health = 0; }
 
             #endif
 
             if (house.health <= 0 && AppMain.top_state == this) {
-                AppMain.top_state = new EndWaveState(false, this);
+                AppMain.HasWon = false;
+                AppMain.top_state = new MenuState(Menu.MenuState.EndWave, this);
                 return;
             }
 
@@ -705,10 +525,14 @@ namespace Gunhouse
                     particle_group.flushAddRemove();
 
                     MoneyGuy.me.sign_v = 0;
+                    AppMain.HasWon = true;
 
-                    //if (MetaState.end_game) { AppMain.top_state = new EndGameState(this); }
-                    if (MetaState.wave_number == 29) { AppMain.top_state = new EndGameState(this); }
-                    else { AppMain.top_state = new EndWaveState(true, this); }
+                    if (MetaState.wave_number == 29) {
+                        AppMain.top_state = new MenuState(Menu.MenuState.EndGame, this);
+                    }
+                    else {
+                        AppMain.top_state = new MenuState(Menu.MenuState.EndWave, this);
+                    }
                 }
             }
             else {
@@ -723,18 +547,6 @@ namespace Gunhouse
             if (DataStorage.BestHardcoreScores.Count > DataStorage.SCORES_TO_KEEP) {
                 DataStorage.BestHardcoreScores.RemoveAt(DataStorage.SCORES_TO_KEEP);
             }
-        }
-
-        public static string dayName(int wave)
-        {
-            string day_name = "Day " + (wave / 3 + 1).ToString() + ", ";
-
-            switch (wave % 3) {
-                case 0: day_name += "noon"; break;
-                case 1: day_name += "dusk"; break;
-                case 2: day_name += "night"; break;
-            }
-            return day_name;
         }
 
         public static int ammoTypesPerWave(int wave_number)
@@ -851,7 +663,7 @@ namespace Gunhouse
                     AppMain.game_pad_active = false;
                 }
                 else if (!AppMain.game_pad_active && Input.touches.Count == 0 &&
-                         (Input.Pad.Move != Vector2.zero || Input.Pad.AnyWasPressd())) {
+                         (Input.Pad.Move != Vector2.zero || Input.Pad.AnyWasPressed)) {
                     clearTouchInputState();
                     AppMain.game_pad_active = true;
                 }
@@ -1436,21 +1248,20 @@ namespace Gunhouse
                 Vector2 gridsize = t.both_groups[i].GridSize();
                 t.both_groups[i].SetGridPosition(pos);
 
-                if (pos.x+(gridsize.x-1) >= columns || pos.x < 0) {
+                if (pos.x + (gridsize.x - 1) >= columns || pos.x < 0) {
                     int grid_y = (int)t.both_groups[i].GridPosition().y;
-
-                    if (pos.x >= columns) {
-                        loading_specials = false;
-                        Objectives.LoadGun(gridsize.x, gridsize.y);
-                    }
-
-                    if (pos.x < 0) {
-                        loading_specials = true;
-                        Objectives.LoadSpecial(gridsize.x, gridsize.y);
-                    }
 
                     // only support blocks of 2x2 or higher
                     if (gridsize.y >= 2) {
+                        if (pos.x < 0) {
+                            loading_specials = true;
+                            Objectives.LoadSpecial(gridsize.x, gridsize.y);
+                        }
+                        else {
+                            loading_specials = false;
+                            Objectives.LoadGun(gridsize.x, gridsize.y);
+                        }
+
                         for (int y = 0; y < gridsize.y; ++y) {
                             gun_feed_amt[(y + grid_y) / 2] += (int)gridsize.x;
                         }
@@ -1479,8 +1290,7 @@ namespace Gunhouse
                     AppMain.tutorial.loadMultiplierAmount++;
                 }
 
-                spawnFloatyText("Match! x" + Game.instance.match_combo,
-                                new Vector2(Puzzle.grid_left + Puzzle.piece_size * 3 + 130, 42.5f), 1.5f, Vector4.one);
+                AppMain.MatchBonus.SpawnFloatyText(Game.instance.match_combo);
                 Game.instance.match_combo++;
                 Game.instance.match_streak++;
                 Game.instance.house.advanceNext();
@@ -1512,7 +1322,7 @@ namespace Gunhouse
 
                     if (loading_specials) {
                         Game.instance.house.addSpecialAttack(i, feed_type, amt);
-                        splash_position = new Vector2 (Puzzle.grid_left, Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
+                        splash_position = new Vector2(Puzzle.grid_left, Puzzle.grid_top + (i * 2 + 1) * Puzzle.piece_size);
 
                         if (!recordOnce && AppMain.tutorial.LoadedSpecial &&
                             AppMain.tutorial.loadedSpecialAmount >= AppMain.tutorial.repeatAmount) {
@@ -1547,8 +1357,9 @@ namespace Gunhouse
                     lightninged = true;
                     spawnFlash(splash_position, ammoColor(feed_type), 0.25f + 0.1f * amt);
 
-                    spawnFloatyText("+" + gun_feed_amt[i].ToString() + (multiplier == 1 ? "" : "x" + multiplier.ToString()),
-                                    splash_position, 1 + 1.0f * (float)Math.Log(amt), ammoColor(feed_type));
+                    AppMain.MatchBonus.SpawnFloatyText(gun_feed_amt[i], multiplier,
+                                                       splash_position, 1 + 1.0f * (float)Math.Log(amt),
+                                                       feed_type);
                 }
             }
 
@@ -1695,84 +1506,76 @@ namespace Gunhouse
             Game.instance.particle_manager.add(flash);
         }
 
-        public static void spawnFloatyText(string text, Vector2 position, float size, Vector4 color)
-        {
-            Particle floaty = new Particle(AppMain.textures.font);
-
-            floaty.position = position;
-            floaty.velocity = new Vector2(0, -0.2f);
-            floaty.scale = Vector2.one / 2 * size;
-            floaty.color = color;
-            floaty.color_delta = new Vector4(0, 0, 0, -0.25f / 60);
-            floaty.text = text;
-            floaty.position.x = Math.Max(floaty.position.x, 24 * floaty.scale.x * text.Length);
-
-            Game.instance.particle_manager.add(floaty);
-        }
-
         public static Vector4 ammoColor(Gun.Ammo type)
         {
-            if (type == Gun.Ammo.DRAGON) { return new Vector4 (1.0f, 0.7f, 0.1f, 1); }
-            if (type == Gun.Ammo.IGLOO) { return new Vector4 (0.1f, 0.5f, 1.0f, 1); }
-            if (type == Gun.Ammo.SKULL) { return new Vector4 (0.8f, 0.2f, 0.7f, 1); }
-            if (type == Gun.Ammo.VEGETABLE) { return new Vector4 (0.4f, 0.8f, 0.3f, 1); }
-            if (type == Gun.Ammo.LIGHTNING) { return new Vector4 (1.0f, 0.3f, 0.3f, 1); }
-            if (type == Gun.Ammo.FLAME) { return new Vector4 (1.0f, 0.7f, 0.1f, 1); }
-            if (type == Gun.Ammo.FORK) { return new Vector4 (0.1f, 0.5f, 1.0f, 1); }
-            if (type == Gun.Ammo.BOUNCE) { return new Vector4 (0.8f, 0.2f, 0.7f, 1); }
-            if (type == Gun.Ammo.BOOMERANG) { return new Vector4 (0.4f, 0.8f, 0.3f, 1); }
-            if (type == Gun.Ammo.SIN) { return new Vector4 (1.0f, 0.3f, 0.3f, 1); }
+            switch (type)
+            {
+            case Gun.Ammo.DRAGON: return new Vector4 (1.0f, 0.7f, 0.1f, 1);
+            case Gun.Ammo.FLAME: return new Vector4 (1.0f, 0.7f, 0.1f, 1);
+            case Gun.Ammo.FORK: return new Vector4 (0.1f, 0.5f, 1.0f, 1);
+            case Gun.Ammo.IGLOO: return new Vector4 (0.1f, 0.5f, 1.0f, 1);
+            case Gun.Ammo.LIGHTNING: return new Vector4 (1.0f, 0.3f, 0.3f, 1);
+            case Gun.Ammo.SIN: return new Vector4 (1.0f, 0.3f, 0.3f, 1);
+            case Gun.Ammo.SKULL: return new Vector4 (0.8f, 0.2f, 0.7f, 1);
+            case Gun.Ammo.BOUNCE: return new Vector4 (0.8f, 0.2f, 0.7f, 1);
+            case Gun.Ammo.VEGETABLE: return new Vector4 (0.4f, 0.8f, 0.3f, 1);
+            case Gun.Ammo.BOOMERANG: return new Vector4 (0.4f, 0.8f, 0.3f, 1);
+            }
             return Vector4.one;
         }
 
-        public static int ammoElementToSprite(Gun.Ammo a)
+        public static int AmmoToSprite(Gun.Ammo type)
         {
-            if (a == Gun.Ammo.DRAGON) { return 0; }
-            if (a == Gun.Ammo.IGLOO) { return 1; }
-            if (a == Gun.Ammo.SKULL) { return 2; }
-            if (a == Gun.Ammo.VEGETABLE) { return 3; }
-            if (a == Gun.Ammo.LIGHTNING) { return 4; }
-            if (a == Gun.Ammo.FLAME) { return 5; }
-            if (a == Gun.Ammo.FORK) { return 6; }
-            if (a == Gun.Ammo.BOUNCE) { return 7; }
-            if (a == Gun.Ammo.BOOMERANG) { return 8; }
-            if (a == Gun.Ammo.SIN) { return 9; }
-            return -1;
-        }
-
-        public static int ammoToBlockSprite(Gun.Ammo a)
-        {
-            switch (a)
+            switch (type)
             {
-                case Gun.Ammo.DRAGON:
-                case Gun.Ammo.FLAME: return (int)block.Sprites.orange;
-                case Gun.Ammo.FORK:
-                case Gun.Ammo.IGLOO: return (int)block.Sprites.blue;
-                case Gun.Ammo.LIGHTNING:
-                case Gun.Ammo.SIN: return (int)block.Sprites.red;
-                case Gun.Ammo.SKULL:
-                case Gun.Ammo.BOUNCE: return (int)block.Sprites.purple;
-                case Gun.Ammo.VEGETABLE:
-                case Gun.Ammo.BOOMERANG: return (int)block.Sprites.green;
+            case Gun.Ammo.DRAGON: return (int)puzzle.Sprites.element_dragon;
+            case Gun.Ammo.FLAME: return (int)puzzle.Sprites.element_flame;
+            case Gun.Ammo.FORK: return (int)puzzle.Sprites.element_fork;
+            case Gun.Ammo.IGLOO: return (int)puzzle.Sprites.element_ice;
+            case Gun.Ammo.LIGHTNING: return (int)puzzle.Sprites.element_lightning;
+            case Gun.Ammo.SIN: return (int)puzzle.Sprites.element_wave;
+            case Gun.Ammo.SKULL: return (int)puzzle.Sprites.element_skull;
+            case Gun.Ammo.BOUNCE: return (int)puzzle.Sprites.element_ball;
+            case Gun.Ammo.VEGETABLE: return (int)puzzle.Sprites.element_vegetable;
+            case Gun.Ammo.BOOMERANG: return (int)puzzle.Sprites.element_boomerang;
             }
 
             return -1;
         }
 
-        public static int ammoToLogoSprite(Gun.Ammo a)
+        public static int ammoToBlockSprite(Gun.Ammo type)
         {
-            switch (a)
+            switch (type)
             {
-                case Gun.Ammo.DRAGON: return (int)block_logo.Sprites.dragon;
-                case Gun.Ammo.FLAME: return (int)block_logo.Sprites.crown;
-                case Gun.Ammo.FORK: return (int)block_logo.Sprites.forks;
-                case Gun.Ammo.IGLOO: return (int)block_logo.Sprites.igloo;
-                case Gun.Ammo.LIGHTNING: return (int)block_logo.Sprites.lightning;
-                case Gun.Ammo.SIN: return (int)block_logo.Sprites.sign;
-                case Gun.Ammo.SKULL: return (int)block_logo.Sprites.skull;
-                case Gun.Ammo.BOUNCE: return (int)block_logo.Sprites.ball;
-                case Gun.Ammo.VEGETABLE: return (int)block_logo.Sprites.carrot;
-                case Gun.Ammo.BOOMERANG: return (int)block_logo.Sprites.boomerang;
+            case Gun.Ammo.DRAGON:
+            case Gun.Ammo.FLAME: return (int)block.Sprites.orange;
+            case Gun.Ammo.FORK:
+            case Gun.Ammo.IGLOO: return (int)block.Sprites.blue;
+            case Gun.Ammo.LIGHTNING:
+            case Gun.Ammo.SIN: return (int)block.Sprites.red;
+            case Gun.Ammo.SKULL:
+            case Gun.Ammo.BOUNCE: return (int)block.Sprites.purple;
+            case Gun.Ammo.VEGETABLE:
+            case Gun.Ammo.BOOMERANG: return (int)block.Sprites.green;
+            }
+
+            return -1;
+        }
+
+        public static int AmmoToLogoSprite(Gun.Ammo type)
+        {
+            switch (type)
+            {
+            case Gun.Ammo.DRAGON: return (int)block_logo.Sprites.dragon;
+            case Gun.Ammo.FLAME: return (int)block_logo.Sprites.crown;
+            case Gun.Ammo.FORK: return (int)block_logo.Sprites.forks;
+            case Gun.Ammo.IGLOO: return (int)block_logo.Sprites.igloo;
+            case Gun.Ammo.LIGHTNING: return (int)block_logo.Sprites.lightning;
+            case Gun.Ammo.SIN: return (int)block_logo.Sprites.sin;
+            case Gun.Ammo.SKULL: return (int)block_logo.Sprites.skull;
+            case Gun.Ammo.BOUNCE: return (int)block_logo.Sprites.ball;
+            case Gun.Ammo.VEGETABLE: return (int)block_logo.Sprites.carrot;
+            case Gun.Ammo.BOOMERANG: return (int)block_logo.Sprites.boomerang;
             }
 
             return -1;

@@ -9,12 +9,10 @@ namespace Gunhouse
         public static List<Necrosofty.Input.TouchData> data;
         public static GameObject audio_object;
         public static Camera camera;
-        public static float background_fade = 0.0f;
-        public static float background_fade_delta = 1.0f / 60;
+
         public static Entity background;
         public static Vector2 vscreen;
 
-        public static MenuOverlay menuOverlay;
         public static MenuTutorial tutorial;
         public static MenuAchievements menuAchievements;
 
@@ -26,13 +24,13 @@ namespace Gunhouse
 
         public static string bgmfilename;
 
+        public static Material spriteMaterial;
         public static Shader shader;
         public static int frame = 0;
         public static GameObject sfx;
 
         public static int shake_int = -1;
         public static int shake_max = -1;
-        public static int shake_dur = 0;
         public static int shake_time = 0;
 
         public static bool back;
@@ -52,6 +50,12 @@ namespace Gunhouse
         public static bool game_pad_active = true;
         #endif
 
+        public static bool DisplayAnchor;
+        public static bool IsPaused;
+        public static bool HasWon;
+        public static Menu.MainMenu MainMenu;
+        public static MatchBonus MatchBonus;
+
         public static void Start()
         {
             GHInputUpdate();
@@ -68,14 +72,13 @@ namespace Gunhouse
         {
             renderer = new GHRenderer();
             textures = new Textures();
-            top_state = new TitleState(MenuOptions.Title);
+            top_state = new MenuState(Menu.MenuState.Splash);
         }
 
         public static void screenShake(int amount, int length)
         {
             shake_int = (int)(amount * .15f);
             if (shake_int > shake_max) { shake_max = shake_int; }
-            shake_dur = length;
             shake_time = length;
         }
 
@@ -111,24 +114,6 @@ namespace Gunhouse
                     camera.transform.position = camera_pos;
                 }
             }
-
-            #if LOADING_SCREEN || LOADING_CREDITS
-            if (!(top_state is LoadState || top_state is EndGameState)) {
-            #else
-            if (!(top_state is EndGameState)) {
-            #endif
-
-                background_fade += background_fade_delta;
-                if (background_fade < 0) {
-                    background_fade = 0;
-                    background_fade_delta = 0;
-                }
-
-                if (background_fade > 1) {
-                    background_fade = 1;
-                    background_fade_delta = 0;
-                }
-            }
         }
 
         static public long last_ram = 0;
@@ -149,22 +134,8 @@ namespace Gunhouse
                 return;
             }
 
-            #if LOADING_SCREEN || LOADING_CREDITS
-            if (!(top_state is LoadState) && !(top_state is CreditState)) {
-            #endif
-
-                if (textures.stage_drdog_noon == null) { textures.loadTheRest(); }
-
-                background.draw();
-
-                if (background_fade < 1.0f) {
-                    textures.fade.draw(0, new Vector2((960 * 0.5f),(544 * 0.5f)), new Vector2(1000, 1000),
-                                       new Vector4(0, 0, 0,(1 - background_fade)));
-                }
-
-            #if LOADING_SCREEN || LOADING_CREDITS
-            }
-            #endif
+            if (textures.stage_drdog_noon == null) { textures.loadTheRest(); }
+            background.draw();
 
             top_state.draw();
 
