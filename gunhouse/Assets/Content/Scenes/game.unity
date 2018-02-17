@@ -4600,64 +4600,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 301397087}
---- !u!1 &309526095
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 1000011616943876, guid: 3eb95c17de83741fbbf357913f2df487,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 309526099}
-  - component: {fileID: 309526097}
-  - component: {fileID: 309526096}
-  m_Layer: 0
-  m_Name: debug
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &309526096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 309526095}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca6c2d819b7404fd09c325ea24936483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  font: {fileID: 12800000, guid: 83248d8d81938674c99a2248a206b0ec, type: 3}
---- !u!114 &309526097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 309526095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d79053292b04a4ebb99736a9c7f14b93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  font: {fileID: 12800000, guid: 83248d8d81938674c99a2248a206b0ec, type: 3}
-  size: 0.3
-  timeScale: 1
---- !u!4 &309526099
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 4000013775407118, guid: 3eb95c17de83741fbbf357913f2df487,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 309526095}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1386014294}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &310536172
 GameObject:
   m_ObjectHideFlags: 0
@@ -15453,7 +15395,7 @@ MonoBehaviour:
   submitButton: 19
   cancelButton: 20
   analogMoveThreshold: 0.5
-  moveRepeatFirstDuration: 0.5
+  moveRepeatFirstDuration: 0.6
   moveRepeatDelayDuration: 0.1
   forceModuleActive: 0
   allowMouseInput: 1
@@ -19804,6 +19746,7 @@ GameObject:
   - component: {fileID: 1386014294}
   - component: {fileID: 1386014296}
   - component: {fileID: 1386014295}
+  - component: {fileID: 1386014297}
   m_Layer: 0
   m_Name: miscellaneous
   m_TagString: Untagged
@@ -19822,7 +19765,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1185377094}
-  - {fileID: 309526099}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19849,6 +19791,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   limit: 1
+--- !u!114 &1386014297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1386014293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f24029f1cc7c47d391f8a064da73151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1387225248
 GameObject:
   m_ObjectHideFlags: 0

@@ -117,7 +117,7 @@ namespace Gunhouse
             Hearts = PlayerPrefs.GetInt(SaveKeys.Hearts, 2);
             Armor = PlayerPrefs.GetInt(SaveKeys.Armor, 0);
             Healing = PlayerPrefs.GetInt(SaveKeys.Healing, 1);
-            StartOnWave = PlayerPrefs.GetInt(SaveKeys.StartOnWave, 0);
+            StartOnWave = 31;// PlayerPrefs.GetInt(SaveKeys.StartOnWave, 0);
 
             GunOwned = PlayerPrefsX.GetBoolArray(SaveKeys.GunOwned);
             GunPower = PlayerPrefsX.GetIntArray(SaveKeys.GunPower);

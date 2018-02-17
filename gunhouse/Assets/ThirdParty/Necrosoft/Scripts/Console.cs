@@ -21,14 +21,14 @@ namespace Necrosoft
 
         void OnEnable()
         {
-            //Application.logMessageReceived += HandleLog;
+            Application.logMessageReceived += HandleLog;
             Log.messages += Message;
         }
 
         void OnDisable()
         {
             Log.messages -= Message;
-            //Application.logMessageReceived -= HandleLog;
+            Application.logMessageReceived -= HandleLog;
         }
 
         void OnGUI()
@@ -36,7 +36,7 @@ namespace Necrosoft
             float w = Screen.width * 4 / 5;
             int h = (int)w / 4; h += 5;
             rect.x = Screen.width / 5;
-            rect.y = Screen.height - h;
+            rect.y = (Screen.height - h) - 50;
             rect.width = w;
             rect.height = h;
 
@@ -73,7 +73,7 @@ namespace Necrosoft
         void HandleLog(string logString, string stackTrace, LogType type)
         {
             if (log.Count > 9) { log.RemoveAt(0); }
-            log.Add(logString + " trace: " + stackTrace);
+            log.Add(logString);// + " trace: " + stackTrace);
         }
 
         void DrawBox(Rect position, Color color)

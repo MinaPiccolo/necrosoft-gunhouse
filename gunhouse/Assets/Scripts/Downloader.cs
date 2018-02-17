@@ -18,7 +18,9 @@ namespace Gunhouse
 
         public void LoadBundle()
         {
-            #if UNITY_TVOS
+            #if UNITY_PS4
+            string bundleName = "PS4/bundled";
+            #elif UNITY_TVOS
             string bundleName = "tvOS/bundled";
             #elif UNITY_IOS
             string bundleName = "iOS/bundled";
@@ -33,12 +35,15 @@ namespace Gunhouse
 
         IEnumerator LoadAssetBundle(string bundleName)
         {
-            #if UNITY_IOS || UNITY_TVOS || UNITY_ANDROID
+            #if UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || UNITY_PS4
 
             AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(bundleName);
 
             while (!request.isDone) {
                 if (progressBar != null) { progressBar.value = request.progress; }
+
+                Debug.Log((int)(100 * request.progress) + "%");
+
                 yield return null;
             }
 

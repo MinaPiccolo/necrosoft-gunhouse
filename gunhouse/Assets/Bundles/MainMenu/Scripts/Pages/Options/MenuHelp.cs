@@ -73,8 +73,9 @@ namespace Gunhouse.Menu
         {
             if (menu.ignore_input) return;
 
-            int horitzonal = Util.keyRepeat("arrow_directional", 0, 30, 10,
-                                            arrow_input == 0 ? (int)input.Move.x : arrow_input);
+            int horitzonal = Util.KeyRepeatTime("arrow_directional", 0, 30, 10,
+                                                arrow_input == 0 ? (int)input.Move.x : arrow_input);
+
             switch (horitzonal) { case -1: SetPage(false); break; case 1: SetPage(true); break; }
         }
 

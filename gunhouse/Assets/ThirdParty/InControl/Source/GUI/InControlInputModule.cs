@@ -81,14 +81,16 @@ namespace InControl
 			return true;
 #endif
 
-			if (forceModuleActive || Input.mousePresent || Input.touchSupported)
-			{
+            #pragma warning disable 0162
+            if (forceModuleActive || Input.mousePresent || Input.touchSupported)
+            #pragma warning restore 0162
+            {
 				return true;
 			}
 
 #if UNITY_5
-			if (Input.touchSupported)
-			{
+            if (Input.touchSupported)
+            {
 				return true;
 			}
 #endif

@@ -49,6 +49,12 @@ namespace Necrosoft
             BuildPipeline.BuildAssetBundles("Assets/StreamingAssets/WebGL", BuildAssetBundleOptions.None, BuildTarget.WebGL);
         }
 
+        [MenuItem("Game/Bundle/Create PS4")]
+        static void AssetBundleCreatePS4()
+        {
+            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets/PS4", BuildAssetBundleOptions.None, BuildTarget.PS4);
+        }
+
         [MenuItem("Game/Bundle/Clear Cache")]
         static void AssetBundleClearCache()
         {

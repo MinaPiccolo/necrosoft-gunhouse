@@ -49,7 +49,6 @@ namespace Gunhouse
                 bytes = File.ReadAllBytes(name);
                 #endif
             }
-
             #endif
 
             read_pos = 0;

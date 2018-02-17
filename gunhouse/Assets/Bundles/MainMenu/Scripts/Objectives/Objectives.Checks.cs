@@ -197,7 +197,49 @@ namespace Gunhouse
 
         public static void CheckAchievements()
         {
-            #if UNITY_PSP2 || UNITY_PS4
+            #if UNITY_PS4
+            if (DataStorage.AmountOfObjectivesComplete > 74) {
+                //PlayStationVita.AwardTrophy(Achievement.LikeMothsToFlame);
+            }
+
+            if (DataStorage.AmountOfObjectivesComplete > 49) {
+                //PlayStationVita.AwardTrophy(Achievement.BlueSkies);
+            }
+
+            if (DataStorage.AmountOfObjectivesComplete > 19) {
+                //PlayStationVita.AwardTrophy(Achievement.Rambunctious);
+            }
+
+            if (DataStorage.AmountOfObjectivesComplete > 9) {
+                //PlayStationVita.AwardTrophy(Achievement.Misdeeds);
+            }
+
+            if (DataStorage.AmountOfObjectivesComplete > 2) {
+                //PlayStationVita.AwardTrophy(Achievement.ToothSome);
+            }
+
+            int currentDay = (DataStorage.StartOnWave / 3 + 1);
+            if (currentDay > 100) {
+                //PlayStationVita.AwardTrophy(Achievement.TooManyGuns);
+            }
+
+            if (currentDay > 30) {
+                //PlayStationVita.AwardTrophy(Achievement.Molytrols);
+            }
+
+            if (currentDay > 20) {
+                //PlayStationVita.AwardTrophy(Achievement.AnotherPeter);
+            }
+
+            if (currentDay > 10) {
+                //PlayStationVita.AwardTrophy(Achievement.Savior);
+            }
+
+            if (currentDay > 5) {
+                //PlayStationVita.AwardTrophy(Achievement.HalfStep);
+            }
+            
+            #elif UNITY_PSP2
             if (DataStorage.AmountOfObjectivesComplete > 74) { PlayStationVita.AwardTrophy(Achievement.LikeMothsToFlame); }
             if (DataStorage.AmountOfObjectivesComplete > 49) { PlayStationVita.AwardTrophy(Achievement.BlueSkies); }
             if (DataStorage.AmountOfObjectivesComplete > 19) { PlayStationVita.AwardTrophy(Achievement.Rambunctious); }

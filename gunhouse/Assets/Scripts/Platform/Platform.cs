@@ -2,19 +2,19 @@
 
 namespace Gunhouse
 {
-    public class Platform /*: MonoBehaviour*/
+    public class Platform : MonoBehaviour
     {
-    //    void Awake()
-    //    {
-    //        DontDestroyOnLoad(gameObject);
-    //        Application.targetFrameRate = 60;
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            Application.targetFrameRate = 60;
 
-    //        #if UNITY_ANDROID
-    //        Screen.autorotateToLandscapeLeft = true;
-    //        Screen.autorotateToLandscapeRight = true;
-    //        Screen.orientation = ScreenOrientation.AutoRotation;
-    //        #endif
-    //    }
+            #if UNITY_ANDROID
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.orientation = ScreenOrientation.AutoRotation;
+            #endif
+        }
 
 #if UNITY_PSP2 && !UNITY_EDITOR
         public static void Quit() { }
@@ -36,19 +36,19 @@ namespace Gunhouse
         /* WebGL, Jump Platform */
         public static void Quit() { WebGLJump.Quit(); }
         public static void SavePlayerData() { }
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public static void LoadPlayerData() { }
         public static void SaveOptions() { }
         public static void SaveStore() { }
         public static void SaveHardcore() { }
         public static void SaveEndWave() { }
-        #else
+#else
         public static void LoadPlayerData() { DataStorage.Load(); Objectives.Load(); }
         public static void SaveOptions() { DataStorage.SaveOptions(); }
         public static void SaveStore() { DataStorage.SaveStore(); }
         public static void SaveHardcore() { DataStorage.SaveHardcore(); }
         public static void SaveEndWave() { Objectives.SaveRemote(); DataStorage.SaveEndWave(); }
-        #endif
+#endif
 #else
         /* Almost every platform will use this */
         public static void Quit() { Application.Quit(); }
