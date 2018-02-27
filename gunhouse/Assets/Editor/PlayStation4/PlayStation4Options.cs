@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.IO;
 using System;
 
 public class PlayStation4Defines
@@ -8,6 +7,11 @@ public class PlayStation4Defines
     [MenuItem("Game/Publishing/PlayStation4/Set Publishing Settings [SCEA]")]
 	static void SetOptions()
 	{
+        string path = "Assets/Editor/PlayStation4/";
+
+        PlayerSettings.PS4.playerPrefsSupport = true;
+        PlayerSettings.PS4.SaveDataImagePath = path + "save_image.png";
+
         PlayerSettings.PS4.category = PlayerSettings.PS4.PS4AppCategory.Application;
 		PlayerSettings.PS4.appVersion = "01.00";
 		PlayerSettings.PS4.masterVersion = "01.00";
@@ -16,17 +20,17 @@ public class PlayStation4Defines
 		PlayerSettings.productName = "Gunhouse";
 		PlayerSettings.PS4.parentalLevel = 4;
 		PlayerSettings.PS4.enterButtonAssignment = PlayerSettings.PS4.PS4EnterButtonAssignment.CrossButton;
-		PlayerSettings.PS4.paramSfxPath = "";   // "Assets/Editor/PlayStation4/param.sfx";
+		PlayerSettings.PS4.paramSfxPath = "";   // path + "param.sfx";
 
         PlayerSettings.PS4.passcode = "4PwEdtzQzXpa6x5sUOspb4CBTWMG3YuR";
-        PlayerSettings.PS4.BackgroundImagePath = "Assets/Editor/PlayStation4/background.png";
-        PlayerSettings.PS4.StartupImagePath = "Assets/Editor/PlayStation4/startup.png";
-        PlayerSettings.PS4.ShareFilePath = "Assets/Editor/PlayStation4/shareparam.json";
-        PlayerSettings.PS4.PronunciationXMLPath = "Assets/Editor/PlayStation4/Gunhouse.xml";
-        PlayerSettings.PS4.PronunciationSIGPath = "Assets/Editor/PlayStation4/Gunhouse.sig";
+        PlayerSettings.PS4.BackgroundImagePath = path + "background.png";
+        PlayerSettings.PS4.StartupImagePath = path + "startup.png";
+        PlayerSettings.PS4.ShareFilePath = path + "shareparam.json";
+        PlayerSettings.PS4.PronunciationXMLPath = path + "Gunhouse.xml";
+        PlayerSettings.PS4.PronunciationSIGPath = path + "Gunhouse.sig";
 
-		PlayerSettings.PS4.NPtitleDatPath = "Assets/Editor/PlayStation4/CUSA09627_00/nptitle.dat";
-		PlayerSettings.PS4.npTrophyPackPath = "Assets/Editor/PlayStation4/trophy.trp";
+		PlayerSettings.PS4.NPtitleDatPath = path + "CUSA09627_00/nptitle.dat";
+		PlayerSettings.PS4.npTrophyPackPath = path + "trophy.trp";
 		PlayerSettings.PS4.npAgeRating = 10;
         PlayerSettings.PS4.npTitleSecret = "0x11,0x66,0x99,0x9f,0xed,0x8d,0xf6,0x95,\n" +
                                            "0x95,0x53,0x6e,0x7e,0x26,0xeb,0x0e,0xbe,\n" +

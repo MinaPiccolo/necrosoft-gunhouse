@@ -493,7 +493,7 @@ PlayerSettings:
   ps4StartupImagePath: Assets/Editor/PlayStation4/startup.png
   ps4StartupImagesFolder: 
   ps4IconImagesFolder: 
-  ps4SaveDataImagePath: 
+  ps4SaveDataImagePath: Assets/Editor/PlayStation4/save_image.png
   ps4SdkOverride: 
   ps4BGMPath: 
   ps4ShareFilePath: Assets/Editor/PlayStation4/shareparam.json
@@ -508,7 +508,7 @@ PlayerSettings:
   ps4ApplicationParam2: 0
   ps4ApplicationParam3: 0
   ps4ApplicationParam4: 0
-  ps4DownloadDataSize: 0
+  ps4DownloadDataSize: 256
   ps4GarlicHeapSize: 2048
   ps4ProGarlicHeapSize: 2560
   ps4Passcode: 4PwEdtzQzXpa6x5sUOspb4CBTWMG3YuR
@@ -516,7 +516,7 @@ PlayerSettings:
   ps4pnPresence: 0
   ps4pnFriends: 0
   ps4pnGameCustomData: 0
-  playerPrefsSupport: 0
+  playerPrefsSupport: 1
   restrictedAudioUsageRights: 0
   ps4UseResolutionFallback: 0
   ps4ReprojectionSupport: 1

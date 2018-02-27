@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Necrosoft;
 
 namespace Gunhouse
 {
@@ -49,12 +50,20 @@ namespace Gunhouse
         public static void SaveHardcore() { DataStorage.SaveHardcore(); }
         public static void SaveEndWave() { Objectives.SaveRemote(); DataStorage.SaveEndWave(); }
 #endif
+#elif UNITY_PS4
+        public static void Quit() { Application.Quit(); }
+        public static void LoadPlayerData() { DataStorage.Load(); Objectives.Load(); PlayerPrefs.Save(); }
+        public static void SavePlayerData() { DataStorage.Save(); Objectives.Save(); PlayerPrefs.Save(); }
+        public static void SaveOptions() { DataStorage.Save(); PlayerPrefs.Save(); }
+        public static void SaveStore() { DataStorage.Save(); PlayerPrefs.Save(); }
+        public static void SaveHardcore() { DataStorage.Save(); PlayerPrefs.Save(); }
+        public static void SaveEndWave() { Objectives.Save(); DataStorage.Save(); PlayerPrefs.Save(); }
 #else
         /* Almost every platform will use this */
         public static void Quit() { Application.Quit(); }
         public static void LoadPlayerData() { DataStorage.Load(); Objectives.Load(); }
         public static void SavePlayerData() { DataStorage.Save(); Objectives.Save(); }
-        public static void SaveOptions() { }
+        public static void SaveOptions() {  }
         public static void SaveStore() { }
         public static void SaveHardcore() { }
         public static void SaveEndWave() { }

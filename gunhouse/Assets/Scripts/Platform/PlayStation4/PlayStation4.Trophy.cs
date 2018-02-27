@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿#if UNITY_PS4
 using Sony.NP;
 using Necrosoft;
 
 namespace Gunhouse
 {
-    public partial class PlayStation4 : MonoBehaviour
+    public partial class PlayStation4
     {
         static bool trophiesAvailable = false;
 
@@ -17,24 +17,17 @@ namespace Gunhouse
         {
             Trophies.RegisterTrophyPackRequest request = new Trophies.RegisterTrophyPackRequest();
             request.UserId = loggedInUser.userId;
-
-            Core.EmptyResponse response = new Core.EmptyResponse();
-            Trophies.RegisterTrophyPack(request, response);
+            Trophies.RegisterTrophyPack(request, new Core.EmptyResponse());
         }
 
         public static void AwardTrophy(int trophyIndex)
         {
-            if (!trophiesAvailable) {
-                TrophiesRegister();     /* I don't think this is even possible right now */
-                return;
-            }
+            if (!trophiesAvailable) return;
 
             Trophies.UnlockTrophyRequest request = new Trophies.UnlockTrophyRequest();
             request.TrophyId = trophyIndex;
             request.UserId = loggedInUser.userId;
-
-            Core.EmptyResponse response = new Core.EmptyResponse();
-            Trophies.UnlockTrophy(request, response);
+            Trophies.UnlockTrophy(request, new Core.EmptyResponse());
         }
 
         public void OnAsyncEventTrophy(NpCallbackEvent callbackEvent)
@@ -54,11 +47,8 @@ namespace Gunhouse
             trophiesAvailable = true;
 
             Trophies.GetTrophyPackSummaryRequest request = new Trophies.GetTrophyPackSummaryRequest();
-            request.RetrieveTrophyPackSummaryIcon = true;
             request.UserId = loggedInUser.userId;
-                
-            Trophies.TrophyPackSummaryResponse summaryResponse = new Trophies.TrophyPackSummaryResponse();
-            Trophies.GetTrophyPackSummary(request, summaryResponse);
+            Trophies.GetTrophyPackSummary(request, new Trophies.TrophyPackSummaryResponse());
         }
 
         void OutputGetTrophyPackSummary(Trophies.TrophyPackSummaryResponse response)
@@ -66,21 +56,20 @@ namespace Gunhouse
             if (response == null) return;
             if (response.Locked) return;
 
-            Console.Log("G: " + response.StaticConfiguration.NumGroups +
+            Console.Log("Available - G: " + response.StaticConfiguration.NumGroups +
                         " T: " + response.StaticConfiguration.NumTrophies +
                         " P: " + response.StaticConfiguration.NumPlatinum +
                         " G: " + response.StaticConfiguration.NumGold +
                         " S: " + response.StaticConfiguration.NumSilver +
-                        " B: " + response.StaticConfiguration.NumBronze +
-                        "\n" + response.StaticConfiguration.Title +
-                        " - " + response.StaticConfiguration.Description);
+                        " B: " + response.StaticConfiguration.NumBronze + 
 
-            Console.Log("User Progress: T: " + response.UserProgress.UnlockedTrophies +
+                        "\nProgress  - T: " + response.UserProgress.UnlockedTrophies +
                         " P: " + response.UserProgress.UnlockedPlatinum +
-                        " G: " + response.UserProgress.UnlockedGold +
+                        "  G: " + response.UserProgress.UnlockedGold +
                         " S: " + response.UserProgress.UnlockedSilver +
                         " B: " + response.UserProgress.UnlockedBronze +
-                        " %: " + response.UserProgress.ProgressPercentage);
+                         " " + response.UserProgress.ProgressPercentage + "%");
         }
     }
 }
+#endif

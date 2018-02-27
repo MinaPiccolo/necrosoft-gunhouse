@@ -15398,7 +15398,7 @@ MonoBehaviour:
   moveRepeatFirstDuration: 0.6
   moveRepeatDelayDuration: 0.1
   forceModuleActive: 0
-  allowMouseInput: 1
+  allowMouseInput: 0
   focusOnMouseHover: 0
 --- !u!114 &1185377097
 MonoBehaviour:

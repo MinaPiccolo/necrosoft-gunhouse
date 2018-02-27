@@ -1,6 +1,6 @@
-﻿using Sony.NP;
+﻿#if UNITY_PS4
+using Sony.NP;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.PS4;
 using System;
 
@@ -27,21 +27,13 @@ namespace Gunhouse
 
             init.threadSettings.affinity = Affinity.AllCores;
             init.memoryPools.JsonPoolSize = 6 * 1024 * 1024;
-	        init.memoryPools.SslPoolSize *= 4;
+            init.memoryPools.SslPoolSize *= 4;
 
             initResult = Main.Initialize(init);
-            if (!initResult.Initialized) return;    /* NpToolkit failed somehow  */
-           
-            // how do you know the profile that started the game? 
-            // do I need to check the trophy pack registered correctly for that userID?
-            // PS4Input.RefreshUsersDetails(0);
-            // PS4Input.PadIsConnected(0);
-
-            // Utility.initialUserId        what are these exactly
-            // Utility.primaryUserId
+            if (!initResult.Initialized) return;
 
             loggedInUser = PS4Input.RefreshUsersDetails(Utility.initialUserId);
-            StartSaveLoad();
+            PS4PlayerPrefs.SetTitleStrings("Gunhouse", "Load your guns! Rain death from above!", "Save Data");            
             StartTrophy();
         
             //#endif    
@@ -49,34 +41,13 @@ namespace Gunhouse
 
         void MainOnAsyncEvent(NpCallbackEvent callbackEvent)
         {
-            Debug.Log("Event: Service = (" + callbackEvent.Service + ") : API Called = (" +
-                      callbackEvent.ApiCalled + ") : Request Id = (" + callbackEvent.NpRequestId +
-                      ") : Calling User Id = (" + callbackEvent.UserId + ")");
+            if (callbackEvent == null) return;
 
-            Debug.Log("Main_OnAsyncEvent Callback: " + callbackEvent.Service.ToString());
-
-            //if (callbackEvent == null) return;
-
-            //switch (callbackEvent.Service)
-            //{
-            //case ServiceTypes.Trophy: OnAsyncEventTrophy(callbackEvent); break;
-            //}
-
-            try
+            switch (callbackEvent.Service)
             {
-                switch (callbackEvent.Service)
-                {
-                case ServiceTypes.Trophy: OnAsyncEventTrophy(callbackEvent); break;
-                }
-            }
-            catch (NpToolkitException e)
-            {
-                Debug.LogError("Main_OnAsyncEvent NpToolkit Exception: " + e.ExtendedMessage + " " + e.ExtendedMessage + " " + e.StackTrace);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Main_OnAsyncEvent General Exception: " + e.Message + " " + e.StackTrace);
+            case ServiceTypes.Trophy: OnAsyncEventTrophy(callbackEvent); break;
             }
         }
     }
 }
+#endif
