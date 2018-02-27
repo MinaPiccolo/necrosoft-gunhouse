@@ -265,6 +265,13 @@ PlayerSettings:
       m_Width: 128
       m_Height: 128
       m_Kind: 0
+  - m_BuildTarget: PS4
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: 509bf71de61dff44bbf667bcbba2a549, type: 3}
+      m_Width: 512
+      m_Height: 512
+      m_Kind: 0
   m_BuildTargetBatching:
   - m_BuildTarget: PSP2
     m_StaticBatching: 1
@@ -436,11 +443,41 @@ PlayerSettings:
   switchSocketInitializeEnabled: 1
   switchNetworkInterfaceManagerInitializeEnabled: 1
   switchPlayerConnectionEnabled: 1
-  ps4NPAgeRating: 12
-  ps4NPTitleSecret: 
-  ps4NPTrophyPackPath: 
+  ps4NPAgeRating: 10
+  ps4NPTitleSecret: '0x11,0x66,0x99,0x9f,0xed,0x8d,0xf6,0x95,
+
+    0x95,0x53,0x6e,0x7e,0x26,0xeb,0x0e,0xbe,
+
+    0xac,0x01,0x59,0x6d,0xf6,0xb9,0xf2,0xca,
+
+    0x41,0xed,0x46,0x2d,0x23,0x5c,0xe8,0xb0,
+
+    0xe2,0x15,0x3f,0x16,0x16,0x6e,0xc9,0xc4,
+
+    0xd5,0x3e,0xaa,0xad,0xa1,0xd3,0x12,0x9f,
+
+    0x8e,0x33,0x7d,0xa4,0x3f,0xc3,0xf3,0x10,
+
+    0x5a,0xce,0x93,0xa3,0x9e,0x3b,0xe6,0x85,
+
+    0x51,0x38,0x39,0x7a,0xee,0x98,0x3c,0xbb,
+
+    0xe5,0x1a,0xaa,0x50,0x40,0xb4,0x86,0x35,
+
+    0xfc,0x68,0x4c,0x93,0xbc,0x2b,0xa7,0x18,
+
+    0x1b,0xe6,0xfc,0x3a,0x1d,0x17,0x0f,0x5e,
+
+    0x91,0x96,0xde,0x94,0x4a,0xbc,0x8b,0x20,
+
+    0x61,0x20,0x70,0xdb,0xa7,0xc2,0xfc,0x0f,
+
+    0xd5,0xef,0x23,0x64,0x4c,0x8e,0x19,0xe3,
+
+    0x0b,0x2f,0x9a,0x17,0x32,0x7d,0xdf,0xd4'
+  ps4NPTrophyPackPath: Assets/Editor/PlayStation4/trophy.trp
   ps4ParentalLevel: 4
-  ps4ContentID: ED1633-NPXX51362_00-0000000000000000
+  ps4ContentID: UP4221-CUSA09627_00-GUNHOUSECOOLTOWN
   ps4Category: 0
   ps4MasterVersion: 01.00
   ps4AppVersion: 01.00
@@ -450,19 +487,19 @@ PlayerSettings:
   ps4VideoOutInitialWidth: 1920
   ps4VideoOutBaseModeInitialWidth: 1920
   ps4VideoOutReprojectionRate: 60
-  ps4PronunciationXMLPath: 
-  ps4PronunciationSIGPath: 
-  ps4BackgroundImagePath: 
-  ps4StartupImagePath: 
+  ps4PronunciationXMLPath: Assets/Editor/PlayStation4/Gunhouse.xml
+  ps4PronunciationSIGPath: Assets/Editor/PlayStation4/Gunhouse.sig
+  ps4BackgroundImagePath: Assets/Editor/PlayStation4/background.png
+  ps4StartupImagePath: Assets/Editor/PlayStation4/startup.png
   ps4StartupImagesFolder: 
   ps4IconImagesFolder: 
   ps4SaveDataImagePath: 
   ps4SdkOverride: 
   ps4BGMPath: 
-  ps4ShareFilePath: 
+  ps4ShareFilePath: Assets/Editor/PlayStation4/shareparam.json
   ps4ShareOverlayImagePath: 
   ps4PrivacyGuardImagePath: 
-  ps4NPtitleDatPath: 
+  ps4NPtitleDatPath: Assets/Editor/PlayStation4/CUSA09627_00/nptitle.dat
   ps4RemotePlayKeyAssignment: -1
   ps4RemotePlayKeyMappingDir: 
   ps4PlayTogetherPlayerCount: 0
@@ -474,11 +511,11 @@ PlayerSettings:
   ps4DownloadDataSize: 0
   ps4GarlicHeapSize: 2048
   ps4ProGarlicHeapSize: 2560
-  ps4Passcode: frAQBc8Wsa1xVPfvJcrgRYwTiizs2trQ
-  ps4pnSessions: 1
-  ps4pnPresence: 1
-  ps4pnFriends: 1
-  ps4pnGameCustomData: 1
+  ps4Passcode: 4PwEdtzQzXpa6x5sUOspb4CBTWMG3YuR
+  ps4pnSessions: 0
+  ps4pnPresence: 0
+  ps4pnFriends: 0
+  ps4pnGameCustomData: 0
   playerPrefsSupport: 0
   restrictedAudioUsageRights: 0
   ps4UseResolutionFallback: 0

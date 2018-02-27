@@ -41,13 +41,12 @@ namespace Gunhouse
 
             while (!request.isDone) {
                 if (progressBar != null) { progressBar.value = request.progress; }
-
-                Debug.Log((int)(100 * request.progress) + "%");
-
                 yield return null;
             }
 
             Bundle = request.assetBundle;
+            Necrosoft.Console.Log("BUNDLE LOADED");
+
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
 
             #elif UNITY_WEBGL

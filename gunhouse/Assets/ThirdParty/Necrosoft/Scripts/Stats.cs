@@ -29,7 +29,7 @@ namespace Necrosoft
             float w = Screen.width / 2; w *= size;
             int h = (int)w / 4; h += h / 2;
             rect.x = 70;
-            rect.y = (Screen.height - h) - 50;
+            rect.y = (Screen.height - h) - 150;
             rect.width = w;
             rect.height = h;
 

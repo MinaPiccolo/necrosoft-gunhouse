@@ -117,9 +117,9 @@ TextureImporter:
   - buildTarget: PS4
     maxTextureSize: 4096
     resizeAlgorithm: 0
-    textureFormat: 25
+    textureFormat: 29
     textureCompression: 0
-    compressionQuality: 100
+    compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 1
