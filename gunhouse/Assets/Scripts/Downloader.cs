@@ -45,7 +45,6 @@ namespace Gunhouse
             }
 
             Bundle = request.assetBundle;
-            Necrosoft.Console.Log("BUNDLE LOADED");
 
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
 
