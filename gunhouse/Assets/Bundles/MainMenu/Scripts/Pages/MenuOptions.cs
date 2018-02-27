@@ -23,6 +23,8 @@ namespace Gunhouse.Menu
         {
             base.OuttroStartNextIntro();
             transitionID = MenuState.Title; /* reset it for next time */
+
+            Platform.SaveOptions();
         }
 
         public override void CancelPressed()

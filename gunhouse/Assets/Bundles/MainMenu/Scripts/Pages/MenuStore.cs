@@ -67,6 +67,7 @@ namespace Gunhouse.Menu
         {
             selector.gameObject.SetActive(false);
             base.OuttroStartNextIntro();
+            Platform.SaveStore();
         }
 
         protected override void OuttroFinished()
