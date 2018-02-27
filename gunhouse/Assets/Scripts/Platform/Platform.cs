@@ -10,6 +10,10 @@ namespace Gunhouse
             DontDestroyOnLoad(gameObject);
             Application.targetFrameRate = 60;
 
+            #if UNITY_PS4
+            QualitySettings.vSyncCount = 1;
+            #endif
+
             #if UNITY_ANDROID
             Screen.autorotateToLandscapeLeft = true;
             Screen.autorotateToLandscapeRight = true;

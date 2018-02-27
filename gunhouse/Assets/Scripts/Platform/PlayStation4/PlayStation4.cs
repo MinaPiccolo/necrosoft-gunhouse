@@ -14,7 +14,6 @@ namespace Gunhouse
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            Application.targetFrameRate = 60;
 
             #if !UNITY_EDITOR
 

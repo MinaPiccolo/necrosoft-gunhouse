@@ -165,13 +165,6 @@ namespace InControl
 				}
 			}
 
-#if (UNITY_5 && !(UNITY_5_0 || UNITY_5_1)) || UNITY_2017_1_OR_NEWER
-			if (ProcessTouchEvents())
-			{
-				return;
-			}
-#endif
-
 #if !UNITY_IOS || UNITY_EDITOR
 			if (allowMouseInput)
 			{
@@ -214,7 +207,6 @@ namespace InControl
 			return touchCount > 0;
 		}
 #endif
-
 
 		bool SendButtonEventToSelectedObject()
 		{

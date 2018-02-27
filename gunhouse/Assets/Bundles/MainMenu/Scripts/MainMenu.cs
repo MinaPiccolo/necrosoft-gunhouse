@@ -91,10 +91,10 @@ namespace Gunhouse.Menu
                 ignoreSelectEffectForever = false;
             }
 
-            if (ignoreFocus) { return; }
-            ignoreFocus = (UnityEngine.Input.touchCount > 0) ||
-                          UnityEngine.Input.GetMouseButton(0);
-            if (ignoreFocus) { ignoreSelectEffectForever = true; }
+            //if (ignoreFocus) { return; }
+            //ignoreFocus = (UnityEngine.Input.touchCount > 0) ||
+            //              UnityEngine.Input.GetMouseButton(0);
+            //if (ignoreFocus) { ignoreSelectEffectForever = true; }
         }
 
         void RefocusMenu()
@@ -102,7 +102,7 @@ namespace Gunhouse.Menu
             /* when the menu is refocused, to prevent it jumping
                 to the next item we need to clear the input. however this
                 needs to happen over multiple frames because movement is
-                based on IsPressed rather theen WasPressed */
+                based on IsPressed rather then WasPressed */
             if (clearInput > 0) { input.ClearInput(); clearInput--; }
 
             if (!input.AnyIsPressed) { return; }
