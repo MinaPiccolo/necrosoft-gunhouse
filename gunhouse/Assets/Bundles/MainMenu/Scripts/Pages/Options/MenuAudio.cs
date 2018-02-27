@@ -22,6 +22,7 @@ namespace Gunhouse.Menu
 
         public override void CancelPressed()
         {
+            Platform.SaveOptions();
             for (int i = 0; i < texts.Length; ++i) { texts[i].color = Color.white; }
             transitionID = AppMain.IsPaused ? MenuState.Pause : MenuState.Options;
             base.CancelPressed();
