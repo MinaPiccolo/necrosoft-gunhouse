@@ -508,7 +508,7 @@ PlayerSettings:
   ps4ApplicationParam2: 0
   ps4ApplicationParam3: 0
   ps4ApplicationParam4: 0
-  ps4DownloadDataSize: 256
+  ps4DownloadDataSize: 0
   ps4GarlicHeapSize: 2048
   ps4ProGarlicHeapSize: 2560
   ps4Passcode: 4PwEdtzQzXpa6x5sUOspb4CBTWMG3YuR

@@ -35,7 +35,6 @@ namespace Gunhouse
             switch (callbackEvent.ApiCalled)
             {
             case FunctionTypes.TrophyRegisterTrophyPack: OutputRegisterTrophyPack(callbackEvent.Response as Core.EmptyResponse); break;
-            case FunctionTypes.TrophyGetTrophyPackSummary: OutputGetTrophyPackSummary(callbackEvent.Response as Trophies.TrophyPackSummaryResponse); break;
             }
         }
 
@@ -45,30 +44,6 @@ namespace Gunhouse
             if (response.Locked) return;
 
             trophiesAvailable = true;
-
-            Trophies.GetTrophyPackSummaryRequest request = new Trophies.GetTrophyPackSummaryRequest();
-            request.UserId = loggedInUser.userId;
-            Trophies.GetTrophyPackSummary(request, new Trophies.TrophyPackSummaryResponse());
-        }
-
-        void OutputGetTrophyPackSummary(Trophies.TrophyPackSummaryResponse response)
-        {
-            if (response == null) return;
-            if (response.Locked) return;
-
-            Console.Log("Available - G: " + response.StaticConfiguration.NumGroups +
-                        " T: " + response.StaticConfiguration.NumTrophies +
-                        " P: " + response.StaticConfiguration.NumPlatinum +
-                        " G: " + response.StaticConfiguration.NumGold +
-                        " S: " + response.StaticConfiguration.NumSilver +
-                        " B: " + response.StaticConfiguration.NumBronze + 
-
-                        "\nProgress  - T: " + response.UserProgress.UnlockedTrophies +
-                        " P: " + response.UserProgress.UnlockedPlatinum +
-                        "  G: " + response.UserProgress.UnlockedGold +
-                        " S: " + response.UserProgress.UnlockedSilver +
-                        " B: " + response.UserProgress.UnlockedBronze +
-                         " " + response.UserProgress.ProgressPercentage + "%");
         }
     }
 }

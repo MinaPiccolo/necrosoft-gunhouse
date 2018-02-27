@@ -16,15 +16,14 @@ namespace Gunhouse
             DontDestroyOnLoad(gameObject);
             Application.targetFrameRate = 60;
 
-            //#if !UNITY_EDITOR
+            #if !UNITY_EDITOR
 
             Main.OnAsyncEvent += MainOnAsyncEvent;
+
             InitToolkit init = new InitToolkit();
             init.contentRestrictions.DefaultAgeRestriction = ContentRestriction.NP_NO_AGE_RESTRICTION;
             init.contentRestrictions.ApplyContentRestriction = false;
-
             init.SetPushNotificationsFlags(PushNotificationsFlags.None);
-
             init.threadSettings.affinity = Affinity.AllCores;
             init.memoryPools.JsonPoolSize = 6 * 1024 * 1024;
             init.memoryPools.SslPoolSize *= 4;
@@ -32,11 +31,11 @@ namespace Gunhouse
             initResult = Main.Initialize(init);
             if (!initResult.Initialized) return;
 
-            loggedInUser = PS4Input.RefreshUsersDetails(Utility.initialUserId);
+            loggedInUser = PS4Input.RefreshUsersDetails(Utility.primaryUserId);
             PS4PlayerPrefs.SetTitleStrings("Gunhouse", "Load your guns! Rain death from above!", "Save Data");            
             StartTrophy();
         
-            //#endif    
+            #endif    
         }
 
         void MainOnAsyncEvent(NpCallbackEvent callbackEvent)
