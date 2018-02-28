@@ -482,9 +482,23 @@ namespace Gunhouse
             for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                 Target t = (Target)Game.instance.enemy_group.entities[i];
 
-                if ((t.position - position).magnitude < size + t.size.magnitude) {
+                /* these are just guess values based on the Debug.Line */
+                float a_min = t.position.x - (t.size.x * 0.5f);
+                float a_max = t.position.x + (t.size.x * 0.5f);
+                float b_min = position.x - size;
+                float b_max = position.x + size;
+
+                if (a_min <= b_max && a_max >= b_min) {
                     t.damage(damage, type);
                 }
+
+                /* this is the old code. it caused a bug where when enemies were
+                    walking away from the house, the dragon special explosion
+                    wouldn't damage them. */
+                //if ((t.position - position).magnitude < size + t.size.magnitude) {
+                //    Debug.Log("DAMAGE");
+                //    t.damage(damage, type);
+                //}
             }
 
             Choom.PlayEffect(SoundAssets.Explosion[Util.rng.Next(SoundAssets.Explosion.Length)]);
