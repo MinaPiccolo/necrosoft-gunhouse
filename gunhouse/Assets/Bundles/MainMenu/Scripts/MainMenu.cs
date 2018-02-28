@@ -189,11 +189,7 @@ namespace Gunhouse.Menu
 
         public string DayName(int wave)
         {
-            builder.Length = 0;
-            builder.AppendFormat("DAY {0}, {1}", (wave / 3 + 1),
-                                 wave % 3 == 0 ? "NOON" : wave % 3 == 1 ? "DUSK" : "NIGHT");
-
-            return AppMain.MainMenu.builder.ToString();
+            return string.Format("DAY {0}, {1}", (wave / 3 + 1), wave % 3 == 0 ? "NOON" : wave % 3 == 1 ? "DUSK" : "NIGHT");
         }
 
         public void DisplayDayName()
