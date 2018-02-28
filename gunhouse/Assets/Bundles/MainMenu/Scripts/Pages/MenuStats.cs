@@ -93,14 +93,12 @@ namespace Gunhouse.Menu
                 if (i < DataStorage.BestHardcoreScores.Count) {
                     amount = DataStorage.BestHardcoreScores[i].Item1;
                     day = DataStorage.BestHardcoreScores[i].Item2;
-
-                    menu.builder.AppendFormat("{0}: ${1}, {2}\n", i + 1, amount, menu.DayName(day));
+                    menu.builder.AppendFormat("{0}: ${1}, {2}\n", (i + 1), amount, menu.DayName(day));
                 }
                 else {
                     menu.builder.AppendFormat("{0}: $0, {1} X\n", i + 1, GText.day);
                 }
             }
-
             details.text = menu.builder.ToString();
         }
 
