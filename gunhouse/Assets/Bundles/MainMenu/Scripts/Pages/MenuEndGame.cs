@@ -71,6 +71,9 @@ namespace Gunhouse.Menu
             Objectives.BossDefeated();
             Objectives.SurvivedFinalStage();
 
+            Platform.SaveEndWave();
+            Objectives.CheckAchievements();
+
             objectives.UpdateText();
 
             menu.Fade(0.9f, 0.5f, () => {

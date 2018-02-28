@@ -26,8 +26,8 @@ public class PlayStation4Defines
         PlayerSettings.PS4.BackgroundImagePath = path + "background.png";
         PlayerSettings.PS4.StartupImagePath = path + "startup.png";
         PlayerSettings.PS4.ShareFilePath = path + "shareparam.json";
-        PlayerSettings.PS4.PronunciationXMLPath = path + "Gunhouse.xml";
-        PlayerSettings.PS4.PronunciationSIGPath = path + "Gunhouse.sig";
+        PlayerSettings.PS4.PronunciationXMLPath = path + "pronunciation.xml";
+        PlayerSettings.PS4.PronunciationSIGPath = path + "pronunciation.sig";
 
 		PlayerSettings.PS4.NPtitleDatPath = path + "CUSA09627_00/nptitle.dat";
 		PlayerSettings.PS4.npTrophyPackPath = path + "trophy.trp";

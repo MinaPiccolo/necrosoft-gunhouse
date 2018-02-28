@@ -487,8 +487,8 @@ PlayerSettings:
   ps4VideoOutInitialWidth: 1920
   ps4VideoOutBaseModeInitialWidth: 1920
   ps4VideoOutReprojectionRate: 60
-  ps4PronunciationXMLPath: Assets/Editor/PlayStation4/Gunhouse.xml
-  ps4PronunciationSIGPath: Assets/Editor/PlayStation4/Gunhouse.sig
+  ps4PronunciationXMLPath: Assets/Editor/PlayStation4/pronunciation.xml
+  ps4PronunciationSIGPath: Assets/Editor/PlayStation4/pronunciation.sig
   ps4BackgroundImagePath: Assets/Editor/PlayStation4/background.png
   ps4StartupImagePath: Assets/Editor/PlayStation4/startup.png
   ps4StartupImagesFolder: 
