@@ -15454,7 +15454,7 @@ MonoBehaviour:
   cancelButton: 20
   analogMoveThreshold: 0.5
   moveRepeatFirstDuration: 0.5
-  moveRepeatDelayDuration: 0.1
+  moveRepeatDelayDuration: 0.2
   forceModuleActive: 0
   allowMouseInput: 1
   focusOnMouseHover: 0
