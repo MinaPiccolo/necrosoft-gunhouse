@@ -34,7 +34,7 @@ namespace Gunhouse
             inControlInputModule.MoveAction = actions.Direction;
         }
 
-        // void Update()
+        //void Update()
         void FixedUpdate()
         {
             Move = Vector2.zero;

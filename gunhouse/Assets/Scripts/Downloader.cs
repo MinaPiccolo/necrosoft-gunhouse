@@ -18,7 +18,11 @@ namespace Gunhouse
 
         public void LoadBundle()
         {
-            #if UNITY_TVOS
+            #if UNITY_PS4
+            string bundleName = "PS4/bundled";
+            #elif UNITY_PSP2
+            string bundleName = "Vita/bundled";
+            #elif UNITY_TVOS
             string bundleName = "tvOS/bundled";
             #elif UNITY_IOS
             string bundleName = "iOS/bundled";
@@ -33,16 +37,18 @@ namespace Gunhouse
 
         IEnumerator LoadAssetBundle(string bundleName)
         {
-            #if UNITY_IOS || UNITY_TVOS || UNITY_ANDROID
+            #if UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || UNITY_PS4 || UNITY_PSP2
 
             AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(bundleName);
 
             while (!request.isDone) {
                 if (progressBar != null) { progressBar.value = request.progress; }
+                Necrosoft.Console.Log(((int)(request.progress * 100)).ToString());
                 yield return null;
             }
 
             Bundle = request.assetBundle;
+
             SceneManager.LoadSceneAsync((int)SceneIndex.Main);
 
             #elif UNITY_WEBGL

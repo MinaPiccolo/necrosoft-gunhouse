@@ -16,64 +16,100 @@ namespace Necrosoft
         StringBuilder builder = new StringBuilder(1000);
         GUIStyle style = new GUIStyle();
         Rect rect = new Rect();
-        
+
         static List<string> log = new List<string>();
+        static System.Object syncObject = new System.Object();
 
         void OnEnable()
         {
-            //Application.logMessageReceived += HandleLog;
-            Log.messages += Message;
+            Application.logMessageReceived += HandleLog;
+            //Log.messages += Message;
         }
 
         void OnDisable()
         {
-            Log.messages -= Message;
-            //Application.logMessageReceived -= HandleLog;
+            //Log.messages -= Message;
+            Application.logMessageReceived -= HandleLog;
         }
 
         void OnGUI()
         {
-            float w = Screen.width * 4 / 5;
-            int h = (int)w / 4; h += 5;
-            rect.x = Screen.width / 5;
-            rect.y = Screen.height - h;
-            rect.width = w;
-            rect.height = h;
+            lock (syncObject)
+            {
+                float w = Screen.width * 4 / 5;
+                int h = (int)w / 3; h += 5;
+                rect.x = Screen.width / 5;
+                rect.y = (Screen.height - h) - 20;
+                rect.width = w;
+                rect.height = h;
 
-            style.alignment = TextAnchor.LowerLeft;
-            style.fontStyle = FontStyle.Bold;
-            style.normal.textColor = Color.white;
-            style.font = font;
-            style.fontSize = (int)w / 50;
+                style.alignment = TextAnchor.LowerLeft;
+                style.fontStyle = FontStyle.Bold;
+                style.normal.textColor = Color.white;
+                style.font = font;
+                style.fontSize = (int)w / 50;
 
-            DrawBox(rect, Color.black);
-            rect.x += rect.width * 0.015f;
-            rect.height += 10;
+                DrawBox(rect, Color.black);
+                rect.x += rect.width * 0.015f;
+                rect.height += 10;
 
-            builder.Length = 0;
-            for (int i = 0; i < log.Count; ++i) {
-                builder.Append(log[i]).AppendLine();
+                builder.Length = 0;
+                for (int i = 0; i < log.Count; ++i)
+                {
+                    builder.Append(log[i]).AppendLine();
+                }
+                GUI.Label(rect, builder.ToString(), style);
             }
-            GUI.Label(rect, builder.ToString(), style);
         }
 
-        void Message(Log.Message message)
+        static private void Log(string message, Color color, bool keepNewlines = false, bool outputToConsole = false)
         {
-            if (log.Count > 9) { log.RemoveAt(0); }
-            log.Add(message.text);
-
-            //switch (message.type)
-            //{
-            //    case Log.MessageType.Info: Debug.Log(message.text); break;
-            //    case Log.MessageType.Warning: Debug.LogWarning(message.text); break;
-            //    case Log.MessageType.Error: Debug.LogError(message.text); break;
-            //}
+            lock (syncObject)
+            {
+                if (log.Count > 30) { log.RemoveAt(0); }
+                log.Add(message);
+            }
         }
+
+        static public void Log(string msg, bool keepNewlines = false)
+        {
+            Log(msg, Color.white, keepNewlines, true);
+        }
+
+        static public void Log(string msg, Color color)
+        {
+            Log(msg, color, false, true);
+        }
+
+        static public void LogWarning(string msg)
+        {
+            Log(msg, Color.yellow, false, false);
+            System.Console.Error.WriteLine(msg);
+        }
+
+        static public void LogError(string msg)
+        {
+            Log(msg, Color.red, false, false);
+            System.Console.Error.WriteLine(msg);
+        }
+
+        //void Message(Log.Message message)
+        //{
+        //    if (log.Count > 30) { log.RemoveAt(0); }
+        //    log.Add(message.text);
+
+        //    //switch (message.type)
+        //    //{
+        //    //    case Log.MessageType.Info: Debug.Log(message.text); break;
+        //    //    case Log.MessageType.Warning: Debug.LogWarning(message.text); break;
+        //    //    case Log.MessageType.Error: Debug.LogError(message.text); break;
+        //    //}
+        //}
 
         void HandleLog(string logString, string stackTrace, LogType type)
         {
-            if (log.Count > 9) { log.RemoveAt(0); }
-            log.Add(logString + " trace: " + stackTrace);
+            if (log.Count > 30) { log.RemoveAt(0); }
+            log.Add(logString);// + " trace: " + stackTrace);
         }
 
         void DrawBox(Rect position, Color color)

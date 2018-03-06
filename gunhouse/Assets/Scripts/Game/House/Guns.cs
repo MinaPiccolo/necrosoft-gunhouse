@@ -482,7 +482,13 @@ namespace Gunhouse
             for (int i = 0; i < Game.instance.enemy_group.entities.Count; ++i) {
                 Target t = (Target)Game.instance.enemy_group.entities[i];
 
-                if ((t.position - position).magnitude < size + t.size.magnitude) {
+                float a_min = t.position.x - (t.size.x * 0.5f);
+                float a_max = t.position.x + (t.size.x * 0.5f);
+                float b_min = position.x - size;
+                float b_max = position.x + size;
+                
+                if ((a_min <= b_max && a_max >= b_min) ||
+                    ((t.position - position).magnitude < size + t.size.magnitude)) {
                     t.damage(damage, type);
                 }
             }

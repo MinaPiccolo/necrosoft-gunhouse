@@ -250,16 +250,7 @@ namespace Gunhouse
     public partial class DrDogFlyer : Target
     {
         public State state, next_state = State.GRAB;
-
-        public enum State
-        {
-            NONE,
-            FLYING,
-            SHOOT,
-            GRAB,
-            DIE}
-
-        ;
+        public enum State { NONE, FLYING, SHOOT, GRAB, DIE };
 
         public Vector2 origin, destination;
         public float lerp_pos, lerp_speed;
@@ -828,13 +819,6 @@ namespace Gunhouse
             AppMain.textures.drdogminion2.draw(anim, (int)frame, position + new Vector2(0, 40), facingScale(),
                                          angle, flashColor());
             drawSubBullets();
-            /*bb.Add(new BitmapDrawCall(AppMain.textures.drdog.atlas.texture,
-        position+origin,
-        AppMain.textures.drdog.atlas.sprite_bounds[1], flashColor(), facingScale(),
-        AppMain.textures.drdog.atlas.centers[1], 0));*/
-            //scale.x = -scale.x;
-            //AppMain.textures.drdog.draw("stance", 0, position, scale,
-            //  angle, flashColor());
         }
     }
 
@@ -852,7 +836,6 @@ namespace Gunhouse
             size = new Vector2(40, 60);
             hp = health;
             frame_rate = Util.rng.NextFloat(0.1f, 0.3f);
-            //held_orphans.Add(new Orphan(new Vector2(0, 0)));
         }
 
         static public void loadAssets()
@@ -899,10 +882,8 @@ namespace Gunhouse
                 held_orphans.Add(new Orphan(new Vector2(20, -10)));
             }
 
-            if (velocity.y != 0)
-                state = (int)drdog_minion.Sprites.drdog_minion_jump;
-            else
-                state = (int)drdog_minion.Sprites.drdog_minion_walk1;
+            if (velocity.y != 0) state = (int)drdog_minion.Sprites.drdog_minion_jump;
+            else state = (int)drdog_minion.Sprites.drdog_minion_walk1;
 
             if (state == (int)drdog_minion.Sprites.drdog_minion_walk1) {
                 sub_frame += 0.1f;
@@ -911,8 +892,7 @@ namespace Gunhouse
                 (int)(sub_frame >= 3 ? 1 : sub_frame);
 
                 if (held_orphans.Count > 0)
-                    frame += (int)drdog_minion.Sprites.drdog_minion_walkg1 -
-                    (int)drdog_minion.Sprites.drdog_minion_walk1;
+                    frame += (int)drdog_minion.Sprites.drdog_minion_walkg1 - (int)drdog_minion.Sprites.drdog_minion_walk1;
             }
             else frame = state;
         }

@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
+using Necrosoft;
 
 namespace Gunhouse
 {
-    public class Platform /*: MonoBehaviour*/
+    public class Platform : MonoBehaviour
     {
-    //    void Awake()
-    //    {
-    //        DontDestroyOnLoad(gameObject);
-    //        Application.targetFrameRate = 60;
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            Application.targetFrameRate = 60;
 
-    //        #if UNITY_ANDROID
-    //        Screen.autorotateToLandscapeLeft = true;
-    //        Screen.autorotateToLandscapeRight = true;
-    //        Screen.orientation = ScreenOrientation.AutoRotation;
-    //        #endif
-    //    }
+            #if UNITY_PS4
+            QualitySettings.vSyncCount = 1;
+            #endif
+
+            #if UNITY_ANDROID
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.orientation = ScreenOrientation.AutoRotation;
+            #endif
+        }
 
 #if UNITY_PSP2 && !UNITY_EDITOR
         public static void Quit() { }
@@ -36,25 +41,33 @@ namespace Gunhouse
         /* WebGL, Jump Platform */
         public static void Quit() { WebGLJump.Quit(); }
         public static void SavePlayerData() { }
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public static void LoadPlayerData() { }
         public static void SaveOptions() { }
         public static void SaveStore() { }
         public static void SaveHardcore() { }
         public static void SaveEndWave() { }
-        #else
+#else
         public static void LoadPlayerData() { DataStorage.Load(); Objectives.Load(); }
         public static void SaveOptions() { DataStorage.SaveOptions(); }
         public static void SaveStore() { DataStorage.SaveStore(); }
         public static void SaveHardcore() { DataStorage.SaveHardcore(); }
         public static void SaveEndWave() { Objectives.SaveRemote(); DataStorage.SaveEndWave(); }
-        #endif
+#endif
+#elif UNITY_PS4
+        public static void Quit() { Application.Quit(); }
+        public static void LoadPlayerData() { DataStorage.Load(); Objectives.Load(); PlayerPrefs.Save(); }
+        public static void SavePlayerData() { DataStorage.Save(); Objectives.Save(); PlayerPrefs.Save(); }
+        public static void SaveOptions() { DataStorage.Save(); PlayerPrefs.Save(); }
+        public static void SaveStore() { DataStorage.Save(); PlayerPrefs.Save(); }
+        public static void SaveHardcore() { DataStorage.Save(); PlayerPrefs.Save(); }
+        public static void SaveEndWave() { Objectives.Save(); DataStorage.Save(); PlayerPrefs.Save(); }
 #else
         /* Almost every platform will use this */
         public static void Quit() { Application.Quit(); }
         public static void LoadPlayerData() { DataStorage.Load(); Objectives.Load(); }
         public static void SavePlayerData() { DataStorage.Save(); Objectives.Save(); }
-        public static void SaveOptions() { }
+        public static void SaveOptions() {  }
         public static void SaveStore() { }
         public static void SaveHardcore() { }
         public static void SaveEndWave() { }

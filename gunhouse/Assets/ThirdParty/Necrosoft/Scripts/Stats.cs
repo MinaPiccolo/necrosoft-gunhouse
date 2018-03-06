@@ -19,12 +19,17 @@ namespace Necrosoft
         float delay = 0.2f;
         float counter = 0.2f;
 
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
         void OnGUI()
         {
             float w = Screen.width / 2; w *= size;
             int h = (int)w / 4; h += h / 2;
-            rect.x = 0;
-            rect.y = Screen.height - h;
+            rect.x = 70;
+            rect.y = (Screen.height - h) - 20;
             rect.width = w;
             rect.height = h;
 
