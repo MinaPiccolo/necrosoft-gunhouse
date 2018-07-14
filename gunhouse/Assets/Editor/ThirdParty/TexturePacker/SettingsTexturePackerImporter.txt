@@ -1,0 +1,18 @@
+version: 2
+importPivots: 1
+tpsheetFileNames:
+- Assets/Bundles/Menu/Textures/credits.tpsheet
+- Assets/Bundles/Menu/Textures/help.tpsheet
+- Assets/Bundles/Menu/Textures/menu.tpsheet
+- Assets/Bundles/Menu/Textures/portraits.tpsheet
+textureFileNames:
+- Assets/Bundles/Menu/Textures/credits.png
+- Assets/Bundles/Menu/Textures/help.png
+- Assets/Bundles/Menu/Textures/menu.png
+- Assets/Bundles/Menu/Textures/portraits.png
+normalmapFileNames:
+- 
+- 
+- 
+- 
+enableDebugOutput: 0

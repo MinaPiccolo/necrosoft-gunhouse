@@ -1,4 +1,4 @@
-#if UNITY_PSP2
+#if UNITY_PSP2 || UNITY_EDITOR
 using Sony.NP;
 using UnityEngine;
 using UnityEngine.PSVita;

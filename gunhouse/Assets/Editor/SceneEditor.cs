@@ -19,7 +19,7 @@ namespace Necrosoft
         static void LoadSceneMain()
         {
             EditorSceneManager.RestoreSceneManagerSetup(new SceneSetup[] {
-                new SceneSetup() { path = scenePath + "game.unity", isActive = true, isLoaded = true },
+                new SceneSetup() { path = scenePath + "Game.unity", isActive = true, isLoaded = true },
             });
         }
 

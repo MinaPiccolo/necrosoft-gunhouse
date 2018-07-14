@@ -544,10 +544,10 @@ PlayerSettings:
   - libSceSmart.prx
   monoEnv: 
   psp2Splashimage: {fileID: 2800000, guid: f70380f9ed5e96d4e82cfcec5dd7d5bb, type: 3}
-  psp2NPTrophyPackPath: C:/-/necrosoft/gunhouse/psn/releases/vita/SIEA/gunhouse_trophy_pack_signed.trp
+  psp2NPTrophyPackPath: C:/-/necrosoft/gunhouse/sie/vita/trophy/PCSB01288_00/trophy.trp
   psp2NPSupportGBMorGJP: 0
   psp2NPAgeRating: 10
-  psp2NPTitleDatPath: C:/-/necrosoft/gunhouse/psn/releases/vita/SIEA/PCSE01157_00/nptitle.dat
+  psp2NPTitleDatPath: C:/-/necrosoft/gunhouse/sie/vita/nptitle/PCSB01288_00/nptitle.dat
   psp2NPCommsID: 
   psp2NPCommunicationsID: NPWR14054_00
   psp2NPCommsPassphrase: '0x69,0xfd,0x44,0x6d,0xdf,0x20,0xd2,0x23,
@@ -621,19 +621,19 @@ PlayerSettings:
 
     0x44,0x0c,0x5b,0xff,0xf4,0xd2,0x05,0xc2'
   psp2ParamSfxPath: 
-  psp2ManualPath: C:/-/necrosoft/gunhouse/psn/releases/vita/SIEA/manual
-  psp2LiveAreaGatePath: C:/-/necrosoft/gunhouse/psn/releases/vita/livearea_full/default_gate.png
-  psp2LiveAreaBackroundPath: C:/-/necrosoft/gunhouse/psn/releases/vita/livearea_full/bg0.png
+  psp2ManualPath: C:/-/necrosoft/gunhouse/sie/vita/manual
+  psp2LiveAreaGatePath: C:/-/necrosoft/gunhouse/sie/vita/livearea/default_gate.png
+  psp2LiveAreaBackroundPath: C:/-/necrosoft/gunhouse/sie/vita/livearea/bg0.png
   psp2LiveAreaPath: 
   psp2LiveAreaTrialPath: 
   psp2PatchChangeInfoPath: 
   psp2PatchOriginalPackage: 
   psp2PackagePassword: F69ASrgax3CF3EDN93LVqLBPh71Yexui
-  psp2KeystoneFile: C:/-/necrosoft/gunhouse/psn/releases/vita/keystone
+  psp2KeystoneFile: C:/-/necrosoft/gunhouse/sie/vita/keystone
   psp2MemoryExpansionMode: 0
   psp2DRMType: 0
-  psp2StorageType: 2
-  psp2MediaCapacity: 7
+  psp2StorageType: 0
+  psp2MediaCapacity: 0
   psp2DLCConfigPath: 
   psp2ThumbnailPath: 
   psp2BackgroundPath: 
@@ -644,7 +644,7 @@ PlayerSettings:
   psp2SaveDataQuota: 1024
   psp2ParentalLevel: 4
   psp2ShortTitle: Gunhouse
-  psp2ContentID: UP4221-PCSE01157_00-GUNHOUSECOOLTOWN
+  psp2ContentID: EP3968-PCSB01288_00-GUNHOUSECOOLTOWN
   psp2Category: 0
   psp2MasterVersion: 01.00
   psp2AppVersion: 01.00
@@ -675,13 +675,13 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    18: BUNDLED;CONTROLLER_AND_TOUCH
+    18: CONTROLLER_AND_TOUCH
   platformArchitecture: {}
   scriptingBackend:
     PSP2: 1
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 0
+  scriptingRuntimeVersion: 1
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
@@ -752,6 +752,7 @@ PlayerSettings:
   XboxOneSplashScreen: {fileID: 0}
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
+  XboxOneXTitleMemory: 8
   xboxOneScriptCompiler: 0
   vrEditorSettings:
     daydream:
@@ -759,7 +760,7 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 
   projectName: 
   organizationId: 

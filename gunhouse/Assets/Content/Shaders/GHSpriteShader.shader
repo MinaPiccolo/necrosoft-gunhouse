@@ -51,7 +51,7 @@ Shader "Gunhouse/Sprite" {
                 };
 
                 v2f vert(appdata_full v)
-				{
+                {
                     v2f o;
 
                     fixed4 drift = fixed4(v.vertex.x + sin(v.vertex.x / 10.0f) * _UniPulseAmtX,
