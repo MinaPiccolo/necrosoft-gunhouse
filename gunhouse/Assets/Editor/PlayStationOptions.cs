@@ -17,7 +17,7 @@ public class PlayStationOptions
 
         PlayerSettings.PS4.contentID = "UP4221-CUSA09627_00-GUNHOUSECOOLTOWN";
         PlayerSettings.productName = "Gunhouse";
-        PlayerSettings.PS4.parentalLevel = 4;
+        PlayerSettings.PS4.parentalLevel = 4;    /* TRC: R3005. ESRB: E10+ */
         PlayerSettings.PS4.enterButtonAssignment = PlayerSettings.PS4.PS4EnterButtonAssignment.CrossButton;
         PlayerSettings.PS4.paramSfxPath = "";   // path + "param.sfx";
 
@@ -30,7 +30,7 @@ public class PlayStationOptions
 
         PlayerSettings.PS4.NPtitleDatPath = path + "CUSA09627_00/nptitle.dat";
         PlayerSettings.PS4.npTrophyPackPath = path + "trophy.trp";
-        PlayerSettings.PS4.npAgeRating = 10;
+        PlayerSettings.PS4.npAgeRating = 10; /* TRC: R3090. ESRB: E10+ */
         PlayerSettings.PS4.npTitleSecret = "0x11,0x66,0x99,0x9f,0xed,0x8d,0xf6,0x95,\n" +
                                            "0x95,0x53,0x6e,0x7e,0x26,0xeb,0x0e,0xbe,\n" +
                                            "0xac,0x01,0x59,0x6d,0xf6,0xb9,0xf2,0xca,\n" +
@@ -58,7 +58,7 @@ public class PlayStationOptions
         PlayerSettings.PSVita.liveAreaBackroundPath = path + "livearea/bg0.png";
         PlayerSettings.PSVita.liveAreaGatePath = path + "livearea/default_gate.png";
 
-        PlayerSettings.PSVita.manualPath = path + "manual/";
+        PlayerSettings.PSVita.manualPath = path + "manual/PCSE01157_00/";
 
         PlayerSettings.PSVita.category = PlayerSettings.PSVita.PSVitaAppCategory.Application;
         PlayerSettings.PSVita.appVersion = "01.00";
@@ -66,8 +66,9 @@ public class PlayStationOptions
         PlayerSettings.PSVita.contentID = "UP4221-PCSE01157_00-GUNHOUSECOOLTOWN";
         PlayerSettings.productName = "Gunhouse";
         PlayerSettings.PSVita.saveDataQuota = 1024;
-        PlayerSettings.PSVita.parentalLevel = 4;
+        PlayerSettings.PSVita.parentalLevel = 4;    /* TRC: R3005. ESRB: E10+ */
         PlayerSettings.PSVita.healthWarning = true;
+        PlayerSettings.PSVita.tvBootMode = PlayerSettings.PSVita.PSVitaTvBootMode.PSVitaBootablePSVitaTvNotBootable;
         PlayerSettings.PSVita.enterButtonAssignment = PlayerSettings.PSVita.PSVitaEnterButtonAssignment.CrossButton;
 
         PlayerSettings.PSVita.paramSfxPath = "";
@@ -80,7 +81,7 @@ public class PlayStationOptions
         PlayerSettings.PSVita.storageType = 0;
 
         PlayerSettings.PSVita.npTrophyPackPath = path + "trophy/PCSE01157_00/trophy.trp";
-        PlayerSettings.PSVita.npAgeRating = 10;
+        PlayerSettings.PSVita.npAgeRating = 10; /* TRC: R3090. ESRB: E10+ */
         PlayerSettings.PSVita.npTitleDatPath = path + "nptitle/PCSE01157_00/nptitle.dat";
 
         PlayerSettings.PSVita.npCommunicationsID = "NPWR14054_00";
@@ -130,7 +131,7 @@ public class PlayStationOptions
         PlayerSettings.PSVita.liveAreaBackroundPath = path + "livearea/bg0.png";
         PlayerSettings.PSVita.liveAreaGatePath = path + "livearea/default_gate.png";
 
-        PlayerSettings.PSVita.manualPath = path + "manual/";
+        PlayerSettings.PSVita.manualPath = path + "manual/PCSB01288_00/";
 
         PlayerSettings.PSVita.category = PlayerSettings.PSVita.PSVitaAppCategory.Application;
         PlayerSettings.PSVita.appVersion = "01.00";
@@ -138,8 +139,9 @@ public class PlayStationOptions
         PlayerSettings.PSVita.contentID = "EP3968-PCSB01288_00-GUNHOUSECOOLTOWN";
         PlayerSettings.productName = "Gunhouse";
         PlayerSettings.PSVita.saveDataQuota = 1024;
-        PlayerSettings.PSVita.parentalLevel = 4;
+        PlayerSettings.PSVita.parentalLevel = 3;    /* TRC: R3005. PEGI: 7+ */
         PlayerSettings.PSVita.healthWarning = true;
+        PlayerSettings.PSVita.tvBootMode = PlayerSettings.PSVita.PSVitaTvBootMode.PSVitaBootablePSVitaTvNotBootable;
         PlayerSettings.PSVita.enterButtonAssignment = PlayerSettings.PSVita.PSVitaEnterButtonAssignment.CrossButton;
 
         PlayerSettings.PSVita.paramSfxPath = "";
@@ -152,7 +154,7 @@ public class PlayStationOptions
         PlayerSettings.PSVita.storageType = 0;
 
         PlayerSettings.PSVita.npTrophyPackPath = path + "trophy/PCSB01288_00/trophy.trp";
-        PlayerSettings.PSVita.npAgeRating = 10;
+        PlayerSettings.PSVita.npAgeRating = 7;  /* TRC: R3090. PEGI 7+ */
         PlayerSettings.PSVita.npTitleDatPath = path + "nptitle/PCSB01288_00/nptitle.dat";
 
         PlayerSettings.PSVita.npCommunicationsID = "NPWR14054_00";

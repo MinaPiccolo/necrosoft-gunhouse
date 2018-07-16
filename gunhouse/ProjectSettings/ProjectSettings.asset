@@ -546,7 +546,7 @@ PlayerSettings:
   psp2Splashimage: {fileID: 2800000, guid: f70380f9ed5e96d4e82cfcec5dd7d5bb, type: 3}
   psp2NPTrophyPackPath: C:/-/necrosoft/gunhouse/sie/vita/trophy/PCSB01288_00/trophy.trp
   psp2NPSupportGBMorGJP: 0
-  psp2NPAgeRating: 10
+  psp2NPAgeRating: 7
   psp2NPTitleDatPath: C:/-/necrosoft/gunhouse/sie/vita/nptitle/PCSB01288_00/nptitle.dat
   psp2NPCommsID: 
   psp2NPCommunicationsID: NPWR14054_00
@@ -621,7 +621,7 @@ PlayerSettings:
 
     0x44,0x0c,0x5b,0xff,0xf4,0xd2,0x05,0xc2'
   psp2ParamSfxPath: 
-  psp2ManualPath: C:/-/necrosoft/gunhouse/sie/vita/manual
+  psp2ManualPath: C:/-/necrosoft/gunhouse/sie/vita/manual/PCSB01288_00
   psp2LiveAreaGatePath: C:/-/necrosoft/gunhouse/sie/vita/livearea/default_gate.png
   psp2LiveAreaBackroundPath: C:/-/necrosoft/gunhouse/sie/vita/livearea/bg0.png
   psp2LiveAreaPath: 
@@ -642,13 +642,13 @@ PlayerSettings:
   psp2TrophyPackagePath: 
   psp2PackagedResourcesPath: 
   psp2SaveDataQuota: 1024
-  psp2ParentalLevel: 4
+  psp2ParentalLevel: 3
   psp2ShortTitle: Gunhouse
   psp2ContentID: EP3968-PCSB01288_00-GUNHOUSECOOLTOWN
   psp2Category: 0
-  psp2MasterVersion: 01.00
+  psp2MasterVersion: 01.01
   psp2AppVersion: 01.00
-  psp2TVBootMode: 0
+  psp2TVBootMode: 2
   psp2EnterButtonAssignment: 2
   psp2TVDisableEmu: 0
   psp2AllowTwitterDialog: 1
