@@ -101,6 +101,7 @@ namespace Gunhouse
         public static string WAVE_COMPLETE;
         public static string WAVE_FAILED;
         public static string CREDITS;
+        public static string QUIT_MENU;
         public static string ACHIEVEMENTS;
         public static string SIGN_IN;
     }

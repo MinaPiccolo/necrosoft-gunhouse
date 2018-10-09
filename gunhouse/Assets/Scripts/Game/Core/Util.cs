@@ -91,6 +91,24 @@ namespace Gunhouse
 
         static Hashtable repeat_infos;
 
+        public static T KeyRepeatTime<T>(string name, T zero, int initialTimeout, int repeatTimeout, T current)
+        {
+            if (repeat_infos == null) repeat_infos = new Hashtable();
+
+            RepeatInfo<T> r;
+            if (repeat_infos.ContainsKey(name)) {
+                r = (RepeatInfo<T>)repeat_infos[name];
+            }
+            else {
+                r = new RepeatInfo<T>(zero, initialTimeout, repeatTimeout);
+            }
+
+            T value = r.RepeatTime(current);
+            repeat_infos[name] = r;
+
+            return value;
+        }
+
         public static T keyRepeat<T>(string name, T zero, int initial_timeout, int repeat_timeout, T current)
         {
             if (repeat_infos == null) repeat_infos = new Hashtable();
@@ -109,35 +127,56 @@ namespace Gunhouse
         {
             T current, zero;
             int timeout, initial_timeout, repeat_timeout;
+            float counterTimer;
 
             public RepeatInfo(T zero, int initial_timeout, int repeat_timeout)
             {
                 this.zero = zero;
                 current = zero;
                 timeout = 0;
+                counterTimer = 0.0f;
                 this.initial_timeout = initial_timeout;
                 this.repeat_timeout = repeat_timeout;
             }
 
             public T repeat(T input)
             {
-                if (input.Equals(zero))
-                {
+                if (input.Equals(zero)) {
                     current = zero;
                     timeout = 0;
                     return zero;
                 }
 
-                if (!input.Equals(current))
-                {
+                if (!input.Equals(current)) {
                     current = input;
                     timeout = initial_timeout;
                     return current;
                 }
 
-                if (--timeout <= 0)
-                {
+                if (--timeout <= 0) {
                     timeout = repeat_timeout;
+                    return current;
+                }
+
+                return zero;
+            }
+
+            public T RepeatTime(T input)
+            {
+                if (input.Equals(zero)) {
+                    current = zero;
+                    counterTimer = 0;
+                    return zero;
+                }
+
+                if (!input.Equals(current)) {
+                    current = input;
+                    counterTimer = Time.realtimeSinceStartup + (((float)initial_timeout / 60));
+                    return current;
+                }
+
+                if (counterTimer <= Time.realtimeSinceStartup) {
+                    counterTimer = Time.realtimeSinceStartup + (((float)repeat_timeout / 60));
                     return current;
                 }
 

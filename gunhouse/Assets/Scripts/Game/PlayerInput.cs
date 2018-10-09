@@ -151,6 +151,17 @@ namespace Gunhouse
             actions.Escape.AddDefaultBinding(Key.Escape);
             #endif
 
+            #if UNITY_TVOS
+            InputManager.OnDeviceAttached += delegate(InputDevice inputDevice) {
+                if (inputDevice.DeviceClass == InputDeviceClass.Remote) {
+                    Remote.reportAbsoluteDpadValues = true;
+                    Remote.touchesEnabled = false;
+                    inputDevice.LeftStick.LowerDeadZone = 0.5f;  // Default is usually 0.2f
+                    inputDevice.LeftStick.StateThreshold = 0.5f; // Default is usually 0.0f
+                }
+            };
+            #endif
+
             //actions.ListenOptions.OnBindingFound = (action, binding) =>
             //{
             //    if (binding == new KeyBindingSource(Key.Escape)) {

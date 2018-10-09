@@ -1,10 +1,13 @@
-#if UNITY_WEBGL
+#if UNITY_WEBGL && JUMP_STORE
 using UnityEngine;
 
 namespace Gunhouse
 {
     public class WebGLJump : MonoBehaviour
     {
+        /* NOTE: requires payfab sdk and jump WebGLTemplates
+            Attach this script to a gameobject in the Download.Scene */
+
         static JumpPlugin jumpPlugin;
         static PlayFabManager playFab;
         static bool once;

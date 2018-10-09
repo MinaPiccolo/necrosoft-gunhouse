@@ -1,4 +1,4 @@
-﻿#if UNITY_WEBGL
+﻿#if UNITY_WEBGL && JUMP_STORE
 using UnityEngine;
 
 namespace Gunhouse
